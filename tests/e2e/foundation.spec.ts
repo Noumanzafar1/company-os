@@ -1,0 +1,50 @@
+import { test,expect } from '@playwright/test';
+
+test('synthetic A/B isolation, shell routes, session cookies and logout',async({page,context})=>{
+  await page.goto('/');
+  await expect(page.getByRole('button',{name:/Sign in as Synthetic User A/})).toBeVisible();
+  await page.getByRole('button',{name:/Sign in as Synthetic User A/}).click();
+  await expect(page.getByRole('heading',{name:'Attention',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'No decisions currently require action.'})).toBeVisible();
+  const optionsA=await page.locator('select option').allTextContents();
+  expect(optionsA).toEqual(['Workspace A']);
+  const workspaceA=await page.locator('select').inputValue();
+  const cookies=await context.cookies();
+  const session=cookies.find(c=>c.name==='company_session');
+  expect(session?.httpOnly).toBe(true); expect(session?.sameSite).toBe('Strict');
+  expect(await page.evaluate(()=>document.cookie)).not.toContain('company_session');
+  expect(await page.evaluate(()=>Object.keys(localStorage))).toEqual([]);
+  await page.screenshot({path:'test-results/attention.png',fullPage:true});
+  await page.getByRole('link',{name:/Approvals/}).click();
+  await expect(page.getByRole('heading',{name:'No approvals pending.'})).toBeVisible();
+  await page.getByRole('link',{name:/System Health/}).click();
+  await expect(page.getByText('Healthy',{exact:true})).toHaveCount(3);
+  await expect(page.getByText('Not configured',{exact:true})).toHaveCount(7);
+  await page.screenshot({path:'test-results/system.png',fullPage:true});
+  await page.getByRole('button',{name:'Sign out'}).click();
+  await page.getByRole('button',{name:/Sign in as Synthetic User B/}).click();
+  expect(await page.locator('select option').allTextContents()).toEqual(['Workspace B']);
+  const workspaceB=await page.locator('select').inputValue();
+  await page.goto(`/attention?workspace=${workspaceA}`);
+  await expect(page.getByRole('heading',{name:'Workspace unavailable'})).toBeVisible();
+  await expect(page.getByText('Workspace A',{exact:true})).toHaveCount(0);
+  await page.getByRole('button',{name:'Sign out'}).click();
+  await page.getByRole('button',{name:/Sign in as Synthetic User A/}).click();
+  await page.goto(`/attention?workspace=${workspaceB}`);
+  await expect(page.getByRole('heading',{name:'Workspace unavailable'})).toBeVisible();
+  await expect(page.getByText('Workspace B',{exact:true})).toHaveCount(0);
+  await page.getByRole('button',{name:'Sign out'}).click();
+  await page.goto('/approvals');
+  await expect(page.getByRole('button',{name:/Sign in as Synthetic User A/})).toBeVisible();
+});
+
+test('browser state changes reject forged or missing CSRF and open redirects',async({page,request})=>{
+  await page.goto('/login?next=https://evil.example');
+  const invalid=await request.post('/auth/login',{form:{identity:'a',csrf:'a'.repeat(64)},headers:{Origin:'https://evil.example'},maxRedirects:0});
+  expect(invalid.status()).toBe(403);
+  const logout=await request.post('/auth/logout',{form:{csrf:'a'.repeat(64)},headers:{Origin:'http://localhost:3000'},maxRedirects:0});
+  expect(logout.status()).toBe(403);
+  await page.getByRole('button',{name:/Sign in as Synthetic User A/}).click();
+  expect(new URL(page.url()).origin).toBe('http://localhost:3000');
+  await expect(page.getByRole('heading',{name:'Attention',exact:true})).toBeVisible();
+});

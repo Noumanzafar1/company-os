@@ -1,0 +1,25 @@
+{
+  "name": "company-os",
+  "version": "0.2.0",
+  "private": true,
+  "engines": { "node": ">=24 <25" },
+  "workspaces": ["apps/console"],
+  "scripts": {
+    "setup": "node scripts/local.mjs setup",
+    "dev": "node scripts/local.mjs start",
+    "stop": "node scripts/local.mjs stop",
+    "db:start": "node scripts/local.mjs db",
+    "db:stop": "node scripts/local.mjs stop-db",
+    "migrate": "node scripts/local.mjs migrate",
+    "seed": "node scripts/local.mjs seed",
+    "contracts": "node scripts/check.mjs contracts",
+    "check": "node scripts/check.mjs",
+    "test:e2e": "playwright test",
+    "build": "npm run build --workspace apps/console"
+  },
+  "devDependencies": {
+    "embedded-postgres": "18.4.0-beta.17",
+    "@playwright/test": "1.58.2",
+    "openapi-typescript": "7.13.0"
+  }
+}

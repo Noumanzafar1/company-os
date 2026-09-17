@@ -1,0 +1,683 @@
+{
+  "phase": 2,
+  "completed_date": "2026-09-17",
+  "gate": "PASS WITH OPEN ITEMS",
+  "repository": "https://github.com/Noumanzafar1/company-os",
+  "branch": "main",
+  "commit": null,
+  "pushed": false,
+  "commit_readiness": "READY FOR REVIEW",
+  "phase_3_started": false,
+  "environment": {
+    "os": "Windows x64",
+    "python": "3.12.14",
+    "node": "24.16.0",
+    "npm": "11.13.0",
+    "postgresql": "18.4",
+    "data": "synthetic A/B only"
+  },
+  "migration_head": "0002_identity_guards",
+  "source_specification": {
+    "version": "1.0",
+    "sha256_original": "5c9fea6b199252587a0b4adcc4bab1dcbe16ece5901465dcc3466c27397173c4",
+    "mapping": "All 30 parts preserved in canonical numbered docs and original ADR registry"
+  },
+  "results": [
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff check .",
+      "status": "PASS"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff format --check .",
+      "status": "PASS",
+      "files": 77
+    },
+    {
+      "command": "npm.cmd run dev",
+      "status": "PASS",
+      "services": "PostgreSQL, API, console, worker (direct WORKER_DATABASE_URL)",
+      "execution": "Approved outside sandbox; initial sandbox pg_ctl restricted-token/start errors 87/3."
+    },
+    {
+      "command": "npm.cmd run check",
+      "status": "PASS",
+      "backend": {
+        "passed": 45,
+        "failed": 0,
+        "skipped": 0,
+        "warnings": 2,
+        "seconds": 15.45
+      },
+      "frontend_unit": {
+        "passed": 2,
+        "failed": 0,
+        "files": 1,
+        "duration_ms": 306
+      },
+      "checks": [
+        "Ruff lint and format",
+        "mypy: 20 source files",
+        "ESLint",
+        "TypeScript",
+        "OpenAPI drift",
+        "generated TypeScript drift",
+        "secrets/current history",
+        "dependency/import boundaries",
+        "immutable migration manifest"
+      ]
+    },
+    {
+      "command": "npm.cmd run build",
+      "status": "PASS",
+      "mode": "Next.js production build",
+      "routes": 9
+    },
+    {
+      "command": "$env:PLAYWRIGHT_CHANNEL='chrome'; npm.cmd run test:e2e",
+      "status": "PASS",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 10.4,
+      "mode": "Development console, installed Chrome"
+    },
+    {
+      "command": "$env:PLAYWRIGHT_CHANNEL='chrome'; node scripts/ci-services.mjs e2e",
+      "status": "PASS",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 6.8,
+      "mode": "Production console, installed Chrome; API shutdown complete"
+    },
+    {
+      "command": "npm.cmd audit --audit-level=moderate",
+      "status": "PASS",
+      "vulnerabilities": 0
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit --project apps/console/tsconfig.json",
+      "status": "PASS",
+      "exit_code": 0,
+      "reason": "Recheck after restoring pre-cycle generated Next type references"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe scripts/boundaries.py",
+      "status": "PASS",
+      "candidate_files": 120,
+      "source_files": 119,
+      "note": "Historical review ZIP remains untracked; not a source manifest entry."
+    },
+    {
+      "command": "git check-ignore .env .local .venv node_modules apps/console/.next test-results",
+      "status": "PASS",
+      "ignored_paths": 6
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS",
+      "exit_code": 0,
+      "note": "No tracked files; repository remains unborn/untracked."
+    },
+    {
+      "command": "npm.cmd run stop",
+      "status": "PASS",
+      "supervisor_exit_code": 0,
+      "services": "API, worker, console and PostgreSQL stopped cleanly"
+    },
+    {
+      "command": "npm.cmd run db:start",
+      "status": "PASS"
+    },
+    {
+      "command": "npm.cmd run db:stop",
+      "status": "PASS"
+    }
+  ],
+  "open_items": [
+    "GitHub-hosted CI has not run: first push explicitly withheld.",
+    "Repository owner must enable required foundation-required branch protection after push authorization.",
+    "Founder Phase 2 review and any subsequent phase authorization pending."
+  ],
+  "limitations": [
+    "No live managed-auth account preflight; synthetic adapter and offline asymmetric JWT verifier tested.",
+    "Installed Chrome tested; pinned Chromium download stalled and was stopped; CI/Linux browser run not claimed.",
+    "Two upstream Python test-adapter deprecation warnings.",
+    "No production deployment, live providers, sending, business data, workflow runtime or AI."
+  ],
+  "process_state": "Local application services and PostgreSQL stopped cleanly; ignored data/configuration retained.",
+  "file_count": 119,
+  "hash_convention": "SHA-256 over UTF-8 text with CRLF normalized to LF; manifest has no self-hash.",
+  "files": [
+    {
+      "path": ".env.example",
+      "sha256_lf": "cee5fe07496370ece4f018d53379ab94c6720f9545c7fcb71f6922216ebb6da4"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256_lf": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256_lf": "7eb437b3602243b0117f9e0692fe47c499938373a28e2f54eea08e6d409c2ddf"
+    },
+    {
+      "path": ".gitignore",
+      "sha256_lf": "ebe34cc6a353c324c493d889e689e09df54f4d17b40b4fa676d4ae170a4fbaa7"
+    },
+    {
+      "path": ".node-version",
+      "sha256_lf": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "path": ".python-version",
+      "sha256_lf": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256_lf": "9b8c430d64d0f291a9f5632b086b6a4cbb32261c11b3f6a889aabb9f3d09622c"
+    },
+    {
+      "path": "alembic.ini",
+      "sha256_lf": "c3be31533ac5399458dffa424400cb88b27286ed1550686a91e607b824253b34"
+    },
+    {
+      "path": "apps/__init__.py",
+      "sha256_lf": "485711c2a9f13531f4867732c6beb8639b5a9c1cedc167a2667bcf088c5d209d"
+    },
+    {
+      "path": "apps/api/__init__.py",
+      "sha256_lf": "86aa4684be03202e930a90a9c028d81ac0e419341ea654d64914221f024676f0"
+    },
+    {
+      "path": "apps/api/main.py",
+      "sha256_lf": "8df002227b429ff3d3022ff850931f5d1887f75efec8235c3570982e57c08941"
+    },
+    {
+      "path": "apps/api/run.py",
+      "sha256_lf": "1e7540b7a83d3e43125436b817a073e2fea8d466a58013ab4acc0120088ffeba"
+    },
+    {
+      "path": "apps/console/app/approvals/page.tsx",
+      "sha256_lf": "9d7d2428e2b83506978462dc7b7c2abefbe8ff65ed932620c9375bd983e93303"
+    },
+    {
+      "path": "apps/console/app/attention/page.tsx",
+      "sha256_lf": "116bb69a03fa1c10649a605863a86d5ef9d2645a2ae112d41cd43ec894a84606"
+    },
+    {
+      "path": "apps/console/app/auth/login/route.ts",
+      "sha256_lf": "44592f3c9d1a11da4dc55fc5ee315088e8c92f7cff14ac59689dc639379e2125"
+    },
+    {
+      "path": "apps/console/app/auth/logout/route.ts",
+      "sha256_lf": "6d3ea88fcef0ae483d63b66605d2dd05ece99fd149d710350c3255f11cb86a59"
+    },
+    {
+      "path": "apps/console/app/auth/prepare/route.ts",
+      "sha256_lf": "51a5eac6a47cf18e5b4f9eb842088ce69841efc584311b72719849a783192c41"
+    },
+    {
+      "path": "apps/console/app/globals.css",
+      "sha256_lf": "a7c99309e25ef3ec1f5ce5bd89abcd2746f1cf85c43462dabd050f6eb61807a9"
+    },
+    {
+      "path": "apps/console/app/layout.tsx",
+      "sha256_lf": "c4a97691c8a289804be6c5d99f0c96bd7859f737c123553ef3762acdda2ebfef"
+    },
+    {
+      "path": "apps/console/app/login/page.tsx",
+      "sha256_lf": "245ee5895e78cbb59ed9f5e019a21cfebdc8f64ce7de243da4d42a34588e5d35"
+    },
+    {
+      "path": "apps/console/app/page.tsx",
+      "sha256_lf": "2cbfc578ffd14d7561de9f15e9ec93bc5a58d5bd7a2b0801fd3e40961c09112c"
+    },
+    {
+      "path": "apps/console/app/system/page.tsx",
+      "sha256_lf": "d10e234cb6abd3b5f5173fdba9bf27bb40123181f453c401435f3dbe1d6c0253"
+    },
+    {
+      "path": "apps/console/components/shell.tsx",
+      "sha256_lf": "c1347bf64530098c930e270f297834f40ac78682407ce53437d82b8b59c1bb7c"
+    },
+    {
+      "path": "apps/console/eslint.config.mjs",
+      "sha256_lf": "827a3200c6eeccf336186f0f8c77bece194438cf971cabd15f1362f0efb89f46"
+    },
+    {
+      "path": "apps/console/lib/api.ts",
+      "sha256_lf": "a6fa276130b4160eb7c157a775ba9dc8b3e0d936fd28ade857432e335d33cc2a"
+    },
+    {
+      "path": "apps/console/lib/security.test.ts",
+      "sha256_lf": "60f20831f2606a54486671d8ed1a97b0f38549093ad9d9367a09a9d1d2125feb"
+    },
+    {
+      "path": "apps/console/lib/security.ts",
+      "sha256_lf": "816a316e721afb9190da224ecd278cb36dd8c61b676d50b8f049ace2bfd60746"
+    },
+    {
+      "path": "apps/console/next-env.d.ts",
+      "sha256_lf": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+    },
+    {
+      "path": "apps/console/next.config.ts",
+      "sha256_lf": "7a03152c4691fd88b1978e20ab2d9bdcd036a7a55a3a30dca97b45357c7de996"
+    },
+    {
+      "path": "apps/console/package.json",
+      "sha256_lf": "664ff987c294f4cb7c16273fae2db9e8f6221fea0d3c548fe771efce1adb73f7"
+    },
+    {
+      "path": "apps/console/tsconfig.json",
+      "sha256_lf": "de051314f06fe9bcbc55cf9bff2a6685869d3163642a5f2ad10638ba1a18cb85"
+    },
+    {
+      "path": "apps/worker/__init__.py",
+      "sha256_lf": "f510e3ff914f4a890095444f8e6d48f741263ff0f0232953ae4c8c044e1160a9"
+    },
+    {
+      "path": "apps/worker/main.py",
+      "sha256_lf": "b5c7e1d8ff430d33053bc6d6a28e9e1f359b68b2812bc77f2522d59cf7b92737"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256_lf": "39c5b79a253bb0b5e94c7343ab863c804b278687b4b1e566f82403a59e8e4176"
+    },
+    {
+      "path": "database/__init__.py",
+      "sha256_lf": "0566531f0513b3779f818835a7da41bf8c958fefb0b69a80fc10b39c9c8c64a4"
+    },
+    {
+      "path": "database/migrations/env.py",
+      "sha256_lf": "5ff4f9ed8d813470d4d7754ddb9beef1a8f15617059df5766383e0d860436eb7"
+    },
+    {
+      "path": "database/migrations/manifest.json",
+      "sha256_lf": "27960a5dca130f2f4c9c5ea0e77cf2bf76c2dea00516d78b11e0055a5e1126c0"
+    },
+    {
+      "path": "database/migrations/versions/0001_foundation.py",
+      "sha256_lf": "e1f47410c1e13ccbdf085ccff8690103a21354b1b8215eae33245f2d2a785407"
+    },
+    {
+      "path": "database/migrations/versions/0001_foundation.sql",
+      "sha256_lf": "e13ad2c3a296ad8743ae611d7dcc1330af021a9b956f6ad722db2eeb9c119e8b"
+    },
+    {
+      "path": "database/migrations/versions/0002_identity_guards.py",
+      "sha256_lf": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0"
+    },
+    {
+      "path": "database/policies/README.md",
+      "sha256_lf": "1c330877c16b02039b7783e9100fc24d9fbe1e62d575594f3961916b16723642"
+    },
+    {
+      "path": "database/seeds/__init__.py",
+      "sha256_lf": "b7b8d602690822ce5ed3e9b0cced265624280e7f5d9edc0b2a67a60a234dcbd2"
+    },
+    {
+      "path": "database/seeds/synthetic.py",
+      "sha256_lf": "9458d75c2c08d1ecdad5cb93fdcf15ca6a8d5651ff7fa099c3d943d9a0de90da"
+    },
+    {
+      "path": "docs/00-product-overview.md",
+      "sha256_lf": "f0c93cb8af63f58e6aa857dcd582f7587f8ca00cb433d0ed2852d21c79c28a7b"
+    },
+    {
+      "path": "docs/01-system-context.md",
+      "sha256_lf": "22ada9ab03d71fdef6598a4a2bbd06d242e823948002655a4de498c49836d352"
+    },
+    {
+      "path": "docs/02-architecture.md",
+      "sha256_lf": "c3f5256d16665b6410a206d0024a8debcf2786301f86d2a7a9a767d1ed3a9cd9"
+    },
+    {
+      "path": "docs/03-domain-model.md",
+      "sha256_lf": "606e0e866f9689709b531900226b8a1082589bed03aaed236769969967bfed6d"
+    },
+    {
+      "path": "docs/04-data-ownership.md",
+      "sha256_lf": "df8abfca97b7f4140f91bfca25e8054cf728e2eafb80a5583beaef210696397e"
+    },
+    {
+      "path": "docs/05-state-machines.md",
+      "sha256_lf": "79c78458235c88971269c56c58bf649998d56e42ff1da923212d72dd23319e10"
+    },
+    {
+      "path": "docs/06-events.md",
+      "sha256_lf": "aa79437b3e0bf3a66b682e549f03ea0895b2d539f1bec823b9c71ca943688325"
+    },
+    {
+      "path": "docs/07-jobs.md",
+      "sha256_lf": "ab7431443ed9cce193c6a024afd6c6ca40d323ce7f7246e97e14f15218a92ab9"
+    },
+    {
+      "path": "docs/08-policy-approvals.md",
+      "sha256_lf": "dcfa9cf00793fd81a618d835252e9889f8dae9d440b8c6318e9a302f7b7db5f5"
+    },
+    {
+      "path": "docs/09-ai-gateway.md",
+      "sha256_lf": "959b46785581b5ba1d8ffa20d3c70547fb7908e2754cb9842922526f667dd5d3"
+    },
+    {
+      "path": "docs/10-agent-contracts.md",
+      "sha256_lf": "99f28ba96f558bbb2730e28c23599c0ad65488df6693910a550ba039a12eccd5"
+    },
+    {
+      "path": "docs/11-integrations.md",
+      "sha256_lf": "b79c4481ad626a7c00008ef3cc42d17e4ac52ee387d715c4001354cddbcf55ff"
+    },
+    {
+      "path": "docs/12-api.md",
+      "sha256_lf": "9b419239396d82d2c545c3468b35bfdb541a1b21b2389a7ff4b41008d3ebc939"
+    },
+    {
+      "path": "docs/13-founder-console.md",
+      "sha256_lf": "ee129988766ef1e4baa79fe8092d9b0fd0f82ff8775e5a8aa2e504d30e0c30a5"
+    },
+    {
+      "path": "docs/14-security.md",
+      "sha256_lf": "ca3b0fffbf291b79987007509336b76955855840f68128215d6a4d0d2098ff6f"
+    },
+    {
+      "path": "docs/15-observability.md",
+      "sha256_lf": "cefad8bf020cfb79616b37ba85185fee077dc35cb15946445d97e1d1be72a86d"
+    },
+    {
+      "path": "docs/16-testing.md",
+      "sha256_lf": "7cbec00ebf71debb36b3747ba45b30a932de9c23ef40546a7eeb340b5e9b398d"
+    },
+    {
+      "path": "docs/17-deployment.md",
+      "sha256_lf": "5666137a6a47f73533607a9963079d5e140ad09a62a2153f7aa4e4f0bb2009a4"
+    },
+    {
+      "path": "docs/18-development-workflow.md",
+      "sha256_lf": "f708c95b2a91de0f0c0a42699059b42017100e3411027dc565e3751054db9cfd"
+    },
+    {
+      "path": "docs/19-implementation-roadmap.md",
+      "sha256_lf": "83cdec2afa6faa202a3b6db0f335ff9d99702807baae1762913d429a6bfbcf77"
+    },
+    {
+      "path": "docs/20-open-decisions.md",
+      "sha256_lf": "13809ca719009007a45ebe443939e3b18e1ae794c7c3c37c2f7ad40dba9c5136"
+    },
+    {
+      "path": "docs/adr/019-foundation-runtime.md",
+      "sha256_lf": "ce72381ba50c337a93a1bc52cb45219c9158edf262f08fb0341ae6d472278c31"
+    },
+    {
+      "path": "docs/adr/phase-1-registry.md",
+      "sha256_lf": "5f40782ac075635f37131f14af907f06c27a2ffa9758820bb89b37d1f448bb34"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha256_lf": "55e6b419371855b8f705158b4c2c42d6897ae1d61d0628badb42cbc7ab273a32"
+    },
+    {
+      "path": "docs/dependencies.md",
+      "sha256_lf": "eae8d32ea353ec4cb2cce4d99b41597ef7a2b69a19b4744c159f3e34ee7411ef"
+    },
+    {
+      "path": "docs/domain-model.md",
+      "sha256_lf": "e4636616e553b65f261b6e5bb5a4ef7abb03146a7a0977d4749ace91853f5dbe"
+    },
+    {
+      "path": "docs/local-development.md",
+      "sha256_lf": "4a5eca6f6a87cb709af5215c52c40c0e243393b097efe1d25f571f8b30769569"
+    },
+    {
+      "path": "docs/phases/phase-2-handoff.md",
+      "sha256_lf": "89b953109c0ba6f6ff3bcccc60c27064b7c9758e6f6f973f370e77ff41d31277"
+    },
+    {
+      "path": "docs/phases/phase-2-manifest.json",
+      "sha256_lf": null
+    },
+    {
+      "path": "docs/phases/phase-2.md",
+      "sha256_lf": "531bd591c54be9e97b67424d5e8b7e904713d59b6a4749b254ba3b39f42aa28e"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256_lf": "9c2431371b6297e40d149062d9f8c502de409360c4cc357d977669a77b8e5272"
+    },
+    {
+      "path": "docs/requirements.md",
+      "sha256_lf": "3da807d364228e433e218d8c0e4e59a1f8348a360d6249751624078446525fc1"
+    },
+    {
+      "path": "docs/security.md",
+      "sha256_lf": "39ce543a03d03e92a6abdd83a8dc17477f5bb88650c43ca242cda2f8fe8dfc88"
+    },
+    {
+      "path": "docs/testing.md",
+      "sha256_lf": "f99902187ffc42cb4645a1ec103382dbb924e84f088f7d4c9fbe64dd47bfcd87"
+    },
+    {
+      "path": "infra/README.md",
+      "sha256_lf": "94f9a2588dc1ce2a9b0d4b5700d36ea9691c26ea9774b914950fbe7e22106132"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256_lf": "55d5787809483bcbfeaed1e277b53a5d7670719e35d45b592b1c28465d5655b2"
+    },
+    {
+      "path": "package.json",
+      "sha256_lf": "98a09a8c017e2040194060efd753ff165ab38136cfa311b280e78efae0f61b93"
+    },
+    {
+      "path": "packages/company_os/__init__.py",
+      "sha256_lf": "342b7501fa2a1d91d86fb22c31b5ce154cc2010528f437209b371b4d7e8dcf28"
+    },
+    {
+      "path": "packages/company_os/adapters/__init__.py",
+      "sha256_lf": "ab63d848371ab46809ecf970556dd8b2fae73b6de742abb49c4d0f25eacf0d25"
+    },
+    {
+      "path": "packages/company_os/adapters/auth.py",
+      "sha256_lf": "b5bd96944a795a49a77d80ed58e161f63845d9321e31c4e84486144b19338101"
+    },
+    {
+      "path": "packages/company_os/ai/README.md",
+      "sha256_lf": "df51b21e7642137f97a2bfbb9d9f3b7b8574fba91613dd07424b37dd70b304b2"
+    },
+    {
+      "path": "packages/company_os/application/__init__.py",
+      "sha256_lf": "963cdb872a3f9a65383213656d375c28d13cb105aeec35bd40bbb1c328b3ff72"
+    },
+    {
+      "path": "packages/company_os/application/identity.py",
+      "sha256_lf": "1efbba0dd1d4c32b788eb3b7ed524a4ff333752feace032231b6dfa301a300d9"
+    },
+    {
+      "path": "packages/company_os/application/ports.py",
+      "sha256_lf": "738a4054ebf48690bdbd2e86830d7d0b53a9de45ec97b2da54198c1b5a8fc2f1"
+    },
+    {
+      "path": "packages/company_os/config.py",
+      "sha256_lf": "249b1b1b161b76233194ecc0c7f74f24213d477bf1b17f8934bf7acdf355025c"
+    },
+    {
+      "path": "packages/company_os/contracts.py",
+      "sha256_lf": "305aee6bd58d59e12ffe92d1445236b157c9f098fda547d92abd5936de6db586"
+    },
+    {
+      "path": "packages/company_os/domain/__init__.py",
+      "sha256_lf": "b705dc8af28b242b0a25774553fd7dbc552dcaaadf466e7f8234834fb9afe203"
+    },
+    {
+      "path": "packages/company_os/domain/identity.py",
+      "sha256_lf": "7d49fd8ec22b353a5670625cafe1f5336cb861ad18fb7240e1a3dca7c2302bad"
+    },
+    {
+      "path": "packages/company_os/persistence/__init__.py",
+      "sha256_lf": "60630982253e6def5574a54b2b3cb6949790524942b1e27ebdb80bbfb8e2ca8f"
+    },
+    {
+      "path": "packages/company_os/persistence/database.py",
+      "sha256_lf": "a647d82b60c497aea8dde794c7d5cc466c376bffe6a2d62ead34c2b793f9288c"
+    },
+    {
+      "path": "packages/company_os/policy/__init__.py",
+      "sha256_lf": "ed98fd86ee5b4f046d2d00bdef085f414606b4550c71e2f907db66c6a46514c8"
+    },
+    {
+      "path": "packages/company_os/policy/access.py",
+      "sha256_lf": "99e2142ca1811f28cc33ccb1488bcd085860f5f773c724d0e3b4dc60f38a0aac"
+    },
+    {
+      "path": "packages/company_os/reporting/__init__.py",
+      "sha256_lf": "1bd59670de07fc5e3519fa849df897c4954b21f4a0db40371ff96d34a7bafb72"
+    },
+    {
+      "path": "packages/company_os/workflow/README.md",
+      "sha256_lf": "aa1114f1d89ae8663281cb1287fe68c7fee23935dbcefe6f1520de269b1f07ba"
+    },
+    {
+      "path": "packages/contracts/api.d.ts",
+      "sha256_lf": "75143e551f59deda6fff14ef253f219a798e2eeacdd677b94ced57f81addf41e"
+    },
+    {
+      "path": "packages/contracts/openapi.json",
+      "sha256_lf": "84ba8ead2d67a99a40010a135e5e9b62f3128496989b88cd0e03a9c41d1738e6"
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256_lf": "dc736ff25b374547d2da02b49ca9f8ebf14148d62fd3554ba57f6e103d332fd5"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256_lf": "5aeebeb267b5996131af7da89134d90a8ccd318454f3f4e31d76330070d39bd8"
+    },
+    {
+      "path": "README.md",
+      "sha256_lf": "ddda91f4ea394c505d015f7ce4bcf0ad1d938147d0c21f1fb1fe4e04a36ca78f"
+    },
+    {
+      "path": "requirements.lock",
+      "sha256_lf": "b1c8044c52fedee17bcbe467a5dd50c19a6ac49ccd62dc72d8445b0489915be0"
+    },
+    {
+      "path": "scripts/bootstrap_db.py",
+      "sha256_lf": "d7c6ba55a248683d8c27cb4f5b53d32101937659339edd610a8195c163ee925a"
+    },
+    {
+      "path": "scripts/boundaries.py",
+      "sha256_lf": "26742ad5efa44e7c7df36e1d1ea2a0725c3f216c2cb85899ff615959c8912d18"
+    },
+    {
+      "path": "scripts/check.mjs",
+      "sha256_lf": "1505a0ff3f29afe09a48a69287050760251860956c253dee6d0c9eaee536d4fd"
+    },
+    {
+      "path": "scripts/ci-env.mjs",
+      "sha256_lf": "394559af2851257fcda51cbc7e1f9d52d086cd022b243174c3cd68e983a08cc7"
+    },
+    {
+      "path": "scripts/ci-services.mjs",
+      "sha256_lf": "628eccb1bb5f9006f2aa7f26eaa71e4cec2cddb8cedb9c8d9cfc3c8e653c3ac6"
+    },
+    {
+      "path": "scripts/contracts.py",
+      "sha256_lf": "994a6a3ce557086a6775ca83939dccdbb3b8f3e96d5198bbb62e78b3bf6c7ace"
+    },
+    {
+      "path": "scripts/import-spec.ps1",
+      "sha256_lf": "d9a30bee4894c89e0f846c364b18f69414c08469cf8e5366ee60ff0a493895d7"
+    },
+    {
+      "path": "scripts/local.mjs",
+      "sha256_lf": "9897b55e7a5c87eb1dede687541bb3652f76025bcee8a1ec25bc24ab1e5135c5"
+    },
+    {
+      "path": "tests/__init__.py",
+      "sha256_lf": "95cc4832d2b95af4bc1cfaf0616dedb23ec0d952c8d6e2b8331b924d6dbbbc10"
+    },
+    {
+      "path": "tests/conftest.py",
+      "sha256_lf": "1db2bbb6114dee45afa42631d4e99368b4156a5a7869a4d0cb39959d5102b345"
+    },
+    {
+      "path": "tests/contract/test_contracts.py",
+      "sha256_lf": "2d99c7b1dc0b8592b3d47b27d9f0477bd3dcc61a92a505bdad4674bb35158430"
+    },
+    {
+      "path": "tests/e2e/foundation.spec.ts",
+      "sha256_lf": "dbe7027c3ea77a17f01ca22668f2ff29c783301a56f15af836663567a48770db"
+    },
+    {
+      "path": "tests/integration/test_restart.py",
+      "sha256_lf": "f828791ae345aeacacf013acd6f0c47d2e69b97ee42c46b849ff33c92d89a1fc"
+    },
+    {
+      "path": "tests/integration/test_tenancy.py",
+      "sha256_lf": "10f705e0787dcd90f3437dfdc1962aaebf778ea344dc6e6bfc3d52fdda035b7b"
+    },
+    {
+      "path": "tests/security/test_auth.py",
+      "sha256_lf": "1465596384b41d2ce51ccbe9bc513a6b5751f980dd3eb1e4628606af7b7fc1c1"
+    },
+    {
+      "path": "tests/unit/test_security_policy.py",
+      "sha256_lf": "83be2b2d9a22bcacb382e95de21bad8b4bd648c41719382d7c7d3d73e608edfb"
+    }
+  ],
+  "correction_cycle": {
+    "date": "2026-09-17",
+    "review_result": "PASS WITH FIXES",
+    "corrected": [
+      "Worker directly consumes WORKER_DATABASE_URL; launcher removes API/owner credentials without remapping.",
+      "AuthenticationFailed maps to 401; AccessDenied permission/assurance failures map to 403; hidden workspaces remain 404."
+    ],
+    "regression_evidence": [
+      "Actual serviceEnvironments worker environment tested; no DATABASE_URL, migration URL or auth secrets.",
+      "Real company_worker current_user, grants, startup and repeated clean shutdown.",
+      "API and owner credentials rejected through unchanged check_runtime; legacy DATABASE_URL-only launch fails closed.",
+      "Authenticated permission/MFA denials are 403; missing/invalid auth 401; inaccessible workspace 404."
+    ],
+    "changed_file_count": 14,
+    "changed_files": [
+      "apps/api/main.py",
+      "apps/worker/main.py",
+      "docs/adr/019-foundation-runtime.md",
+      "docs/phases/phase-2-handoff.md",
+      "docs/phases/phase-2-manifest.json",
+      "packages/company_os/adapters/auth.py",
+      "packages/company_os/application/identity.py",
+      "packages/company_os/domain/identity.py",
+      "scripts/local.mjs",
+      "tests/conftest.py",
+      "tests/integration/test_restart.py",
+      "tests/integration/test_tenancy.py",
+      "tests/security/test_auth.py",
+      "tests/unit/test_security_policy.py"
+    ],
+    "unchanged": "All migrations/RLS, check_runtime, existing policy helpers, permission registry, API routes/contracts, dependency manifests/locks, CI configuration, .env.example and AGENTS.md/CLAUDE.md.",
+    "generated_file_restored": "apps/console/next-env.d.ts regenerated by build, restored to pre-cycle content; TypeScript passed again.",
+    "new_review_zip": false,
+    "commit": false,
+    "push": false,
+    "phase_3_started": false,
+    "external_review_acceptance": "Pending founder/independent review of corrected handoff"
+  },
+  "excluded_artifacts": [
+    {
+      "path": "company-os-phase-2-review.zip",
+      "reason": "Existing untracked pre-correction review snapshot; unchanged, not source or commit candidate.",
+      "sha256": "b6dd957ffe530541cdd9056cb570b502d32630e597ece4bca66fca98d37a785e"
+    }
+  ],
+  "git_state": {
+    "branch": "main",
+    "unborn": true,
+    "tracked_files": 0,
+    "staged_files": 0,
+    "untracked_source_files": 119,
+    "untracked_existing_archives": 1,
+    "untracked_total": 120
+  }
+}

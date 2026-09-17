@@ -1,0 +1,5 @@
+{
+  "database/migrations/versions/0001_foundation.py": "e1f47410c1e13ccbdf085ccff8690103a21354b1b8215eae33245f2d2a785407",
+  "database/migrations/versions/0001_foundation.sql": "e13ad2c3a296ad8743ae611d7dcc1330af021a9b956f6ad722db2eeb9c119e8b",
+  "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0"
+}
