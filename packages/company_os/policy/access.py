@@ -2,7 +2,16 @@ from datetime import UTC, datetime, timedelta
 
 from company_os.domain.identity import AccessDenied, SessionIdentity
 
-PERMISSIONS = frozenset({"workspace.read", "system.read", "approval.grant"})
+PERMISSIONS = frozenset(
+    {
+        "workspace.read",
+        "system.read",
+        "approval.grant",
+        "business.read",
+        "business.write",
+        "identity.review",
+    }
+)
 
 
 def require_permission(permissions: list[str], permission: str) -> None:

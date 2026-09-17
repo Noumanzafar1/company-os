@@ -11,7 +11,7 @@ def key(name: str) -> UUID:
     return uuid5(NAMESPACE, name)
 
 
-def seed() -> None:
+def seed(*, include_business: bool = True) -> None:
     if os.environ.get("COMPANY_ENV") not in {"development", "test"}:
         raise RuntimeError("Synthetic fixtures are local/test only")
     engine = create_engine(os.environ["MIGRATION_DATABASE_URL"], hide_parameters=True)
@@ -44,7 +44,14 @@ def seed() -> None:
                     params,
                 )
         for role, permissions in {
-            "founder": ["workspace.read", "system.read", "approval.grant"],
+            "founder": [
+                "workspace.read",
+                "system.read",
+                "approval.grant",
+                "business.read",
+                "business.write",
+                "identity.review",
+            ],
             "system_administrator": ["workspace.read", "system.read"],
         }.items():
             conn.execute(
@@ -54,6 +61,12 @@ def seed() -> None:
                 {"id": key(role), "name": role, "actor": founder},
             )
             for permission in permissions:
+                if not include_business and permission in {
+                    "business.read",
+                    "business.write",
+                    "identity.review",
+                }:
+                    continue
                 conn.execute(
                     text(
                         "INSERT INTO app.role_permissions(id,role_id,permission,created_by,updated_by) VALUES(:id,:role,:permission,:actor,:actor) ON CONFLICT DO NOTHING"
@@ -95,6 +108,10 @@ def seed() -> None:
                     "actor": founder,
                 },
             )
+    from database.seeds.core_business import seed_business
+
+    if include_business:
+        seed_business(engine)
     engine.dispose()
     print("Synthetic A/B identities ready; existing grants/revocations preserved")
 

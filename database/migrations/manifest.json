@@ -1,5 +1,8 @@
 {
   "database/migrations/versions/0001_foundation.py": "e1f47410c1e13ccbdf085ccff8690103a21354b1b8215eae33245f2d2a785407",
   "database/migrations/versions/0001_foundation.sql": "e13ad2c3a296ad8743ae611d7dcc1330af021a9b956f6ad722db2eeb9c119e8b",
-  "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0"
+  "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0",
+  "database/migrations/versions/0003_core_business_state.py": "e9c38d91d578629ca078097f7b0eeac7dae79612fcc806f63e876672e99f5feb",
+  "database/migrations/versions/0004_core_integrity.py": "0e27150ca844416c471d864679bda1d7a8bdbf0783afd13f81800a3b3e34707a",
+  "database/migrations/versions/0005_phase3_review_fixes.py": "3023775dd206921d905bfe460a06e3d57ffeb581f6917aecc33ad223509ac720"
 }

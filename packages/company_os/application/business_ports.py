@@ -1,0 +1,9 @@
+from typing import Protocol
+
+
+class DocumentStore(Protocol):
+    def read_fixture(self, external_file_id: str) -> tuple[str, bytes]: ...
+
+    def save_snapshot(self, content: bytes) -> str: ...
+
+    def read_snapshot(self, key: str) -> bytes: ...
