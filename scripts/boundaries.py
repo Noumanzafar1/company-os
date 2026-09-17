@@ -1,4 +1,4 @@
-"""Small, testable Phase 2 guard; no paid scanner/service required."""
+"""Phase 3 guard preserving foundation controls; no paid scanner/service required."""
 
 import ast
 import hashlib
@@ -9,7 +9,24 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BANNED = {"redis", "celery", "kafka", "temporalio", "langchain", "openai", "anthropic", "supabase"}
+BANNED = {
+    "redis",
+    "celery",
+    "kafka",
+    "temporalio",
+    "langchain",
+    "openai",
+    "anthropic",
+    "supabase",
+    "apollo",
+    "zerobounce",
+    "smartlead",
+    "pipedrive",
+    "n8n",
+    "smtplib",
+    "sendgrid",
+    "mailgun",
+}
 BACKEND = {
     "fastapi",
     "uvicorn",
@@ -65,6 +82,48 @@ def import_findings(path: str, content: str) -> list[str]:
     return findings
 
 
+def phase_findings(path: str, content: str) -> list[str]:
+    """Implementation-only guard; future architecture documentation remains allowed."""
+    errors = []
+    if any(
+        segment in path.lower()
+        for segment in [
+            "/workflow/",
+            "/ai/",
+            "/campaigns/",
+            "/outbox/",
+            "/inbox/",
+            "/scheduler/",
+            "/providers/",
+        ]
+    ):
+        errors.append(f"{path}: later-phase implementation module")
+    if re.search(
+        r"[\"']/(?:v1/)?(?:campaigns|webhooks|ai-tasks|jobs|opportunities|messages/.*/dispatch)(?:/|[\"'])",
+        content,
+    ):
+        errors.append(f"{path}: later-phase route")
+    if path.startswith("packages/company_os/adapters/") and not path.endswith(
+        ("/auth.py", "/__init__.py")
+    ):
+        tree = ast.parse(content)
+        for node in ast.walk(tree):
+            names = (
+                [part.name for part in node.names]
+                if isinstance(node, ast.Import)
+                else [node.module or ""]
+                if isinstance(node, ast.ImportFrom)
+                else []
+            )
+            if any(
+                name.split(".")[0] in {"httpx", "requests", "socket", "aiohttp"}
+                or name.startswith("urllib.request")
+                for name in names
+            ):
+                errors.append(f"{path}: Phase 3 adapter must remain offline")
+    return errors
+
+
 def main() -> None:
     files = (
         subprocess.check_output(
@@ -94,6 +153,7 @@ def main() -> None:
         errors.extend(secret_findings(name, content))
         if name.endswith(".py") and name.startswith(("apps/", "packages/company_os/")):
             errors.extend(import_findings(name, content))
+            errors.extend(phase_findings(name, content))
         if name.startswith("apps/console/") and re.search(
             r"(?:process\.env\.(?:DATABASE_URL|MIGRATION_DATABASE_URL|WORKER_DATABASE_URL)|localStorage)",
             content,

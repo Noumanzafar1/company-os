@@ -1,0 +1,694 @@
+{
+  "phase": 3,
+  "completed_date": "2026-09-17",
+  "gate": "PASS",
+  "review_status": "AWAITING INDEPENDENT REVIEW",
+  "phase_2_baseline_sha": "8e8de67447d6283bd51c412487af90ddf5eb7cf3",
+  "branch": "phase-3-core-business-state",
+  "current_head_sha": "8e8de67447d6283bd51c412487af90ddf5eb7cf3",
+  "working_tree": "uncommitted, unstaged Phase 3 changes",
+  "main_modified": false,
+  "committed": false,
+  "pushed": false,
+  "pr_created": false,
+  "merged": false,
+  "migration_head": "0005_phase3_review_fixes",
+  "new_migrations": [
+    "0003_core_business_state",
+    "0004_core_integrity",
+    "0005_phase3_review_fixes"
+  ],
+  "migration_hashes_normalized_lf": {
+    "database/migrations/versions/0001_foundation.py": "e1f47410c1e13ccbdf085ccff8690103a21354b1b8215eae33245f2d2a785407",
+    "database/migrations/versions/0001_foundation.sql": "e13ad2c3a296ad8743ae611d7dcc1330af021a9b956f6ad722db2eeb9c119e8b",
+    "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0",
+    "database/migrations/versions/0003_core_business_state.py": "e9c38d91d578629ca078097f7b0eeac7dae79612fcc806f63e876672e99f5feb",
+    "database/migrations/versions/0004_core_integrity.py": "0e27150ca844416c471d864679bda1d7a8bdbf0783afd13f81800a3b3e34707a",
+    "database/migrations/versions/0005_phase3_review_fixes.py": "3023775dd206921d905bfe460a06e3d57ffeb581f6917aecc33ad223509ac720"
+  },
+  "changed_repository_paths": [
+    "AGENTS.md",
+    "README.md",
+    "apps/api/business.py",
+    "apps/api/main.py",
+    "apps/console/app/accounts/[identifier]/page.tsx",
+    "apps/console/app/accounts/page.tsx",
+    "apps/console/app/business/rescore/route.ts",
+    "apps/console/app/evidence/[identifier]/page.tsx",
+    "apps/console/app/globals.css",
+    "apps/console/app/knowledge/page.tsx",
+    "apps/console/app/leads/page.tsx",
+    "apps/console/app/sources/[identifier]/page.tsx",
+    "apps/console/components/business.tsx",
+    "apps/console/components/shell.tsx",
+    "database/migrations/manifest.json",
+    "database/migrations/versions/0003_core_business_state.py",
+    "database/migrations/versions/0004_core_integrity.py",
+    "database/migrations/versions/0005_phase3_review_fixes.py",
+    "database/seeds/core_business.py",
+    "database/seeds/synthetic.py",
+    "docs/adr/020-core-state-refinements.md",
+    "docs/phases/phase-3-brief.md",
+    "docs/phases/phase-3-handoff.md",
+    "docs/phases/phase-3-manifest.json",
+    "packages/company_os/adapters/local_documents.py",
+    "packages/company_os/adapters/local_source.py",
+    "packages/company_os/application/business.py",
+    "packages/company_os/application/business_ports.py",
+    "packages/company_os/application/scoring.py",
+    "packages/company_os/business_contracts.py",
+    "packages/company_os/domain/scoring.py",
+    "packages/company_os/persistence/business.py",
+    "packages/company_os/persistence/database.py",
+    "packages/company_os/policy/access.py",
+    "packages/company_os/reporting/business.py",
+    "packages/contracts/api.d.ts",
+    "packages/contracts/openapi.json",
+    "scripts/audit_python.py",
+    "scripts/boundaries.py",
+    "tests/conftest.py",
+    "tests/contract/test_contracts.py",
+    "tests/e2e/core-business.spec.ts",
+    "tests/integration/test_core_commands.py",
+    "tests/integration/test_core_state.py",
+    "tests/integration/test_identity_review.py",
+    "tests/integration/test_phase3_review_fixes.py",
+    "tests/integration/test_tenancy.py",
+    "tests/phase3_scope.py",
+    "tests/unit/test_core_boundaries.py",
+    "tests/unit/test_scoring.py"
+  ],
+  "requirement_ids": [
+    "SYS-002",
+    "SYS-003",
+    "SYS-004",
+    "SYS-015",
+    "SYS-023",
+    "DATA-001",
+    "DATA-007",
+    "DATA-009",
+    "DATA-010",
+    "DATA-011",
+    "DATA-012",
+    "DATA-013",
+    "DATA-014",
+    "DATA-015",
+    "DATA-016",
+    "DATA-017",
+    "DATA-018",
+    "DATA-019",
+    "DATA-020",
+    "DATA-022",
+    "DATA-023",
+    "DATA-025",
+    "DATA-026",
+    "DATA-044",
+    "DATA-055",
+    "DATA-056",
+    "DATA-057",
+    "DATA-058",
+    "SEC-001",
+    "SEC-003",
+    "SEC-004",
+    "SEC-008",
+    "SEC-009",
+    "API-001",
+    "API-004",
+    "API-005",
+    "API-006",
+    "API-008",
+    "API-009",
+    "API-010",
+    "API-012",
+    "API-013",
+    "API-016",
+    "API-017",
+    "API-018",
+    "API-019",
+    "API-020",
+    "API-054",
+    "API-056",
+    "TEST-001",
+    "TEST-008",
+    "TEST-016",
+    "TEST-017",
+    "TEST-018",
+    "TEST-028",
+    "TEST-031"
+  ],
+  "requirement_scope": "Phase 3 subsets only. Exact implemented/deferred mapping is in phase-3-handoff.md and phase-3-brief.md; no assertion of later-phase completion.",
+  "architecture_decisions": [
+    "docs/adr/020-core-state-refinements.md"
+  ],
+  "environment": {
+    "os": "Windows x64",
+    "node": "24.16.0",
+    "python": "3.12.14",
+    "postgresql": "18.4",
+    "browser": "installed Chrome via Playwright",
+    "data": "synthetic A/B only"
+  },
+  "tests": [
+    {
+      "command": "npm.cmd run db:start",
+      "status": "PASS"
+    },
+    {
+      "command": "npm.cmd run migrate",
+      "status": "PASS",
+      "context": "populated local 0004 to 0005; repeat upgrade passed"
+    },
+    {
+      "command": "npm.cmd run contracts",
+      "status": "PASS"
+    },
+    {
+      "command": "npm.cmd run check",
+      "status": "PASS",
+      "python": {
+        "passed": 159,
+        "failed": 0,
+        "skipped": 0,
+        "warnings": 2,
+        "seconds": 71.5
+      },
+      "vitest": {
+        "passed": 2,
+        "failed": 0,
+        "duration_ms": 465
+      },
+      "ruff_formatted_files": 102,
+      "mypy_source_files": 30,
+      "checks": [
+        "Python lint/format/types",
+        "unit/integration/security/contracts",
+        "real runtime role RLS and composite references",
+        "complete migration downgrade/upgrade sequence",
+        "OpenAPI and generated TypeScript drift",
+        "boundary/dependency/secret/migration hashes",
+        "frontend lint/types/unit"
+      ]
+    },
+    {
+      "command": "npm.cmd run build",
+      "status": "PASS",
+      "framework": "Next.js 16.3.5",
+      "routes_including_not_found": 16
+    },
+    {
+      "command": "$env:PLAYWRIGHT_CHANNEL='chrome'; node scripts/ci-services.mjs e2e",
+      "status": "PASS",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 21.4,
+      "foundation_tests": 2,
+      "core_tests": 2
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit --project apps/console/tsconfig.json",
+      "status": "PASS",
+      "context": "after restoring generated next-env.d.ts to baseline"
+    },
+    {
+      "command": "npm.cmd audit --audit-level=moderate",
+      "status": "PASS",
+      "vulnerabilities": 0
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe scripts/audit_python.py --online",
+      "status": "PASS",
+      "registry": "OSV/PyPI",
+      "checked_packages": 49,
+      "findings": [],
+      "checked_at": "2026-09-17T14:10:40.186073+00:00"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "migration_test_sequence": [
+    "upgrade populated 0002_identity_guards to head",
+    "downgrade to 0002_identity_guards retains 9 tables and 2 memberships",
+    "upgrade head",
+    "downgrade base",
+    "upgrade head",
+    "repeat upgrade head"
+  ],
+  "api_added": [
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/accounts"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/accounts"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/accounts/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/accounts/{identifier}/propose-correction"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/contact-points"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/documents"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/documents/register"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/documents/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/employments"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/evidence"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/evidence"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/evidence/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/evidence/{identifier}/retract"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/icp-versions/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/icps"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/icps/{identifier}/versions"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/identities/merge"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/identities/merges/{identifier}/reverse"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/knowledge/search"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/leads"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/leads"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/leads/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/leads/{identifier}/archive"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/leads/{identifier}/begin-research"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/leads/{identifier}/complete-research"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/leads/{identifier}/disqualify"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/offer-versions/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/offers"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/offers/{identifier}/versions"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/people"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/people"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/people/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/scores/calculate"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/scores/{identifier}"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/signals"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/signals"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/signals/{identifier}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspace_id}/signals/{identifier}/accept"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/sources"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspace_id}/sources/{identifier}"
+    }
+  ],
+  "phase_boundary": {
+    "real_business_providers": false,
+    "ai": false,
+    "outbound": false,
+    "crm": false,
+    "durable_jobs": false,
+    "events_outbox_runtime": false,
+    "general_approval_engine": false,
+    "verification_integration": false,
+    "production_provisioning_or_deployment": false,
+    "phase_4_started": false,
+    "fake_adapters_only": true,
+    "worker_business_grants": false,
+    "normal_synthetic_login_mfa": false,
+    "offline_verified_mfa_fixture": "explicitly approved by Nouman; test only"
+  },
+  "limitations": [
+    "Independent review and hosted CI remain outstanding; no push authorized",
+    "Draft-only definitions; unknown role score; no live identity-provider preflight claim",
+    "Bounded detail projections; no load-capacity claim",
+    "Query-time rights/expiry checks, no scheduler",
+    "Fake local documents may leave unused blob after rollback; no production storage claim",
+    "Legacy scores require explicit rescore because original full input sets were not persisted",
+    "Read-time score re-evaluation adds queries; no capacity claim"
+  ],
+  "phase_4_readiness": "NOT READY: requires independent Phase 3 review and explicit authorization",
+  "source_hash_algorithm": "SHA-256 of exact working-tree bytes (migration manifest separately normalizes CRLF to LF)",
+  "source_hash_exclusions": {
+    "docs/phases/phase-3-manifest.json": "Self-hash omitted to avoid recursion; included in review archive and covered by archive SHA-256"
+  },
+  "source_hashes": {
+    "AGENTS.md": "bb0d94129f3564d190b63a6dcec503ad2c02969fd82fffbcad13ea9cbfb30e11",
+    "README.md": "f35700ca46ba37784c2691c039817dda6bb0b6e8b8d1492c48838b6e4c83ee7e",
+    "apps/api/business.py": "9367c4537b741edf3af5834ce64c24c09360aa5fdc3f7c7e3ef7bcd003eb2078",
+    "apps/api/main.py": "1af02fb142576a7d199a8de9987a713700479541c6cb03be6961ebafc6f0b342",
+    "apps/console/app/accounts/[identifier]/page.tsx": "75f4424e0b6f353b8d84798007f53f3c63a66f6d3f64c6664ff00ba4031c7661",
+    "apps/console/app/accounts/page.tsx": "ff665ac9bc14ac04fa91f7b27348d48d11289d72f20e2243ebb2e0084053d6d3",
+    "apps/console/app/business/rescore/route.ts": "99f5c702333bf1bea7798d9723260f310585b6e43fd687170e1b1f089f28d40e",
+    "apps/console/app/evidence/[identifier]/page.tsx": "df8158c2b47469b15d0555854be721dcd9ac2a23a05ee3a4e88c2503d45873c5",
+    "apps/console/app/globals.css": "d860d3c62548ad84750cafdc767e4c05a648cf7933e2c08210d0aed37ecfa3ff",
+    "apps/console/app/knowledge/page.tsx": "fa2db930bc67cd9409a6efc3afb7e50a4b0f678fb102cf9d543bd30ef77463cf",
+    "apps/console/app/leads/page.tsx": "a59ae5984afe8f75cccbb533fab2b108b8f57f11a8988ef7181d81ef79186c71",
+    "apps/console/app/sources/[identifier]/page.tsx": "d905586196fb0cbea148ec7ec94add0477f10772a1bf4ecd35681c8ad618efb2",
+    "apps/console/components/business.tsx": "d7c25d8c0f190909ccba6da57f7298c6412eca3f3d5004b3bb3dda043817548b",
+    "apps/console/components/shell.tsx": "fa715ea64d3e2358a8835d6f7bfcffbb9d6a25fbfe223278adeef5f525569322",
+    "database/migrations/manifest.json": "572f5856c1881ca0bb18a828d9e32e2cf25acb06ba81264884dfe735deefb340",
+    "database/migrations/versions/0003_core_business_state.py": "e9c38d91d578629ca078097f7b0eeac7dae79612fcc806f63e876672e99f5feb",
+    "database/migrations/versions/0004_core_integrity.py": "0e27150ca844416c471d864679bda1d7a8bdbf0783afd13f81800a3b3e34707a",
+    "database/migrations/versions/0005_phase3_review_fixes.py": "fcc089f58f59c73e5660437c0b1de4190c7f87204e051a84e0fcb6f89933b9d0",
+    "database/seeds/core_business.py": "4265890d906e24b3fcf0b8a6e5226da6eb8246bd93d7b539fb6f489af88dd4ea",
+    "database/seeds/synthetic.py": "112d9476cc43e53f135c1ef8ab231174448ef86ee1cb4463e1190b59ed995216",
+    "docs/adr/020-core-state-refinements.md": "057928850a3656b4837cfa4882b130842941dd4b470f954bcb6b8c2ede6e134e",
+    "docs/phases/phase-3-brief.md": "44a5b541260d0f420e58b873f4dfeb0b73a06d232f4e2813ffb1e9b383a1550b",
+    "docs/phases/phase-3-handoff.md": "0fff134391cfc24bb92bc1afb0d762c59fddc2a886ad549253b1ca1c91f42eb8",
+    "packages/company_os/adapters/local_documents.py": "ca00b9789e97a57c908dc79c1b297a8b0f6ddf34b95bad5a2a61c7d3ec0cda17",
+    "packages/company_os/adapters/local_source.py": "b75af5756ed5a672dc08930642b4fb36693ee1196860ab87699c2e7565c23366",
+    "packages/company_os/application/business.py": "324a16292d910edcab24c8b2c485126c859ab54e63b2cfbf94ce0937a972f315",
+    "packages/company_os/application/business_ports.py": "1794d6890145d1f5aac07fdccd21230d8d426b6df3b8931e6ac73cac7f793934",
+    "packages/company_os/application/scoring.py": "35e2f4fff0c11b013c76311ea3759861edff4cfd526959304829ebafd3c4f35b",
+    "packages/company_os/business_contracts.py": "55c45dcb96beba53699d83c396e251ea5eaf64a0f068076d48c61d32453a6d43",
+    "packages/company_os/domain/scoring.py": "d75acdbb13b2cdf4b3c4bc6da8d871a7f9eb1dfe52e696a6d33d6c6d31fc42a0",
+    "packages/company_os/persistence/business.py": "542b460119709999aaaf409074af0165c57739cad87a44ca1c79ba9303050f75",
+    "packages/company_os/persistence/database.py": "0f129ccd82204e26d015e3d93c2ec8f77cbca4a610e4e025086add329e0c4276",
+    "packages/company_os/policy/access.py": "afd79ff9e64a799dbb0f05ed97dd8dadc0329d9f3e550860c1afe3ddbc486524",
+    "packages/company_os/reporting/business.py": "65a4139fdf063416945e69f13f2e724db9698710b3d6bb03e5b3f5b907267d9e",
+    "packages/contracts/api.d.ts": "c9835ee995515e57ff30fe725c2e01fa23da961449914ae8e1f9b03663f9edda",
+    "packages/contracts/openapi.json": "14da138dabc3ffc516e5242c5963631911a5830d9dd83d0bbbe31ef4a680079f",
+    "scripts/audit_python.py": "001e9537ed8bbecdc7151c7e4f039d59985ed58d0b0090fe025044d7f489c286",
+    "scripts/boundaries.py": "2c7ef251e113d698162b4dbdee50c9bdb71bd8205e6795e78d0048357c9a4c91",
+    "tests/conftest.py": "ef3772c5be7dd320295ce1265a96b52306a67468690c547f7131877d160e1fad",
+    "tests/contract/test_contracts.py": "ba7febb8b7ac5c69092a177633c8209657cfaa5907b8a65b39fc650ad2f7ed78",
+    "tests/e2e/core-business.spec.ts": "f33cb0a347fb95a0eed76770f81e6f49be082d70b37324f2f88a8ca0c042fd71",
+    "tests/integration/test_core_commands.py": "e903063917692ce5cdeebff619c494200f2e459a7b35bd2b849afb4ec765f0d0",
+    "tests/integration/test_core_state.py": "538954930e726f26689272ca4160c33142140aeadee0091470e0af8bb00d3157",
+    "tests/integration/test_identity_review.py": "39dfcceaa65f7c61dd85202b78b7cb454d3b9880ee50da3e5ffb6c1c8ca4e19a",
+    "tests/integration/test_phase3_review_fixes.py": "1181cd1e758dd6d7b58458b873074279c1782134e7e0f72f6a3def21a7ff4502",
+    "tests/integration/test_tenancy.py": "9df050b66e3e29ea1fb08a7831b0bcf7b90577724b3adc8633976bfc0fc4e346",
+    "tests/phase3_scope.py": "d7529e2666f44870412b994d2b696e3ec5759bfea0f98b41c291888cbfc26852",
+    "tests/unit/test_core_boundaries.py": "31b4b26b2fa9b80095905c6f3c7299102030b3f75b2f516d361b5ac8b2c59490",
+    "tests/unit/test_scoring.py": "cbe6c06d4af34adc6fc6a13020a90b52454a8939c19c9b62b4d42ccabeea20a2"
+  },
+  "review_bundle": {
+    "file": "company-os-phase-3-review.zip",
+    "includes_repository_tree": true,
+    "sha256_location": "Reported separately at delivery to avoid recursive archive content",
+    "excludes": [
+      ".git",
+      ".env",
+      "secrets",
+      "node_modules",
+      ".venv",
+      "build artifacts",
+      "caches",
+      "test screenshots/videos",
+      "local PostgreSQL data",
+      "review ZIPs",
+      "temporary files"
+    ],
+    "status": "Original review ZIP preserved unchanged; apply correction delta over it"
+  },
+  "pre_review_tests": [
+    {
+      "command": "npm.cmd run check",
+      "status": "PASS",
+      "python": {
+        "passed": 132,
+        "failed": 0,
+        "skipped": 0,
+        "warnings": 2,
+        "seconds": 33.41
+      },
+      "vitest": {
+        "passed": 2,
+        "failed": 0,
+        "duration_ms": 234
+      },
+      "ruff_formatted_files": 98,
+      "mypy_source_files": 29,
+      "checks": [
+        "lint",
+        "format",
+        "types",
+        "OpenAPI drift",
+        "generated TypeScript drift",
+        "secrets/current Git history",
+        "dependency and phase boundaries",
+        "immutable migrations",
+        "PostgreSQL integration/security",
+        "frontend lint/types/unit"
+      ]
+    },
+    {
+      "command": "npm.cmd run build",
+      "status": "PASS",
+      "framework": "Next.js 16.3.5",
+      "routes_including_not_found": 16
+    },
+    {
+      "command": "$env:PLAYWRIGHT_CHANNEL='chrome'; node scripts/ci-services.mjs e2e",
+      "status": "PASS",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 13.3,
+      "foundation_tests": 2,
+      "core_tests": 2,
+      "services": "running local API and production console"
+    },
+    {
+      "command": "npm.cmd run contracts",
+      "status": "PASS"
+    },
+    {
+      "command": "npm.cmd run migrate",
+      "status": "PASS",
+      "repeat_upgrade": "PASS"
+    },
+    {
+      "command": "npm.cmd run seed",
+      "status": "PASS",
+      "accounts": 22
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit --project apps/console/tsconfig.json",
+      "status": "PASS",
+      "context": "after restoring generated next-env.d.ts to baseline"
+    },
+    {
+      "command": "npm.cmd audit --audit-level=moderate",
+      "status": "PASS",
+      "vulnerabilities": 0
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe scripts/audit_python.py --online",
+      "status": "PASS",
+      "registry": "OSV/PyPI",
+      "checked_packages": 49,
+      "findings": [],
+      "checked_at": "2026-09-17T13:16:51.681910+00:00"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    },
+    {
+      "command": "node --input-type=module -e \"import {loadEnv,python,run} from './scripts/local.mjs'; loadEnv(); run(python,['-m','pytest','-q','tests/integration/test_identity_review.py']);\"",
+      "status": "PASS",
+      "passed": 2,
+      "failed": 0,
+      "warnings": 2,
+      "seconds": 12.6
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe scripts/boundaries.py",
+      "status": "PASS",
+      "context": "final documentation and manifest",
+      "enumerated_files": 153
+    }
+  ],
+  "correction": {
+    "gate": "PASS",
+    "independent_review_before_corrections": "PASS WITH FIXES",
+    "acceptance": "AWAITING INDEPENDENT CORRECTION REVIEW",
+    "baseline_review_zip_sha256": "38d014402d584aeb1069cb0579f3ecfd2594ea850de80ee7fb9e1191784c46a3",
+    "changed_repository_paths": [
+      "database/migrations/manifest.json",
+      "database/migrations/versions/0005_phase3_review_fixes.py",
+      "docs/adr/020-core-state-refinements.md",
+      "docs/phases/phase-3-handoff.md",
+      "docs/phases/phase-3-manifest.json",
+      "packages/company_os/application/business.py",
+      "packages/company_os/application/scoring.py",
+      "packages/company_os/business_contracts.py",
+      "packages/company_os/persistence/business.py",
+      "packages/company_os/persistence/database.py",
+      "packages/company_os/reporting/business.py",
+      "packages/contracts/api.d.ts",
+      "packages/contracts/openapi.json",
+      "tests/contract/test_contracts.py",
+      "tests/integration/test_identity_review.py",
+      "tests/integration/test_phase3_review_fixes.py",
+      "tests/phase3_scope.py"
+    ],
+    "fixes": {
+      "score_dependencies": "Immutable complete input evidence and exact Signal snapshot joins; shared read-only evaluation/hash comparison; query-time freshness and fail-closed legacy results; no history rewrite",
+      "typed_contradictions": "Canonical type/value/unit comparison and expected scoring types; invalid/contradictory facts yield unknown",
+      "reversal_evidence": "Every reference scoped to tenant and reviewed survivor/retired identities; all current-evidence checks before decision",
+      "contact_permissions": "Unknown email assessment for email only; no assessment for phone/URL",
+      "signal_chronology": "Application/model and SQL chronology checks; future event_at permitted",
+      "review_cleanup": "Unused DocumentInput.purpose removed; Signal acceptance_reason persisted/readable, legacy null"
+    },
+    "new_migration": "0005_phase3_review_fixes",
+    "new_tables": [
+      "score_input_evidence",
+      "score_signals"
+    ],
+    "total_business_tables": 35,
+    "total_app_tables": 44,
+    "unchanged_applied_migrations": [
+      "0003_core_business_state",
+      "0004_core_integrity"
+    ],
+    "legacy_behavior": "dependency_version=0 scores remain immutable/readable but non-current; explicit rescore creates/reuses a version-one result",
+    "archive": "company-os-phase-3-correction-delta.zip",
+    "archive_file_list": "CORRECTION_FILE_LIST.txt",
+    "full_repository_zip_created": false,
+    "before_hashes": {
+      "database/migrations/manifest.json": "da3dfe06b32971bbfd8a56a8323179d0c80f67412be93bbdc110b44a1d00224f",
+      "database/migrations/versions/0005_phase3_review_fixes.py": null,
+      "docs/adr/020-core-state-refinements.md": "2521492375a3ab8753fa3c58e58e671221b0abf9ea6de960c5c8bc34121a0f68",
+      "docs/phases/phase-3-handoff.md": "6818146b7e775fdf373d9ff4d8e38e9ea2c8f3e01e41f7d6b1daa847cf6355db",
+      "docs/phases/phase-3-manifest.json": "0f50238657f07f31dc6681dcb327d1629ff281623d22e0569a18b17b3eecd440",
+      "packages/company_os/application/business.py": "3f97f50e518c1cafcb52441df5ec58cbc925600df215f0ea784050a4d4ba0de1",
+      "packages/company_os/application/scoring.py": null,
+      "packages/company_os/business_contracts.py": "7e51d10226abd6fc9f4be6b8219ec5efb4ac30ef2df77e3fb361c4e0a2502c92",
+      "packages/company_os/persistence/business.py": "84b6b4a04902612cfc0f43c64f67d106c9f41323c3d0486d506eeb71e55c49c9",
+      "packages/company_os/persistence/database.py": "5858845edd8f99cdcad2f4834bfbc597b46a9e2571fd22f85669dacab6f5b53a",
+      "packages/company_os/reporting/business.py": "27a7445d35ab80ec6615c68ebd76faea0cb89290690802ff2fb06878811f2597",
+      "packages/contracts/api.d.ts": "cdecff5500ab0f5d8ae2d4c817c1fad2ee2cf98c28b27c843d2e0f21e7027da0",
+      "packages/contracts/openapi.json": "b4f38332b16923f29e7f63373e2846f1387fcc583e05e795a6ac440a67f601b8",
+      "tests/contract/test_contracts.py": "a9f4fa8903e5c3422939e584444428836e8ed3c8a2b0fc61006845284a1966b3",
+      "tests/integration/test_identity_review.py": "d1a3750dffa0d7ecc45e83240a809f944ddc9bb6caf05e304d99614f4101ac38",
+      "tests/integration/test_phase3_review_fixes.py": null,
+      "tests/phase3_scope.py": "958d8ea05a92bf211ce2a0aa7fc1670cc278cf5eece01cdb65862982370ec7fc"
+    },
+    "source_hashes": {
+      "database/migrations/manifest.json": "572f5856c1881ca0bb18a828d9e32e2cf25acb06ba81264884dfe735deefb340",
+      "database/migrations/versions/0005_phase3_review_fixes.py": "fcc089f58f59c73e5660437c0b1de4190c7f87204e051a84e0fcb6f89933b9d0",
+      "docs/adr/020-core-state-refinements.md": "057928850a3656b4837cfa4882b130842941dd4b470f954bcb6b8c2ede6e134e",
+      "docs/phases/phase-3-handoff.md": "0fff134391cfc24bb92bc1afb0d762c59fddc2a886ad549253b1ca1c91f42eb8",
+      "packages/company_os/application/business.py": "324a16292d910edcab24c8b2c485126c859ab54e63b2cfbf94ce0937a972f315",
+      "packages/company_os/application/scoring.py": "35e2f4fff0c11b013c76311ea3759861edff4cfd526959304829ebafd3c4f35b",
+      "packages/company_os/business_contracts.py": "55c45dcb96beba53699d83c396e251ea5eaf64a0f068076d48c61d32453a6d43",
+      "packages/company_os/persistence/business.py": "542b460119709999aaaf409074af0165c57739cad87a44ca1c79ba9303050f75",
+      "packages/company_os/persistence/database.py": "0f129ccd82204e26d015e3d93c2ec8f77cbca4a610e4e025086add329e0c4276",
+      "packages/company_os/reporting/business.py": "65a4139fdf063416945e69f13f2e724db9698710b3d6bb03e5b3f5b907267d9e",
+      "packages/contracts/api.d.ts": "c9835ee995515e57ff30fe725c2e01fa23da961449914ae8e1f9b03663f9edda",
+      "packages/contracts/openapi.json": "14da138dabc3ffc516e5242c5963631911a5830d9dd83d0bbbe31ef4a680079f",
+      "tests/contract/test_contracts.py": "ba7febb8b7ac5c69092a177633c8209657cfaa5907b8a65b39fc650ad2f7ed78",
+      "tests/integration/test_identity_review.py": "39dfcceaa65f7c61dd85202b78b7cb454d3b9880ee50da3e5ffb6c1c8ca4e19a",
+      "tests/integration/test_phase3_review_fixes.py": "1181cd1e758dd6d7b58458b873074279c1782134e7e0f72f6a3def21a7ff4502",
+      "tests/phase3_scope.py": "d7529e2666f44870412b994d2b696e3ec5759bfea0f98b41c291888cbfc26852"
+    },
+    "self_hash_exclusion": "Manifest self-hash omitted; covered by delivered delta archive SHA-256",
+    "initial_failed_test": "New reversal fixture accidentally reused unique evidence content hash; distinct provenance/hash fixed without weakening any constraint; final 159 pass"
+  },
+  "correction_review_bundle": {
+    "file": "company-os-phase-3-correction-delta.zip",
+    "includes_correction_file_list": true,
+    "source_files": 17,
+    "sha256_location": "Reported separately at delivery",
+    "excludes_unchanged_files": true
+  }
+}

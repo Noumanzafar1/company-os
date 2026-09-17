@@ -2,10 +2,13 @@ import secrets
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 from uuid import UUID, uuid4
 
 from company_os.adapters.auth import JWTIdentityProvider
+from company_os.adapters.local_documents import FakeDocumentStore
+from company_os.application.business import CoreCommands
 from company_os.application.identity import IdentityService, digest
 from company_os.config import Settings
 from company_os.contracts import (
@@ -21,6 +24,7 @@ from company_os.contracts import (
     Workspace,
 )
 from company_os.domain.identity import AccessDenied, AuthenticationFailed, SessionIdentity
+from company_os.persistence.business import BusinessError
 from company_os.persistence.database import check_runtime, make_engine, transaction
 from company_os.policy.access import require_permission
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
@@ -28,6 +32,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from apps.api.business import register
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -40,6 +46,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         api.state.config = config
         api.state.engine = engine
         api.state.identity = IdentityService(engine, JWTIdentityProvider(config))
+        api.state.commands = CoreCommands(
+            engine, api.state.identity, FakeDocumentStore(Path(".local/documents"))
+        )
         yield
         engine.dispose()
 
@@ -80,6 +89,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @api.exception_handler(AuthenticationFailed)
     async def unauthenticated(request: Request, exc: AuthenticationFailed) -> JSONResponse:
         return error(request, 401, "UNAUTHENTICATED", "Sign in required.")
+
+    @api.exception_handler(BusinessError)
+    async def business_error(request: Request, exc: BusinessError) -> JSONResponse:
+        return error(
+            request,
+            exc.status,
+            exc.code,
+            "Resource unavailable." if exc.status == 404 else "Command could not be completed.",
+        )
 
     @api.exception_handler(AccessDenied)
     async def denied(request: Request, exc: AccessDenied) -> JSONResponse:
@@ -221,6 +239,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         request.app.state.identity.logout(token, csrf, request.state.request_id)
         return Response(status_code=204)
 
+    register(api, authenticated)
     return api
 
 

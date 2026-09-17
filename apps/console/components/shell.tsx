@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import type { ReactNode } from 'react';
 import { apiGet,CSRF_COOKIE,type Me,type Health,type WorkspaceResponse } from '@/lib/api';
 
-const routes=[['/attention','Attention','01'],['/approvals','Approvals','02'],['/system','System Health','03']];
+const routes=[['/attention','Attention','01'],['/approvals','Approvals','02'],['/system','System Health','03'],['/accounts','Accounts','04'],['/leads','Leads','05'],['/knowledge','Knowledge','06']];
 
-export async function Shell({route,requestedWorkspace}:{route:string,requestedWorkspace?:string}) {
+export async function Shell({route,requestedWorkspace,children}:{route:string,requestedWorkspace?:string,children?:ReactNode}) {
   const profile=await apiGet<Me>('/v1/me');
   if(profile.status===401)redirect('/login');
   if(!profile.data)return <main className="failure"><h1>Company OS is temporarily unavailable</h1><p>Your workspace could not be loaded. Please retry shortly.</p></main>;
@@ -34,9 +35,9 @@ export async function Shell({route,requestedWorkspace}:{route:string,requestedWo
       <div className="user-menu"><div><strong>{user.display_name}</strong><span>{scope?.roles.join(', ').replaceAll('_',' ') || 'No active membership'}</span></div>
         <form action="/auth/logout" method="post"><input type="hidden" name="csrf" value={csrf || ''}/><button className="text-button">Sign out</button></form></div>
     </header>
-    <main className="content"><div className="page-heading"><div><span className="eyebrow">YOUR OPERATING SPACE</span><h1>{title}</h1></div><span className="phase-tag">PHASE 02</span></div>
+    <main className="content"><div className="page-heading"><div><span className="eyebrow">YOUR OPERATING SPACE</span><h1>{title}</h1></div><span className="phase-tag">PHASE 03</span></div>
       {!scope ? <section className="empty-state" role="alert"><div className="empty-symbol">⊘</div><h2>Workspace unavailable</h2><p>This workspace is unavailable or you do not have access.</p><Link href={route}>Return to your workspace</Link></section>
-      : route==='/system' ? <><p className="page-intro">Connection status for this foundation. Unconfigured services have no active connections.</p>
+      : children ? children : route==='/system' ? <><p className="page-intro">Connection status for this foundation. Unconfigured services have no active connections.</p>
         {health?.data ? <section className="health-panel"><div className="panel-heading"><h2>Platform status</h2><span className="small muted">Checked {new Date(health.data.meta.as_of).toISOString().slice(11,19)} UTC</span></div>
           {health.data.data.components.map(component=><div className="health-row" key={component.name}><span>{component.name}</span><span className={component.status==='healthy'?'status healthy':'status'}>{component.status==='healthy'?'Healthy':'Not configured'}</span></div>)}
         </section>:<section className="notice error" role="alert">System status unavailable. Health could not be confirmed.</section>}
