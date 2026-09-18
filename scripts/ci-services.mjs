@@ -8,8 +8,9 @@ if(process.argv[2]==='prepare') {
   run(python,['-m','alembic','upgrade','head']);
   run(python,['-m','database.seeds.synthetic']);
 } else if(process.argv[2]==='e2e') {
-  const {apiEnv,consoleEnv}=serviceEnvironments();
+  const {apiEnv,consoleEnv,workerEnv}=serviceEnvironments();
   const api=spawn(python,['-m','apps.api.run','--stop-file','.local/ci-api.stop'],{stdio:'inherit',windowsHide:true,env:apiEnv});
+  const worker=spawn(python,['-m','apps.worker.main','--stop-file','.local/ci-worker.stop'],{stdio:'inherit',windowsHide:true,env:workerEnv});
   const consoleProcess=spawn(process.execPath,['node_modules/next/dist/bin/next','start','apps/console','--hostname','127.0.0.1'],{stdio:'inherit',windowsHide:true,env:consoleEnv});
   try {
     let ready=false;
@@ -24,9 +25,13 @@ if(process.argv[2]==='prepare') {
     if(!ready)throw new Error('Services did not become ready');
     run(process.execPath,[resolve('node_modules/@playwright/test/cli.js'),'test']);
   } finally {
+    writeFileSync('.local/ci-worker.stop','stop');
     writeFileSync('.local/ci-api.stop','stop'); consoleProcess.kill('SIGTERM');
     const timeout=setTimeout(()=>api.kill('SIGTERM'),10000);
     await new Promise(r=>api.exitCode!==null?r():api.once('exit',r));
     clearTimeout(timeout);
+    const workerTimeout=setTimeout(()=>worker.kill('SIGTERM'),10000);
+    await new Promise(r=>worker.exitCode!==null?r():worker.once('exit',r));
+    clearTimeout(workerTimeout);
   }
 }

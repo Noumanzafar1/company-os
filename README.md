@@ -1,11 +1,13 @@
 # Company OS
 
-Private Company OS modular monolith. **Phase 3 core business state; independent review required.**
+Private Company OS modular monolith. **Phase 4 fake durable runtime; independent review required.**
 
-Next.js console, FastAPI API, heartbeat-only worker and PostgreSQL with enforced
+Next.js console, FastAPI API, durable worker and PostgreSQL with enforced
 workspace isolation. No business integrations, outbound sending, AI or production
 deployment exists. Accounts, people, sourced evidence, deterministic scores and
 draft ICP/Offer versions use synthetic data and local fake adapters only.
+Phase 4 adds durable events/jobs, scheduling, fake effects, budget reservations and
+System Health. Review status and remaining gates are recorded in the Phase 4 handoff.
 
 Prerequisites: Node.js 24, npm 11+, Python 3.12. From this repository:
 
@@ -31,8 +33,9 @@ Run checks and E2E while `npm run dev` is running. The Python suite creates and
 removes its own randomly named test database, never the demo database.
 
 See the [exact local/demo runbook](docs/local-development.md),
+[Phase 4 handoff and runtime demo](docs/phases/phase-4-handoff.md),
 [Phase 3 handoff and business-state demo](docs/phases/phase-3-handoff.md),
 [Phase 2 handoff](docs/phases/phase-2-handoff.md),
 [canonical documentation](docs/README.md) and [engineering instructions](AGENTS.md).
-Phase 3 work remains local and uncommitted for independent review. No commit,
-push, PR, merge or Phase 4 implementation is authorized.
+Phase 3 is closed. Phase 4 work remains local and uncommitted for independent review.
+No commit, push, PR, merge, production deployment or Phase 5 is authorized.

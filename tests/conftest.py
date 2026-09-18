@@ -32,6 +32,7 @@ def db_env() -> Iterator[dict[str, str]]:
         "AUTH_MODE": "development",
         "DEV_AUTH_SECRET": secrets.token_hex(32),
         "CONSOLE_SECRET": secrets.token_hex(32),
+        "FAKE_WEBHOOK_SECRET": secrets.token_hex(32),
     }
     for key in ["MIGRATION_DATABASE_URL", "DATABASE_URL", "WORKER_DATABASE_URL"]:
         env[key] = os.environ[key].rsplit("/", 1)[0] + "/" + database
@@ -52,6 +53,18 @@ def db_env() -> Iterator[dict[str, str]]:
         )
         subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
         subprocess.run(
+            [sys.executable, "-m", "alembic", "downgrade", "0011_runtime_event_payloads"],
+            env=env,
+            check=True,
+        )
+        subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        subprocess.run(
+            [sys.executable, "-m", "alembic", "downgrade", "0005_phase3_review_fixes"],
+            env=env,
+            check=True,
+        )
+        subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        subprocess.run(
             [sys.executable, "-m", "alembic", "downgrade", "0002_identity_guards"],
             env=env,
             check=True,
@@ -65,12 +78,30 @@ def db_env() -> Iterator[dict[str, str]]:
             )
             assert check.execute("SELECT count(*) FROM app.memberships").fetchone()[0] == 2
         subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        subprocess.run(
+            [sys.executable, "-m", "alembic", "downgrade", "0005_phase3_review_fixes"],
+            env=env,
+            check=True,
+        )
+        subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
         subprocess.run([sys.executable, "-m", "alembic", "downgrade", "base"], env=env, check=True)
         with psycopg.connect(
             env["MIGRATION_DATABASE_URL"].replace("postgresql+psycopg:", "postgresql:")
         ) as check:
             assert check.execute("SELECT to_regnamespace('app')").fetchone()[0] is None
         subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        subprocess.run(
+            [sys.executable, "-m", "alembic", "downgrade", "0005_phase3_review_fixes"],
+            env=env,
+            check=True,
+        )
+        subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        subprocess.run(
+            [sys.executable, "-m", "alembic", "downgrade", "0005_phase3_review_fixes"],
+            env=env,
+            check=True,
+        )
         subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
         subprocess.run([sys.executable, "-m", "database.seeds.synthetic"], env=env, check=True)
         yield env
@@ -133,6 +164,7 @@ def settings(db_env):
                 "CONSOLE_ORIGIN",
                 "CONSOLE_SECRET",
                 "DEV_AUTH_SECRET",
+                "FAKE_WEBHOOK_SECRET",
             }
         },
     )

@@ -1,0 +1,10 @@
+Company OS Phase 4 final correction delta
+Baseline: company-os-phase-4-correction-delta.zip
+Baseline SHA-256: ac7d518668a92a282bbb01fc9e3956a848a63dd077b9625aea8bad3f22bc608b
+
+CORRECTION_FILE_LIST.txt
+docs/adr/021-fake-runtime-boundaries.md
+docs/phases/phase-4-handoff.md
+docs/phases/phase-4-manifest.json
+packages/company_os/application/runtime.py
+tests/integration/test_phase4_review_fixes.py
