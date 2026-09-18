@@ -1,0 +1,938 @@
+{
+  "phase": 4,
+  "gate_status": "PASS",
+  "final_status": "PHASE 4 FINAL CORRECTION COMPLETE - AWAITING ACCEPTANCE REVIEW",
+  "generated_at_utc": "2026-09-18T06:38:11.872493+00:00",
+  "phase_3_baseline_sha": "e8c896a8fd7669472d9488b83840526ce847ce20",
+  "branch": "phase-4-events-jobs-health",
+  "head": "e8c896a8fd7669472d9488b83840526ce847ce20",
+  "main": "e8c896a8fd7669472d9488b83840526ce847ce20",
+  "origin_main": "e8c896a8fd7669472d9488b83840526ce847ce20",
+  "working_tree": "Uncommitted and unstaged; no commit, push, PR, merge or deployment",
+  "migration_head": "0012_phase4_review_fixes",
+  "environment": {
+    "os": "Windows",
+    "postgresql": "18.4",
+    "node": "24.16.0",
+    "python": "3.12",
+    "data": "synthetic only",
+    "verification_permissions": "Elevated/non-sandboxed Windows process/temp/browser execution and outbound HTTPS; all required commands succeeded"
+  },
+  "changed_repository_paths": [
+    ".env.example",
+    "AGENTS.md",
+    "CORRECTION_FILE_LIST.txt",
+    "README.md",
+    "apps/api/main.py",
+    "apps/api/runtime.py",
+    "apps/console/app/system/command/route.ts",
+    "apps/console/app/system/events/page.tsx",
+    "apps/console/app/system/incidents/page.tsx",
+    "apps/console/app/system/jobs/[identifier]/page.tsx",
+    "apps/console/app/system/jobs/page.tsx",
+    "apps/console/app/system/page.tsx",
+    "apps/console/components/runtime.tsx",
+    "apps/console/components/shell.tsx",
+    "apps/worker/main.py",
+    "database/migrations/manifest.json",
+    "database/migrations/versions/0006_durable_runtime.py",
+    "database/migrations/versions/0007_runtime_integrity.py",
+    "database/migrations/versions/0008_runtime_actor_guard.py",
+    "database/migrations/versions/0009_runtime_callbacks.py",
+    "database/migrations/versions/0010_runtime_budget_caps.py",
+    "database/migrations/versions/0011_runtime_event_payloads.py",
+    "database/migrations/versions/0012_phase4_review_fixes.py",
+    "database/seeds/runtime.py",
+    "database/seeds/synthetic.py",
+    "docs/adr/021-fake-runtime-boundaries.md",
+    "docs/phases/phase-4-brief.md",
+    "docs/phases/phase-4-handoff.md",
+    "docs/phases/phase-4-manifest.json",
+    "packages/company_os/adapters/fake_effects.py",
+    "packages/company_os/application/runtime.py",
+    "packages/company_os/application/scheduler.py",
+    "packages/company_os/application/webhooks.py",
+    "packages/company_os/config.py",
+    "packages/company_os/persistence/database.py",
+    "packages/company_os/persistence/runtime.py",
+    "packages/company_os/reporting/runtime.py",
+    "packages/company_os/runtime_contracts.py",
+    "packages/company_os/workflow/README.md",
+    "packages/company_os/workflow/__init__.py",
+    "packages/company_os/workflow/runtime.py",
+    "packages/contracts/api.d.ts",
+    "packages/contracts/openapi.json",
+    "scripts/boundaries.py",
+    "scripts/ci-services.mjs",
+    "scripts/local.mjs",
+    "scripts/phase4-demo.mjs",
+    "tests/conftest.py",
+    "tests/contract/test_contracts.py",
+    "tests/e2e/runtime.spec.ts",
+    "tests/integration/test_phase4_review_fixes.py",
+    "tests/integration/test_runtime.py",
+    "tests/integration/test_tenancy.py",
+    "tests/phase4_scope.py",
+    "tests/unit/test_core_boundaries.py",
+    "tests/unit/test_runtime_contracts.py"
+  ],
+  "requirement_ids": [
+    "DATA-050",
+    "DATA-051",
+    "DATA-052",
+    "DATA-053",
+    "DATA-057",
+    "EVT-001",
+    "EVT-002",
+    "EVT-027",
+    "EVT-029",
+    "EVT-030",
+    "EVT-035",
+    "EVT-038",
+    "EVT-039",
+    "OPS-013",
+    "OPS-014",
+    "OPS-015",
+    "OPS-016",
+    "OPS-017",
+    "OPS-018",
+    "OPS-019",
+    "API-051",
+    "API-052",
+    "API-053",
+    "API-059",
+    "API-060",
+    "API-061",
+    "API-062",
+    "API-063",
+    "UI-015",
+    "SEC-001",
+    "SEC-003",
+    "SEC-008",
+    "SEC-009",
+    "TEST-004",
+    "TEST-007",
+    "TEST-009",
+    "TEST-012",
+    "TEST-013",
+    "TEST-014",
+    "TEST-018",
+    "TEST-019",
+    "TEST-027",
+    "TEST-029",
+    "TEST-031"
+  ],
+  "requirement_scope": "Authorized Phase 4 fake/runtime subsets only; bounded correction cycle",
+  "tests": [
+    {
+      "command": "npm.cmd run db:start",
+      "result": "PASS",
+      "detail": "Local PostgreSQL and non-owner runtime roles ready"
+    },
+    {
+      "command": "npm.cmd run check",
+      "result": "PASS",
+      "python": {
+        "passed": 216,
+        "warnings": 2,
+        "seconds": 149.68
+      },
+      "vitest": {
+        "passed": 2,
+        "files": 1,
+        "seconds": 0.244
+      },
+      "static_checks": "OpenAPI/TypeScript drift, Ruff, 127 formatted Python files, mypy 40 files, boundaries/migration hashes/secret checks, frontend lint and TypeScript all passed"
+    },
+    {
+      "command": "npm.cmd run build",
+      "result": "PASS",
+      "routes": 21,
+      "generated_pages": 18,
+      "warnings": 0
+    },
+    {
+      "command": "$env:PLAYWRIGHT_CHANNEL='chrome'; node scripts/ci-services.mjs e2e",
+      "result": "PASS",
+      "passed": 5,
+      "test_seconds": 17.3,
+      "warnings": 2,
+      "warning_detail": "NO_COLOR/FORCE_COLOR; running API, worker and production console, clean shutdown"
+    },
+    {
+      "command": "npm.cmd audit --audit-level=moderate",
+      "result": "PASS",
+      "vulnerabilities": 0
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe scripts/audit_python.py --online",
+      "result": "PASS",
+      "report": {
+        "checked_at": "2026-09-18T06:31:37.470245+00:00",
+        "registry": "OSV/PyPI",
+        "checked_packages": 49,
+        "findings": []
+      }
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS",
+      "whitespace_errors": 0,
+      "advisories": "Seven existing CRLF normalization advisories; repeated after documentation updates"
+    },
+    {
+      "command": "$env:PYTEST_ADDOPTS='-p no:cacheprovider'; node scripts/phase4-demo.mjs all",
+      "result": "PASS",
+      "passed": 55,
+      "warnings": 2,
+      "test_seconds": 137.55
+    }
+  ],
+  "load_metrics": {
+    "synthetic_workspaces": 5,
+    "additional_accounts": 50000,
+    "additional_people": 100000,
+    "concurrent_users": 10,
+    "read_api_p95_seconds": 0.21900000001187436,
+    "command_p95_seconds": 0.17199999999138527
+  },
+  "queue_metrics": {
+    "fixture": "10000-jobs-per-day-equivalent",
+    "normal_executions": 40,
+    "elapsed_seconds": 0.7820000000065193,
+    "safety_claim_seconds": 0.125
+  },
+  "migration_hash_algorithm": "SHA-256 over bytes with CRLF normalized to LF",
+  "migration_hashes": {
+    "database/migrations/versions/0001_foundation.py": "e1f47410c1e13ccbdf085ccff8690103a21354b1b8215eae33245f2d2a785407",
+    "database/migrations/versions/0001_foundation.sql": "e13ad2c3a296ad8743ae611d7dcc1330af021a9b956f6ad722db2eeb9c119e8b",
+    "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0",
+    "database/migrations/versions/0003_core_business_state.py": "e9c38d91d578629ca078097f7b0eeac7dae79612fcc806f63e876672e99f5feb",
+    "database/migrations/versions/0004_core_integrity.py": "0e27150ca844416c471d864679bda1d7a8bdbf0783afd13f81800a3b3e34707a",
+    "database/migrations/versions/0005_phase3_review_fixes.py": "3023775dd206921d905bfe460a06e3d57ffeb581f6917aecc33ad223509ac720",
+    "database/migrations/versions/0006_durable_runtime.py": "e2997e9aff372ef52874f9af8e5c33ad097fd66e8f34cdb714247df88b7d9289",
+    "database/migrations/versions/0007_runtime_integrity.py": "c87f2e1395519b8be6823382852142af12f2bdc2f24b56b65e3e8c5da2adcd91",
+    "database/migrations/versions/0008_runtime_actor_guard.py": "0ac34227f3fece4c1b5157a2d520fcbd77d1279bdcccf3f0c791c0faf5b13892",
+    "database/migrations/versions/0009_runtime_callbacks.py": "9d12128363d6a0fd194ecb5326b151606be58a070baa2025355b69a8effc00a8",
+    "database/migrations/versions/0010_runtime_budget_caps.py": "b9c61a71a2ff4d68f189d4696f89f97d91d030eee36d157f8aa4a82c737c7dc7",
+    "database/migrations/versions/0011_runtime_event_payloads.py": "496d65e639f523c6cb3ffab38dc97d4dd57a2b6d8770d4a306540aad7124cc4d",
+    "database/migrations/versions/0012_phase4_review_fixes.py": "07f6b88428bb6e109a7687ad0865649ec1d6dfca2d1185026226bd1c1aa9bde7"
+  },
+  "source_hash_algorithm": "SHA-256 over exact delivered file bytes",
+  "source_hashes": {
+    ".env.example": "605d195a81c22fb209ec7bdcb48b4c7aa7f08f31132b94c53e077fe6994e56f6",
+    ".gitattributes": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c",
+    ".github/workflows/ci.yml": "7eb437b3602243b0117f9e0692fe47c499938373a28e2f54eea08e6d409c2ddf",
+    ".gitignore": "ebe34cc6a353c324c493d889e689e09df54f4d17b40b4fa676d4ae170a4fbaa7",
+    ".node-version": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53",
+    ".python-version": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+    "AGENTS.md": "63d53855cff35fd86471901d3e70c42629fd66abc5b9d32c1001bbc766437831",
+    "CLAUDE.md": "39c5b79a253bb0b5e94c7343ab863c804b278687b4b1e566f82403a59e8e4176",
+    "CORRECTION_FILE_LIST.txt": "e3233bd18dc7687da936ae8b19f2479922ab6c5a16bbe308a365ea0a62277d6a",
+    "README.md": "18de9e5dfa0a70e442541b58089903815f8a5cd44cd32ba007571758c6d19d2c",
+    "alembic.ini": "c3be31533ac5399458dffa424400cb88b27286ed1550686a91e607b824253b34",
+    "apps/__init__.py": "485711c2a9f13531f4867732c6beb8639b5a9c1cedc167a2667bcf088c5d209d",
+    "apps/api/__init__.py": "86aa4684be03202e930a90a9c028d81ac0e419341ea654d64914221f024676f0",
+    "apps/api/business.py": "9367c4537b741edf3af5834ce64c24c09360aa5fdc3f7c7e3ef7bcd003eb2078",
+    "apps/api/main.py": "280cb0b6d10e559816179c55f24c876c37068f07bfd027b7d2f0ea257bcf93cf",
+    "apps/api/run.py": "1e7540b7a83d3e43125436b817a073e2fea8d466a58013ab4acc0120088ffeba",
+    "apps/api/runtime.py": "23bd413e6066345077f22db3e5c1135daf1bb59c198258eb23acb02e00dfa9d9",
+    "apps/console/app/accounts/[identifier]/page.tsx": "75f4424e0b6f353b8d84798007f53f3c63a66f6d3f64c6664ff00ba4031c7661",
+    "apps/console/app/accounts/page.tsx": "ff665ac9bc14ac04fa91f7b27348d48d11289d72f20e2243ebb2e0084053d6d3",
+    "apps/console/app/approvals/page.tsx": "9d7d2428e2b83506978462dc7b7c2abefbe8ff65ed932620c9375bd983e93303",
+    "apps/console/app/attention/page.tsx": "116bb69a03fa1c10649a605863a86d5ef9d2645a2ae112d41cd43ec894a84606",
+    "apps/console/app/auth/login/route.ts": "44592f3c9d1a11da4dc55fc5ee315088e8c92f7cff14ac59689dc639379e2125",
+    "apps/console/app/auth/logout/route.ts": "6d3ea88fcef0ae483d63b66605d2dd05ece99fd149d710350c3255f11cb86a59",
+    "apps/console/app/auth/prepare/route.ts": "51a5eac6a47cf18e5b4f9eb842088ce69841efc584311b72719849a783192c41",
+    "apps/console/app/business/rescore/route.ts": "99f5c702333bf1bea7798d9723260f310585b6e43fd687170e1b1f089f28d40e",
+    "apps/console/app/evidence/[identifier]/page.tsx": "df8158c2b47469b15d0555854be721dcd9ac2a23a05ee3a4e88c2503d45873c5",
+    "apps/console/app/globals.css": "d860d3c62548ad84750cafdc767e4c05a648cf7933e2c08210d0aed37ecfa3ff",
+    "apps/console/app/knowledge/page.tsx": "fa2db930bc67cd9409a6efc3afb7e50a4b0f678fb102cf9d543bd30ef77463cf",
+    "apps/console/app/layout.tsx": "c4a97691c8a289804be6c5d99f0c96bd7859f737c123553ef3762acdda2ebfef",
+    "apps/console/app/leads/page.tsx": "a59ae5984afe8f75cccbb533fab2b108b8f57f11a8988ef7181d81ef79186c71",
+    "apps/console/app/login/page.tsx": "245ee5895e78cbb59ed9f5e019a21cfebdc8f64ce7de243da4d42a34588e5d35",
+    "apps/console/app/page.tsx": "2cbfc578ffd14d7561de9f15e9ec93bc5a58d5bd7a2b0801fd3e40961c09112c",
+    "apps/console/app/sources/[identifier]/page.tsx": "d905586196fb0cbea148ec7ec94add0477f10772a1bf4ecd35681c8ad618efb2",
+    "apps/console/app/system/command/route.ts": "8cf21222ab3bebf168586f9f8c3623f6afc2b5d0a7132d8d0d88fd6ac9acd16e",
+    "apps/console/app/system/events/page.tsx": "2e050d93ef29f5af40b0689d58880972b275f3f1d571e267cc2ab4843bab9370",
+    "apps/console/app/system/incidents/page.tsx": "bcbe7520362208b611c81a8f802cf65c855505f4b27430707e4927d4246f7795",
+    "apps/console/app/system/jobs/[identifier]/page.tsx": "05d88fc2270b20b904d60b099a709164bab5883753b3bc3bceaca157b9d92774",
+    "apps/console/app/system/jobs/page.tsx": "d80cd7ebe7c72cc1a596cdaa06d1d5a13657e435e7cd5dab78df271e9dc7cd2d",
+    "apps/console/app/system/page.tsx": "b6d10c08bd2866b81aa70bc57cdb8fd9d6f38485429a20ecfe6d03199e17270b",
+    "apps/console/components/business.tsx": "2b9ee64ce473866a71e318f0a4558f6dd3a5aeac15fa972dfc637af909563cfd",
+    "apps/console/components/runtime.tsx": "570fdac3d1ceaaa28dfceb8fc012ff3e9b34a78707b249d79727adf11445fa57",
+    "apps/console/components/shell.tsx": "9ea7a7f9cc2805b0b86fbe81960a483b066cfe1d9e02439e28db1b685679bdde",
+    "apps/console/eslint.config.mjs": "827a3200c6eeccf336186f0f8c77bece194438cf971cabd15f1362f0efb89f46",
+    "apps/console/lib/api.ts": "a6fa276130b4160eb7c157a775ba9dc8b3e0d936fd28ade857432e335d33cc2a",
+    "apps/console/lib/security.test.ts": "60f20831f2606a54486671d8ed1a97b0f38549093ad9d9367a09a9d1d2125feb",
+    "apps/console/lib/security.ts": "816a316e721afb9190da224ecd278cb36dd8c61b676d50b8f049ace2bfd60746",
+    "apps/console/next-env.d.ts": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "apps/console/next.config.ts": "7a03152c4691fd88b1978e20ab2d9bdcd036a7a55a3a30dca97b45357c7de996",
+    "apps/console/package.json": "664ff987c294f4cb7c16273fae2db9e8f6221fea0d3c548fe771efce1adb73f7",
+    "apps/console/tsconfig.json": "de051314f06fe9bcbc55cf9bff2a6685869d3163642a5f2ad10638ba1a18cb85",
+    "apps/worker/__init__.py": "f510e3ff914f4a890095444f8e6d48f741263ff0f0232953ae4c8c044e1160a9",
+    "apps/worker/main.py": "fb5a758fd6db190362cd90a8b41265d1d9de379806231e63e6a9521df007a55c",
+    "database/__init__.py": "0566531f0513b3779f818835a7da41bf8c958fefb0b69a80fc10b39c9c8c64a4",
+    "database/migrations/env.py": "5ff4f9ed8d813470d4d7754ddb9beef1a8f15617059df5766383e0d860436eb7",
+    "database/migrations/manifest.json": "8dfd9711bf849435f9a65de83d6bcef74f394d205d6124ba3c9c958d299d24b2",
+    "database/migrations/versions/0001_foundation.py": "e1f47410c1e13ccbdf085ccff8690103a21354b1b8215eae33245f2d2a785407",
+    "database/migrations/versions/0001_foundation.sql": "e13ad2c3a296ad8743ae611d7dcc1330af021a9b956f6ad722db2eeb9c119e8b",
+    "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0",
+    "database/migrations/versions/0003_core_business_state.py": "e9c38d91d578629ca078097f7b0eeac7dae79612fcc806f63e876672e99f5feb",
+    "database/migrations/versions/0004_core_integrity.py": "0e27150ca844416c471d864679bda1d7a8bdbf0783afd13f81800a3b3e34707a",
+    "database/migrations/versions/0005_phase3_review_fixes.py": "3023775dd206921d905bfe460a06e3d57ffeb581f6917aecc33ad223509ac720",
+    "database/migrations/versions/0006_durable_runtime.py": "e2997e9aff372ef52874f9af8e5c33ad097fd66e8f34cdb714247df88b7d9289",
+    "database/migrations/versions/0007_runtime_integrity.py": "c87f2e1395519b8be6823382852142af12f2bdc2f24b56b65e3e8c5da2adcd91",
+    "database/migrations/versions/0008_runtime_actor_guard.py": "0ac34227f3fece4c1b5157a2d520fcbd77d1279bdcccf3f0c791c0faf5b13892",
+    "database/migrations/versions/0009_runtime_callbacks.py": "9d12128363d6a0fd194ecb5326b151606be58a070baa2025355b69a8effc00a8",
+    "database/migrations/versions/0010_runtime_budget_caps.py": "b9c61a71a2ff4d68f189d4696f89f97d91d030eee36d157f8aa4a82c737c7dc7",
+    "database/migrations/versions/0011_runtime_event_payloads.py": "496d65e639f523c6cb3ffab38dc97d4dd57a2b6d8770d4a306540aad7124cc4d",
+    "database/migrations/versions/0012_phase4_review_fixes.py": "07f6b88428bb6e109a7687ad0865649ec1d6dfca2d1185026226bd1c1aa9bde7",
+    "database/policies/README.md": "1c330877c16b02039b7783e9100fc24d9fbe1e62d575594f3961916b16723642",
+    "database/seeds/__init__.py": "b7b8d602690822ce5ed3e9b0cced265624280e7f5d9edc0b2a67a60a234dcbd2",
+    "database/seeds/core_business.py": "4265890d906e24b3fcf0b8a6e5226da6eb8246bd93d7b539fb6f489af88dd4ea",
+    "database/seeds/runtime.py": "a3ed402b11ca056f66b0e0a6a68d875be73007b362eaede42e6c68ee1300e224",
+    "database/seeds/synthetic.py": "cd404cc9db9210f7481853d7828fd4888320f40f716d0ad8dddfae56ffec64c4",
+    "docs/00-product-overview.md": "f0c93cb8af63f58e6aa857dcd582f7587f8ca00cb433d0ed2852d21c79c28a7b",
+    "docs/01-system-context.md": "22ada9ab03d71fdef6598a4a2bbd06d242e823948002655a4de498c49836d352",
+    "docs/02-architecture.md": "c3f5256d16665b6410a206d0024a8debcf2786301f86d2a7a9a767d1ed3a9cd9",
+    "docs/03-domain-model.md": "606e0e866f9689709b531900226b8a1082589bed03aaed236769969967bfed6d",
+    "docs/04-data-ownership.md": "df8abfca97b7f4140f91bfca25e8054cf728e2eafb80a5583beaef210696397e",
+    "docs/05-state-machines.md": "79c78458235c88971269c56c58bf649998d56e42ff1da923212d72dd23319e10",
+    "docs/06-events.md": "aa79437b3e0bf3a66b682e549f03ea0895b2d539f1bec823b9c71ca943688325",
+    "docs/07-jobs.md": "ab7431443ed9cce193c6a024afd6c6ca40d323ce7f7246e97e14f15218a92ab9",
+    "docs/08-policy-approvals.md": "dcfa9cf00793fd81a618d835252e9889f8dae9d440b8c6318e9a302f7b7db5f5",
+    "docs/09-ai-gateway.md": "959b46785581b5ba1d8ffa20d3c70547fb7908e2754cb9842922526f667dd5d3",
+    "docs/10-agent-contracts.md": "99f28ba96f558bbb2730e28c23599c0ad65488df6693910a550ba039a12eccd5",
+    "docs/11-integrations.md": "b79c4481ad626a7c00008ef3cc42d17e4ac52ee387d715c4001354cddbcf55ff",
+    "docs/12-api.md": "9b419239396d82d2c545c3468b35bfdb541a1b21b2389a7ff4b41008d3ebc939",
+    "docs/13-founder-console.md": "ee129988766ef1e4baa79fe8092d9b0fd0f82ff8775e5a8aa2e504d30e0c30a5",
+    "docs/14-security.md": "ca3b0fffbf291b79987007509336b76955855840f68128215d6a4d0d2098ff6f",
+    "docs/15-observability.md": "cefad8bf020cfb79616b37ba85185fee077dc35cb15946445d97e1d1be72a86d",
+    "docs/16-testing.md": "7cbec00ebf71debb36b3747ba45b30a932de9c23ef40546a7eeb340b5e9b398d",
+    "docs/17-deployment.md": "5666137a6a47f73533607a9963079d5e140ad09a62a2153f7aa4e4f0bb2009a4",
+    "docs/18-development-workflow.md": "f708c95b2a91de0f0c0a42699059b42017100e3411027dc565e3751054db9cfd",
+    "docs/19-implementation-roadmap.md": "83cdec2afa6faa202a3b6db0f335ff9d99702807baae1762913d429a6bfbcf77",
+    "docs/20-open-decisions.md": "13809ca719009007a45ebe443939e3b18e1ae794c7c3c37c2f7ad40dba9c5136",
+    "docs/README.md": "9c2431371b6297e40d149062d9f8c502de409360c4cc357d977669a77b8e5272",
+    "docs/adr/019-foundation-runtime.md": "ce72381ba50c337a93a1bc52cb45219c9158edf262f08fb0341ae6d472278c31",
+    "docs/adr/020-core-state-refinements.md": "7316b8fa5ad3801a878522b8bdde5960c3d6392be83a0866ff3d6079e810e191",
+    "docs/adr/021-fake-runtime-boundaries.md": "7ad212cf362e7913a88626a41042393d0511f671d7394facf9bc8ce431afd5b8",
+    "docs/adr/phase-1-registry.md": "5f40782ac075635f37131f14af907f06c27a2ffa9758820bb89b37d1f448bb34",
+    "docs/architecture.md": "55e6b419371855b8f705158b4c2c42d6897ae1d61d0628badb42cbc7ab273a32",
+    "docs/dependencies.md": "eae8d32ea353ec4cb2cce4d99b41597ef7a2b69a19b4744c159f3e34ee7411ef",
+    "docs/domain-model.md": "e4636616e553b65f261b6e5bb5a4ef7abb03146a7a0977d4749ace91853f5dbe",
+    "docs/local-development.md": "4a5eca6f6a87cb709af5215c52c40c0e243393b097efe1d25f571f8b30769569",
+    "docs/phases/phase-2-handoff.md": "89b953109c0ba6f6ff3bcccc60c27064b7c9758e6f6f973f370e77ff41d31277",
+    "docs/phases/phase-2-manifest.json": "c14a6ca2b2b2e0da6c1e05ba41a13dc754502aec778ab4122f8f18edc216f869",
+    "docs/phases/phase-2.md": "737bee70d68c843d6be84e8c99bfb647694601d01ce4571573e82d590d951f7e",
+    "docs/phases/phase-3-brief.md": "ace8523229e003579fcca1a4784f64fd16422ee926dcf4c75a6badd6d3e784ab",
+    "docs/phases/phase-3-handoff.md": "27fdc87c2fbb457d8c3c059e97e1e6ceae7c104bb3ff12100b9c0940203b8bee",
+    "docs/phases/phase-3-manifest.json": "bdad4b02f6085fb2893784c8c0be0da8a12c0383f37412a6c73ba9bf49f74d7a",
+    "docs/phases/phase-4-brief.md": "cd493685f91c8df1e1a3911810e50e69060ea13c66924f98cf25c7b83da2ecb9",
+    "docs/phases/phase-4-handoff.md": "408dcb2d4029f643cecd54b6dec5382ca4dffc9eecbdee6e489c94b7f6a3ca5e",
+    "docs/requirements.md": "3da807d364228e433e218d8c0e4e59a1f8348a360d6249751624078446525fc1",
+    "docs/security.md": "39ce543a03d03e92a6abdd83a8dc17477f5bb88650c43ca242cda2f8fe8dfc88",
+    "docs/testing.md": "f99902187ffc42cb4645a1ec103382dbb924e84f088f7d4c9fbe64dd47bfcd87",
+    "infra/README.md": "94f9a2588dc1ce2a9b0d4b5700d36ea9691c26ea9774b914950fbe7e22106132",
+    "package-lock.json": "55d5787809483bcbfeaed1e277b53a5d7670719e35d45b592b1c28465d5655b2",
+    "package.json": "98a09a8c017e2040194060efd753ff165ab38136cfa311b280e78efae0f61b93",
+    "packages/company_os/__init__.py": "342b7501fa2a1d91d86fb22c31b5ce154cc2010528f437209b371b4d7e8dcf28",
+    "packages/company_os/adapters/__init__.py": "ab63d848371ab46809ecf970556dd8b2fae73b6de742abb49c4d0f25eacf0d25",
+    "packages/company_os/adapters/auth.py": "b5bd96944a795a49a77d80ed58e161f63845d9321e31c4e84486144b19338101",
+    "packages/company_os/adapters/fake_effects.py": "1908fef7629554d05d355c5fd8602dcd8bcc502aefb4b5c9492cd47c9c980108",
+    "packages/company_os/adapters/local_documents.py": "ca00b9789e97a57c908dc79c1b297a8b0f6ddf34b95bad5a2a61c7d3ec0cda17",
+    "packages/company_os/adapters/local_source.py": "b75af5756ed5a672dc08930642b4fb36693ee1196860ab87699c2e7565c23366",
+    "packages/company_os/ai/README.md": "df51b21e7642137f97a2bfbb9d9f3b7b8574fba91613dd07424b37dd70b304b2",
+    "packages/company_os/application/__init__.py": "963cdb872a3f9a65383213656d375c28d13cb105aeec35bd40bbb1c328b3ff72",
+    "packages/company_os/application/business.py": "7d5db2ed2adee6fb3507c197e3e5fc8bdfc13eff8bdc9e4b8f79b06c34860259",
+    "packages/company_os/application/business_ports.py": "1794d6890145d1f5aac07fdccd21230d8d426b6df3b8931e6ac73cac7f793934",
+    "packages/company_os/application/identity.py": "1efbba0dd1d4c32b788eb3b7ed524a4ff333752feace032231b6dfa301a300d9",
+    "packages/company_os/application/ports.py": "738a4054ebf48690bdbd2e86830d7d0b53a9de45ec97b2da54198c1b5a8fc2f1",
+    "packages/company_os/application/runtime.py": "2900d1cf34990c5c868cc0ce8d626debcddc9a4050bff1c78440a113eeafb947",
+    "packages/company_os/application/scheduler.py": "fea0ef0b2bf2d5858a1b537b289dbaf6c3ef155fd904268533c695a267e70e28",
+    "packages/company_os/application/scoring.py": "febaee877528afea2944c5903968498ead181b0048d8ab372a22aa4a5a8d989a",
+    "packages/company_os/application/webhooks.py": "ee4462698e2bb3d35de28a349c3ec2f0f4f292e565f1504a2673afa5e6084aaa",
+    "packages/company_os/business_contracts.py": "2393ba6dcc45a6c07a23b2f9a094b52467f5ab241a17d186ce39fb881b8a2fe3",
+    "packages/company_os/config.py": "92d5b3c06da917e74090060e128096ed49daf06c068ec0e8feb8a4e8adcb1d17",
+    "packages/company_os/contracts.py": "305aee6bd58d59e12ffe92d1445236b157c9f098fda547d92abd5936de6db586",
+    "packages/company_os/domain/__init__.py": "b705dc8af28b242b0a25774553fd7dbc552dcaaadf466e7f8234834fb9afe203",
+    "packages/company_os/domain/identity.py": "7d49fd8ec22b353a5670625cafe1f5336cb861ad18fb7240e1a3dca7c2302bad",
+    "packages/company_os/domain/scoring.py": "d75acdbb13b2cdf4b3c4bc6da8d871a7f9eb1dfe52e696a6d33d6c6d31fc42a0",
+    "packages/company_os/persistence/__init__.py": "60630982253e6def5574a54b2b3cb6949790524942b1e27ebdb80bbfb8e2ca8f",
+    "packages/company_os/persistence/business.py": "d110d9acce0aad4ca804994768f2afcc4586cd63708b30fa42bbcb6b2c693ad4",
+    "packages/company_os/persistence/database.py": "af549ad7eb3549fcba290fce897ae1689885f54358ee3f5f53a360c3da5a09c8",
+    "packages/company_os/persistence/runtime.py": "f15020c44eb1fc64e8367dc54f7b2f2f80c0f11b6b5f21e1555f629c6d8e15fb",
+    "packages/company_os/policy/__init__.py": "ed98fd86ee5b4f046d2d00bdef085f414606b4550c71e2f907db66c6a46514c8",
+    "packages/company_os/policy/access.py": "afd79ff9e64a799dbb0f05ed97dd8dadc0329d9f3e550860c1afe3ddbc486524",
+    "packages/company_os/reporting/__init__.py": "1bd59670de07fc5e3519fa849df897c4954b21f4a0db40371ff96d34a7bafb72",
+    "packages/company_os/reporting/business.py": "64f0644db403afffce70170d6214f2223e5caba05bc45488205825b89bf3dffa",
+    "packages/company_os/reporting/runtime.py": "6621c63df7ddf0f9362b186488ee981595fde048c0189ed710d065a8a7999b8a",
+    "packages/company_os/runtime_contracts.py": "597c33d74475463733997391cfcad433bad9e79f83fb78da00ba52d65293189d",
+    "packages/company_os/workflow/README.md": "f891636725b2dc47afaac7e77119b551c529b17f4db0ef8cbc793591111e1608",
+    "packages/company_os/workflow/__init__.py": "d726d3503181d07d180cd975f1bbe225b487723041d13ef3e19bf2744ad0223e",
+    "packages/company_os/workflow/runtime.py": "1816d70f72a0875573312449cd01157719acf87ab6bd819d55db10819d6413af",
+    "packages/contracts/api.d.ts": "0a8c3bc964c52a4e035e8637227d8a2ccd047c43e9ed0c2dbc3e273aa3a1c367",
+    "packages/contracts/openapi.json": "a7f41ec6a7fb382454d332e7abba5eefdf31663c11a428556ec18ed70eafa4d4",
+    "playwright.config.ts": "dc736ff25b374547d2da02b49ca9f8ebf14148d62fd3554ba57f6e103d332fd5",
+    "pyproject.toml": "5aeebeb267b5996131af7da89134d90a8ccd318454f3f4e31d76330070d39bd8",
+    "requirements.lock": "b1c8044c52fedee17bcbe467a5dd50c19a6ac49ccd62dc72d8445b0489915be0",
+    "scripts/audit_python.py": "001e9537ed8bbecdc7151c7e4f039d59985ed58d0b0090fe025044d7f489c286",
+    "scripts/bootstrap_db.py": "d7c6ba55a248683d8c27cb4f5b53d32101937659339edd610a8195c163ee925a",
+    "scripts/boundaries.py": "e53ae87c8f6472c9ef0b4410ee5a003b69ce8201393b6fb1aea7ce74b3f98d14",
+    "scripts/check.mjs": "1505a0ff3f29afe09a48a69287050760251860956c253dee6d0c9eaee536d4fd",
+    "scripts/ci-env.mjs": "394559af2851257fcda51cbc7e1f9d52d086cd022b243174c3cd68e983a08cc7",
+    "scripts/ci-services.mjs": "6387c0f61ca0c12f180cb5761f89a923c9c9406c32617eda4051c16ec72f2a26",
+    "scripts/contracts.py": "994a6a3ce557086a6775ca83939dccdbb3b8f3e96d5198bbb62e78b3bf6c7ace",
+    "scripts/import-spec.ps1": "d9a30bee4894c89e0f846c364b18f69414c08469cf8e5366ee60ff0a493895d7",
+    "scripts/local.mjs": "1847758141d3e0771c3a7ed96ee5bcb6f706736e6a23380332e16780887ec8a1",
+    "scripts/phase4-demo.mjs": "4775571f6655b3708924ab5e61debbc3f76feb224b022df03b64311b859b78ea",
+    "tests/__init__.py": "95cc4832d2b95af4bc1cfaf0616dedb23ec0d952c8d6e2b8331b924d6dbbbc10",
+    "tests/conftest.py": "c22c41db0e0f12af8a4158bb8a8804fb4fef9fdca4366cdab757c629e5912202",
+    "tests/contract/test_contracts.py": "019b29961f2c1c7020d432cd2baed22d4f8e9a70ce4d73d7840ea846cd1e9668",
+    "tests/e2e/core-business.spec.ts": "f70f568cad71b928e75ef5386e1e9762c9df51f2be11bec32ae8bcaf7c17d88e",
+    "tests/e2e/foundation.spec.ts": "dbe7027c3ea77a17f01ca22668f2ff29c783301a56f15af836663567a48770db",
+    "tests/e2e/runtime.spec.ts": "459bb0429fc8769fedf7eb8b3039c95e1102ad9d0b431157017d97280525c676",
+    "tests/integration/test_core_commands.py": "e903063917692ce5cdeebff619c494200f2e459a7b35bd2b849afb4ec765f0d0",
+    "tests/integration/test_core_state.py": "538954930e726f26689272ca4160c33142140aeadee0091470e0af8bb00d3157",
+    "tests/integration/test_identity_review.py": "f9ce8ee7283d7995db74ecaec57412bb6f55d41ee58d99f3271e67a8eff0a327",
+    "tests/integration/test_phase3_review_fixes.py": "984a3243a61d5596487fbe4977cd80c79302f59fa9e53d43b0c5e3121388cf14",
+    "tests/integration/test_phase4_review_fixes.py": "d39de3be30cc248533df46e923c16824d522783abf697fbf935e51623926101b",
+    "tests/integration/test_restart.py": "f828791ae345aeacacf013acd6f0c47d2e69b97ee42c46b849ff33c92d89a1fc",
+    "tests/integration/test_runtime.py": "8fc6435cb550622003ee9380d748e67379dcb5bf37c44ef76cab95a8a25394ab",
+    "tests/integration/test_tenancy.py": "2dadfd31ce7e2334b82f23e0bda0744ef564e01f1c5f22d27b051ec745cc53f1",
+    "tests/phase3_scope.py": "5c235bb8213e0c9d30d76075fe811d8d5992670ef345f6a16bb737f37cc725c1",
+    "tests/phase4_scope.py": "88735905db23933f797e027d3875c5ed2a69424e46ea57ed44e97812dd57122b",
+    "tests/security/test_auth.py": "1465596384b41d2ce51ccbe9bc513a6b5751f980dd3eb1e4628606af7b7fc1c1",
+    "tests/unit/test_core_boundaries.py": "2f6adf4ceebe6274ef921ae8c02936ceedacd4e632af97d25b80f77b678773e4",
+    "tests/unit/test_runtime_contracts.py": "a97d1836ddbca279ccb6e08509037d50c88e08f1a1c6915cd04311000c210f1d",
+    "tests/unit/test_scoring.py": "cbe6c06d4af34adc6fc6a13020a90b52454a8939c19c9b62b4d42ccabeea20a2",
+    "tests/unit/test_security_policy.py": "83be2b2d9a22bcacb382e95de21bad8b4bd648c41719382d7c7d3d73e608edfb"
+  },
+  "self_hash_excluded": true,
+  "fake_adapter": {
+    "identifier": "fake_local_v1",
+    "business_network_calls": false,
+    "receipt_store": "workspace-scoped synthetic DB ledger in independent transaction",
+    "authentication": "FAKE PHASE 4 TEST AUTHENTICATION — NOT A PROVIDER GUARANTEE"
+  },
+  "phase_boundary": {
+    "real_providers": false,
+    "ai": false,
+    "outbound": false,
+    "crm": false,
+    "campaign_runtime": false,
+    "full_approval_engine": false,
+    "n8n_cloud": false,
+    "phase_5": false,
+    "production_deployment": false,
+    "openai": false,
+    "anthropic": false
+  },
+  "review_archive": {
+    "filename": "company-os-phase-4-final-correction-delta.zip",
+    "contents": "Only six final-correction changed files, repository-relative paths, including CORRECTION_FILE_LIST.txt",
+    "baseline_filename": "company-os-phase-4-correction-delta.zip",
+    "baseline_sha256": "ac7d518668a92a282bbb01fc9e3956a848a63dd077b9625aea8bad3f22bc608b",
+    "sha256": "Reported separately in delivery to avoid self-reference",
+    "exclusions": [
+      ".git",
+      ".env",
+      "secrets",
+      "dependencies",
+      "build output",
+      "caches",
+      "local DB files",
+      "previous ZIPs",
+      "unchanged source"
+    ]
+  },
+  "preserved_existing_archives": {
+    "company-os-phase-2-correction-delta.zip": "2779e7c8c7bb04b08ddd907e5998ebcf29549d58250d77a6ab72aae1bc44b924",
+    "company-os-phase-2-review.zip": "b6dd957ffe530541cdd9056cb570b502d32630e597ece4bca66fca98d37a785e",
+    "company-os-phase-3-correction-delta.zip": "06c1f05b8baa10168be39711434c41ccde1594be9874e9ed5a48bb2480d5ea0f",
+    "company-os-phase-3-review.zip": "38d014402d584aeb1069cb0579f3ecfd2594ea850de80ee7fb9e1191784c46a3",
+    "company-os-phase-4-review.zip": "e7b47c27738591ff42bd1cb00a618dd38587dd95a43fe611ada21e35035b0e61",
+    "company-os-phase-4-review-final.zip": "20932d6dea8b85f49045d7e5ae4aae34410aea4f54b18e9c6d0ca8ffc2846ec2",
+    "company-os-phase-4-correction-delta.zip": "ac7d518668a92a282bbb01fc9e3956a848a63dd077b9625aea8bad3f22bc608b"
+  },
+  "phase_5_readiness": "NOT READY",
+  "open_items_reference": "docs/phases/phase-4-handoff.md",
+  "superseded_verification": {
+    "status": "Superseded by final-source rerun on 2026-09-18",
+    "original_archive_sha256": "e7b47c27738591ff42bd1cb00a618dd38587dd95a43fe611ada21e35035b0e61",
+    "gate_status": "FAIL",
+    "final_status": "PHASE 4 NOT READY",
+    "generated_at_utc": "2026-09-17T19:07:32.251395+00:00",
+    "tests": [
+      {
+        "command": "PYTEST_ADDOPTS=-p no:cacheprovider; node scripts/phase4-demo.mjs all",
+        "result": "PASS",
+        "passed": 26,
+        "warnings": 2,
+        "seconds": 112.79,
+        "source_note": "Followed only by a mypy local-variable rename; final static checks passed"
+      },
+      {
+        "command": "python -m pytest -q -p no:cacheprovider tests/unit/test_runtime_contracts.py",
+        "result": "PASS",
+        "passed": 2,
+        "warnings": 2,
+        "seconds": 0.02
+      },
+      {
+        "command": "python -m ruff check .; python -m ruff format --check .",
+        "result": "PASS",
+        "formatted_python_files": 125
+      },
+      {
+        "command": "python -m mypy packages/company_os apps/api apps/worker",
+        "result": "PASS",
+        "typed_files": 40
+      },
+      {
+        "command": "python scripts/contracts.py --check",
+        "result": "PASS"
+      },
+      {
+        "command": "python scripts/boundaries.py",
+        "result": "PASS",
+        "note": "Final pre-manifest scan 189 files; rerun after manifest preparation"
+      },
+      {
+        "command": "npm.cmd run check",
+        "result": "BLOCKED",
+        "last_reliable_totals": {
+          "passed": 183,
+          "failed": 1,
+          "errors": 2,
+          "seconds": 132.43
+        },
+        "reason": "Windows sandbox named-pipe and temporary-directory access denied; later workspace basetemp run reached 100% but cleanup prevented summary"
+      },
+      {
+        "command": "node node_modules/eslint/bin/eslint.js .; node node_modules/typescript/bin/tsc --noEmit (console cwd)",
+        "result": "PASS"
+      },
+      {
+        "command": "node node_modules/vitest/vitest.mjs run (console cwd)",
+        "result": "BLOCKED",
+        "reason": "spawn EPERM, no final tests executed",
+        "earlier_revision_passed": 2
+      },
+      {
+        "command": "npm.cmd run build",
+        "result": "BLOCKED_FINAL",
+        "reason": "spawn EPERM",
+        "earlier_run": "PASS, 21 routes; before final backend-only corrections"
+      },
+      {
+        "command": "PLAYWRIGHT_CHANNEL=chrome; node scripts/ci-services.mjs e2e",
+        "result": "PASS_EARLIER_SOURCE",
+        "passed": 5,
+        "seconds": 16.5,
+        "scope": "Phase 2/3/4 browser tests against API/worker/production console",
+        "limitation": "Not rerun after final backend corrections"
+      },
+      {
+        "command": "npm.cmd audit --audit-level=moderate",
+        "result": "PASS",
+        "vulnerabilities": 0
+      },
+      {
+        "command": "python scripts/audit_python.py --online",
+        "result": "BLOCKED",
+        "reason": "OSV DNS failure earlier; final sandbox connection refused WinError 10061"
+      },
+      {
+        "command": "git diff --check",
+        "result": "PASS"
+      }
+    ],
+    "load_metrics": {
+      "synthetic_workspaces": 5,
+      "additional_accounts": 50000,
+      "additional_people": 100000,
+      "concurrent_users": 10,
+      "read_api_p95_seconds": 0.1879999999946449,
+      "command_p95_seconds": 0.14100000000325963
+    },
+    "queue_metrics": {
+      "fixture": "10000-jobs-per-day-equivalent",
+      "normal_executions": 40,
+      "elapsed_seconds": 0.75,
+      "safety_claim_seconds": 0.1870000000053551
+    },
+    "review_archive": {
+      "filename": "company-os-phase-4-review-final.zip",
+      "contents": "Complete Git-listed source plus nonignored Phase 4 source, manifest, handoff and REPOSITORY_TREE.txt",
+      "sha256": "Reported separately in delivery to avoid self-reference",
+      "exclusions": [
+        ".git",
+        ".env",
+        "secrets",
+        "node_modules",
+        ".venv",
+        "build outputs",
+        "caches",
+        "test media",
+        "local PostgreSQL data",
+        "previous ZIPs",
+        "temporary files"
+      ],
+      "reason_for_regeneration": "Final handoff/manifest replace historical environment-blocked gate; implementation bytes unchanged",
+      "previous_archive": {
+        "filename": "company-os-phase-4-review.zip",
+        "sha256": "e7b47c27738591ff42bd1cb00a618dd38587dd95a43fe611ada21e35035b0e61",
+        "preserved": true
+      }
+    }
+  },
+  "gate_description": "Scoped first-creation serialization and complete regression gate passed; acceptance pending",
+  "implementation_source_changed_during_verification": false,
+  "documentation_only_updates": [
+    "docs/phases/phase-4-handoff.md",
+    "docs/phases/phase-4-manifest.json",
+    "CORRECTION_FILE_LIST.txt"
+  ],
+  "source_integrity_verification": {
+    "correction_baseline_archive": "company-os-phase-4-correction-delta.zip",
+    "baseline_archive_sha256": "ac7d518668a92a282bbb01fc9e3956a848a63dd077b9625aea8bad3f22bc608b",
+    "all_migrations_and_manifest_unchanged": true,
+    "only_six_final_correction_paths_changed": true,
+    "generated_next_type_references": "Restored exact reviewed baseline bytes after build"
+  },
+  "all_required_final_source_commands_completed": true,
+  "pre_correction_verification": {
+    "gate_status": "PASS",
+    "final_status": "PHASE 4 IMPLEMENTATION COMPLETE — AWAITING INDEPENDENT REVIEW",
+    "generated_at_utc": "2026-09-18T05:13:35.548241+00:00",
+    "migration_head": "0011_runtime_event_payloads",
+    "tests": [
+      {
+        "command": "npm.cmd run db:start",
+        "result": "PASS",
+        "seconds": 9.4113368,
+        "warnings": 0
+      },
+      {
+        "command": "npm.cmd run check",
+        "result": "PASS",
+        "seconds": 291.4750307,
+        "python": {
+          "passed": 187,
+          "warnings": 2,
+          "seconds": 250.22
+        },
+        "vitest": {
+          "passed": 2,
+          "files": 1,
+          "warnings": 0,
+          "seconds": 0.522
+        },
+        "static_checks": "OpenAPI and TypeScript drift, Ruff, formatting 125 files, mypy 40 files, boundaries/security/migration hashes, frontend lint/typecheck all passed"
+      },
+      {
+        "command": "npm.cmd run build",
+        "result": "PASS",
+        "seconds": 46.2850536,
+        "routes": 21,
+        "generated_pages": 18,
+        "warnings": 0
+      },
+      {
+        "command": "$env:PLAYWRIGHT_CHANNEL='chrome'; node scripts/ci-services.mjs e2e",
+        "result": "PASS",
+        "passed": 5,
+        "test_seconds": 26.1,
+        "seconds": 34.4633665,
+        "warnings": 2,
+        "warning_detail": "NO_COLOR ignored because FORCE_COLOR is set",
+        "services": "running API, worker process pools, production console; clean shutdown"
+      },
+      {
+        "command": "npm.cmd audit --audit-level=moderate",
+        "result": "PASS",
+        "vulnerabilities": 0,
+        "seconds": 3.1460104,
+        "warnings": 0
+      },
+      {
+        "command": ".\\.venv\\Scripts\\python.exe scripts/audit_python.py --online",
+        "result": "PASS",
+        "seconds": 1.6665668,
+        "report": {
+          "checked_at": "2026-09-18T05:07:18.430104+00:00",
+          "registry": "OSV/PyPI",
+          "checked_packages": 49,
+          "findings": []
+        },
+        "warnings": 0
+      },
+      {
+        "command": "git diff --check",
+        "result": "PASS",
+        "seconds": 0.1680425,
+        "whitespace_errors": 0,
+        "advisories": "Seven existing CRLF normalization advisories; repeated after documentation changes"
+      },
+      {
+        "command": "$env:PYTEST_ADDOPTS='-p no:cacheprovider'; node scripts/phase4-demo.mjs all",
+        "result": "PASS",
+        "passed": 26,
+        "warnings": 2,
+        "test_seconds": 207.56,
+        "seconds": 211.6482808
+      }
+    ],
+    "load_metrics": {
+      "synthetic_workspaces": 5,
+      "additional_accounts": 50000,
+      "additional_people": 100000,
+      "concurrent_users": 10,
+      "read_api_p95_seconds": 0.3129999999946449,
+      "command_p95_seconds": 0.21900000001187436
+    },
+    "queue_metrics": {
+      "fixture": "10000-jobs-per-day-equivalent",
+      "normal_executions": 40,
+      "elapsed_seconds": 1.4059999999881256,
+      "safety_claim_seconds": 0.2659999999741558
+    },
+    "review_archive": {
+      "filename": "company-os-phase-4-review-final.zip",
+      "contents": "Complete Git-listed source plus nonignored Phase 4 source, manifest, handoff and REPOSITORY_TREE.txt",
+      "sha256": "Reported separately in delivery to avoid self-reference",
+      "exclusions": [
+        ".git",
+        ".env",
+        "secrets",
+        "node_modules",
+        ".venv",
+        "build outputs",
+        "caches",
+        "test media",
+        "local PostgreSQL data",
+        "previous ZIPs",
+        "temporary files"
+      ],
+      "reason_for_regeneration": "Final handoff/manifest replace historical environment-blocked gate; implementation bytes unchanged",
+      "previous_archive": {
+        "filename": "company-os-phase-4-review.zip",
+        "sha256": "e7b47c27738591ff42bd1cb00a618dd38587dd95a43fe611ada21e35035b0e61",
+        "preserved": true
+      }
+    },
+    "source_integrity_verification": {
+      "original_manifest_source_files": 185,
+      "original_archive_sha256": "e7b47c27738591ff42bd1cb00a618dd38587dd95a43fe611ada21e35035b0e61",
+      "unexpected_initial_source_changes": [],
+      "generated_next_type_references": "Regenerated by production build, then restored exactly from original ZIP",
+      "all_non_documentation_bytes_match_original_archive": true
+    }
+  },
+  "correction_gate": "PASS",
+  "correction_changed_paths": [
+    "CORRECTION_FILE_LIST.txt",
+    "docs/adr/021-fake-runtime-boundaries.md",
+    "docs/phases/phase-4-handoff.md",
+    "docs/phases/phase-4-manifest.json",
+    "packages/company_os/application/runtime.py",
+    "tests/integration/test_phase4_review_fixes.py"
+  ],
+  "verification_scope": "Complete gate started after all correction implementation and test changes; later updates are documentation only",
+  "performance_scope": "Bounded synthetic local evidence only; no sustained fairness/production-capacity claim",
+  "migration_round_trips": [
+    "head -> 0011 -> head",
+    "head -> 0005 -> head",
+    "head -> 0002 -> head",
+    "head -> base -> head",
+    "repeated upgrade and seed"
+  ],
+  "non_blocking_debt": {
+    "handler_timeout": "No long-running/provider/AI handler until timeout/fencing and cancellation are explicitly validated; prerequisite especially for Phase 6",
+    "sustained_fairness": "Deferred; synthetic local evidence only"
+  },
+  "correction_regression_cases": {
+    "first_creation_contenders": [
+      2,
+      5
+    ],
+    "hash_conflict_contenders": 2,
+    "hash_conflict_positions": 2,
+    "new_cases": 4,
+    "prior_correction_cases_preserved": 25,
+    "all_correction_cases": 29
+  },
+  "previous_correction_verification": {
+    "gate_status": "PASS",
+    "correction_gate": "PASS",
+    "final_status": "PHASE 4 CORRECTIONS COMPLETE - AWAITING ACCEPTANCE REVIEW",
+    "generated_at_utc": "2026-09-18T05:55:30.569001+00:00",
+    "migration_head": "0012_phase4_review_fixes",
+    "tests": [
+      {
+        "command": "npm.cmd run db:start",
+        "result": "PASS",
+        "detail": "Local PostgreSQL and non-owner runtime roles ready"
+      },
+      {
+        "command": "npm.cmd run check",
+        "result": "PASS",
+        "seconds": 151.6774041,
+        "python": {
+          "passed": 212,
+          "warnings": 2,
+          "seconds": 133.52
+        },
+        "vitest": {
+          "passed": 2,
+          "files": 1,
+          "seconds": 0.298
+        },
+        "static_checks": "Contract drift, Ruff, 127 formatted Python files, mypy 40 files, boundary/security/migration hashes, frontend lint and TypeScript passed"
+      },
+      {
+        "command": "npm.cmd run build",
+        "result": "PASS",
+        "seconds": 30.7190796,
+        "routes": 21,
+        "generated_pages": 18,
+        "warnings": 0
+      },
+      {
+        "command": "$env:PLAYWRIGHT_CHANNEL='chrome'; node scripts/ci-services.mjs e2e",
+        "result": "PASS",
+        "passed": 5,
+        "test_seconds": 19.0,
+        "seconds": 25.7592432,
+        "warnings": 2,
+        "warning_detail": "NO_COLOR ignored because FORCE_COLOR is set",
+        "services": "Running API, worker process pools and production console; clean shutdown"
+      },
+      {
+        "command": "npm.cmd audit --audit-level=moderate",
+        "result": "PASS",
+        "vulnerabilities": 0,
+        "seconds": 2.32024
+      },
+      {
+        "command": ".\\.venv\\Scripts\\python.exe scripts/audit_python.py --online",
+        "result": "PASS",
+        "seconds": 1.2971361,
+        "report": {
+          "checked_at": "2026-09-18T05:47:50.933118+00:00",
+          "registry": "OSV/PyPI",
+          "checked_packages": 49,
+          "findings": []
+        }
+      },
+      {
+        "command": "git diff --check",
+        "result": "PASS",
+        "whitespace_errors": 0,
+        "advisories": "Seven existing CRLF normalization advisories; repeated after documentation updates"
+      },
+      {
+        "command": "$env:PYTEST_ADDOPTS='-p no:cacheprovider'; node scripts/phase4-demo.mjs all",
+        "result": "PASS",
+        "passed": 51,
+        "warnings": 2,
+        "test_seconds": 125.69,
+        "seconds": 128.0198481
+      }
+    ],
+    "correction_changed_paths": [
+      "CORRECTION_FILE_LIST.txt",
+      "apps/api/runtime.py",
+      "apps/console/components/runtime.tsx",
+      "database/migrations/manifest.json",
+      "database/migrations/versions/0012_phase4_review_fixes.py",
+      "docs/adr/021-fake-runtime-boundaries.md",
+      "docs/phases/phase-4-handoff.md",
+      "docs/phases/phase-4-manifest.json",
+      "packages/company_os/application/runtime.py",
+      "packages/company_os/application/scheduler.py",
+      "packages/company_os/persistence/database.py",
+      "packages/company_os/reporting/runtime.py",
+      "packages/company_os/runtime_contracts.py",
+      "packages/company_os/workflow/runtime.py",
+      "packages/contracts/api.d.ts",
+      "packages/contracts/openapi.json",
+      "scripts/phase4-demo.mjs",
+      "tests/conftest.py",
+      "tests/contract/test_contracts.py",
+      "tests/integration/test_phase4_review_fixes.py"
+    ],
+    "correction_regression_cases": {
+      "effect_ownership": 5,
+      "recovery_health": 2,
+      "event_versions": 10,
+      "schedules": 8,
+      "total": 25
+    },
+    "review_archive": {
+      "filename": "company-os-phase-4-correction-delta.zip",
+      "contents": "Only 20 correction-cycle changed/new paths; repository-relative paths; includes CORRECTION_FILE_LIST.txt",
+      "baseline_filename": "company-os-phase-4-review-final.zip",
+      "baseline_sha256": "20932d6dea8b85f49045d7e5ae4aae34410aea4f54b18e9c6d0ca8ffc2846ec2",
+      "sha256": "Reported separately in delivery to avoid self-reference",
+      "exclusions": [
+        ".git",
+        ".env",
+        "secrets",
+        "dependencies",
+        "build output",
+        "caches",
+        "local DB files",
+        "previous ZIPs",
+        "unchanged source"
+      ]
+    },
+    "source_integrity_verification": {
+      "correction_baseline_archive": "company-os-phase-4-review-final.zip",
+      "baseline_archive_sha256": "20932d6dea8b85f49045d7e5ae4aae34410aea4f54b18e9c6d0ca8ffc2846ec2",
+      "applied_migrations_0001_through_0011_unchanged": true,
+      "generated_next_type_references": "Restored exact baseline bytes after build",
+      "delta_contains_only_changed_or_new_files": true
+    },
+    "load_metrics": {
+      "synthetic_workspaces": 5,
+      "additional_accounts": 50000,
+      "additional_people": 100000,
+      "concurrent_users": 10,
+      "read_api_p95_seconds": 0.1870000000053551,
+      "command_p95_seconds": 0.14100000000325963
+    },
+    "queue_metrics": {
+      "fixture": "10000-jobs-per-day-equivalent",
+      "normal_executions": 40,
+      "elapsed_seconds": 0.8910000000032596,
+      "safety_claim_seconds": 0.15700000000651926
+    }
+  },
+  "final_correction_gate": "PASS",
+  "publishing_cleanup": {
+    "verified_at_utc": "2026-09-18T07:15:00.653902+00:00",
+    "independent_review": "FINAL PASS applies to the reviewed implementation",
+    "scope": "Only EOF blank-line removal, handoff line-ending normalization and resulting manifest hash/metadata updates; no behavioral or textual content change",
+    "changes": [
+      {
+        "path": "apps/console/components/runtime.tsx",
+        "change": "Remove exactly one trailing blank CRLF line; preserve all preceding bytes",
+        "before_sha256": "d997dbc15cce337faf07aeb55936e0ae7dd7aa0cb55b75eeba4cd604e1fc93d4",
+        "after_sha256": "570fdac3d1ceaaa28dfceb8fc012ff3e9b34a78707b249d79727adf11445fa57",
+        "bytes_removed": 2
+      },
+      {
+        "path": "docs/phases/phase-4-handoff.md",
+        "change": "Normalize CRLF/CRCRLF endings to one LF; preserve every line and its text",
+        "before_sha256": "3a920939f6dca686592aaa4a93691151a16fbca52dcfe590dcc97a537bce3ef0",
+        "after_sha256": "408dcb2d4029f643cecd54b6dec5382ca4dffc9eecbdee6e489c94b7f6a3ca5e",
+        "bytes_removed": 924
+      }
+    ],
+    "migration_hashes_unchanged": true,
+    "self_hash_convention": "Manifest excludes its own hash; SHA-256 over exact delivered source bytes"
+  }
+}

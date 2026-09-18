@@ -1,4 +1,4 @@
-"""Phase 3 guard preserving foundation controls; no paid scanner/service required."""
+"""Phase 4 guard preserving foundation controls; no paid scanner/service required."""
 
 import ast
 import hashlib
@@ -88,18 +88,14 @@ def phase_findings(path: str, content: str) -> list[str]:
     if any(
         segment in path.lower()
         for segment in [
-            "/workflow/",
             "/ai/",
             "/campaigns/",
-            "/outbox/",
-            "/inbox/",
-            "/scheduler/",
             "/providers/",
         ]
     ):
         errors.append(f"{path}: later-phase implementation module")
     if re.search(
-        r"[\"']/(?:v1/)?(?:campaigns|webhooks|ai-tasks|jobs|opportunities|messages/.*/dispatch)(?:/|[\"'])",
+        r"[\"']/(?:v1/)?(?:campaigns|ai-tasks|opportunities|messages/.*/dispatch)(?:/|[\"'])",
         content,
     ):
         errors.append(f"{path}: later-phase route")
@@ -120,7 +116,7 @@ def phase_findings(path: str, content: str) -> list[str]:
                 or name.startswith("urllib.request")
                 for name in names
             ):
-                errors.append(f"{path}: Phase 3 adapter must remain offline")
+                errors.append(f"{path}: Phase 4 adapter must remain offline")
     return errors
 
 

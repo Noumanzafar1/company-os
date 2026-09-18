@@ -34,6 +34,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from apps.api.business import register
+from apps.api.runtime import register as register_runtime
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -240,6 +241,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return Response(status_code=204)
 
     register(api, authenticated)
+    register_runtime(api, authenticated)
     return api
 
 

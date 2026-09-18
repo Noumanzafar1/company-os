@@ -23,7 +23,7 @@ export async function Shell({route,requestedWorkspace,children}:{route:string,re
         <form method="get" action={route}><select id="workspace" name="workspace" defaultValue={scope?.id || ''} aria-label="Workspace">
           {!scope && <option value="">Select workspace</option>}
           {user.workspaces.map(w=><option key={w.id} value={w.id}>{w.name}</option>)}
-        </select><button className="switch" type="submit">Open workspace →</button></form>
+        </select><button className="switch" type="submit">Open workspace â†’</button></form>
         <span className="small muted">{scope?.kind.replace('_',' ') || 'No workspace selected'}</span>
       </div>
       <span className="nav-label">OVERVIEW</span><nav aria-label="Application navigation">
@@ -35,20 +35,20 @@ export async function Shell({route,requestedWorkspace,children}:{route:string,re
       <div className="user-menu"><div><strong>{user.display_name}</strong><span>{scope?.roles.join(', ').replaceAll('_',' ') || 'No active membership'}</span></div>
         <form action="/auth/logout" method="post"><input type="hidden" name="csrf" value={csrf || ''}/><button className="text-button">Sign out</button></form></div>
     </header>
-    <main className="content"><div className="page-heading"><div><span className="eyebrow">YOUR OPERATING SPACE</span><h1>{title}</h1></div><span className="phase-tag">PHASE 03</span></div>
-      {!scope ? <section className="empty-state" role="alert"><div className="empty-symbol">⊘</div><h2>Workspace unavailable</h2><p>This workspace is unavailable or you do not have access.</p><Link href={route}>Return to your workspace</Link></section>
+    <main className="content"><div className="page-heading"><div><span className="eyebrow">YOUR OPERATING SPACE</span><h1>{title}</h1></div><span className="phase-tag">PHASE 04</span></div>
+      {!scope ? <section className="empty-state" role="alert"><div className="empty-symbol">âŠ˜</div><h2>Workspace unavailable</h2><p>This workspace is unavailable or you do not have access.</p><Link href={route}>Return to your workspace</Link></section>
       : children ? children : route==='/system' ? <><p className="page-intro">Connection status for this foundation. Unconfigured services have no active connections.</p>
         {health?.data ? <section className="health-panel"><div className="panel-heading"><h2>Platform status</h2><span className="small muted">Checked {new Date(health.data.meta.as_of).toISOString().slice(11,19)} UTC</span></div>
           {health.data.data.components.map(component=><div className="health-row" key={component.name}><span>{component.name}</span><span className={component.status==='healthy'?'status healthy':'status'}>{component.status==='healthy'?'Healthy':'Not configured'}</span></div>)}
         </section>:<section className="notice error" role="alert">System status unavailable. Health could not be confirmed.</section>}
         <div className="notice">Live sending is disabled. The worker currently performs connectivity checks only.</div></>
       : <><p className="page-intro">{route==='/attention'?'A focused place for decisions that need your attention.':'A dedicated place to review and authorize future work.'}</p>
-        <section className="empty-state"><div className="empty-symbol">{route==='/attention'?'✓':'◇'}</div><span className="eyebrow">{route==='/attention'?'A CLEAR START':'NOTHING AWAITING REVIEW'}</span>
+        <section className="empty-state"><div className="empty-symbol">{route==='/attention'?'âœ“':'â—‡'}</div><span className="eyebrow">{route==='/attention'?'A CLEAR START':'NOTHING AWAITING REVIEW'}</span>
           <h2>{route==='/attention'?'No decisions currently require action.':'No approvals pending.'}</h2>
           <p>{route==='/attention'?'Your workspace foundation is ready. Business workflows will appear here as they are introduced.':'Approval workflows are not enabled in this foundation. No business actions can be approved or executed yet.'}</p>
-          <Link href={`/system?workspace=${scope.id}`} className="outline-link">View system health <span>↗</span></Link>
+          <Link href={`/system?workspace=${scope.id}`} className="outline-link">View system health <span>â†—</span></Link>
         </section></>}
-      <footer className="page-footer"><span>Company OS · Platform foundation</span><span>Private by design. Scoped to your workspace.</span></footer>
+      <footer className="page-footer"><span>Company OS Â· Platform foundation</span><span>Private by design. Scoped to your workspace.</span></footer>
     </main></div>
   </div>;
 }

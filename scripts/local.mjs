@@ -30,6 +30,7 @@ export function serviceEnvironments() {
   const consoleEnv={...runtimeEnv}; delete consoleEnv.DATABASE_URL; delete consoleEnv.WORKER_DATABASE_URL;
   const workerEnv={...runtimeEnv};
   delete workerEnv.DATABASE_URL; delete workerEnv.DEV_AUTH_SECRET; delete workerEnv.CONSOLE_SECRET;
+  delete consoleEnv.FAKE_WEBHOOK_SECRET; delete workerEnv.FAKE_WEBHOOK_SECRET;
   return {apiEnv,consoleEnv,workerEnv};
 }
 const action=process.argv[2];
@@ -42,7 +43,7 @@ if(action==='setup') {
       `MIGRATION_DATABASE_URL=postgresql+psycopg://postgres:${owner}@127.0.0.1:55432/company_os`,
       `DATABASE_URL=postgresql+psycopg://company_api:${api}@127.0.0.1:55432/company_os`,
       `WORKER_DATABASE_URL=postgresql+psycopg://company_worker:${worker}@127.0.0.1:55432/company_os`,
-      `DEV_AUTH_SECRET=${secret()}`,`CONSOLE_SECRET=${secret()}`,'LIVE_SENDING_ENABLED=false','LIVE_BUDGET_USD=0',''
+      `DEV_AUTH_SECRET=${secret()}`,`CONSOLE_SECRET=${secret()}`,`FAKE_WEBHOOK_SECRET=${secret()}`,'LIVE_SENDING_ENABLED=false','LIVE_BUDGET_USD=0',''
     ].join('\n'),{mode:0o600,flag:'wx'});
   }
   if(!existsSync(python)) run(process.env.COMPANY_PYTHON || (win?'python':'python3'),['-m','venv','.venv']);

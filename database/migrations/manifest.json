@@ -4,5 +4,12 @@
   "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0",
   "database/migrations/versions/0003_core_business_state.py": "e9c38d91d578629ca078097f7b0eeac7dae79612fcc806f63e876672e99f5feb",
   "database/migrations/versions/0004_core_integrity.py": "0e27150ca844416c471d864679bda1d7a8bdbf0783afd13f81800a3b3e34707a",
-  "database/migrations/versions/0005_phase3_review_fixes.py": "3023775dd206921d905bfe460a06e3d57ffeb581f6917aecc33ad223509ac720"
+  "database/migrations/versions/0005_phase3_review_fixes.py": "3023775dd206921d905bfe460a06e3d57ffeb581f6917aecc33ad223509ac720",
+  "database/migrations/versions/0006_durable_runtime.py": "e2997e9aff372ef52874f9af8e5c33ad097fd66e8f34cdb714247df88b7d9289",
+  "database/migrations/versions/0007_runtime_integrity.py": "c87f2e1395519b8be6823382852142af12f2bdc2f24b56b65e3e8c5da2adcd91",
+  "database/migrations/versions/0008_runtime_actor_guard.py": "0ac34227f3fece4c1b5157a2d520fcbd77d1279bdcccf3f0c791c0faf5b13892",
+  "database/migrations/versions/0009_runtime_callbacks.py": "9d12128363d6a0fd194ecb5326b151606be58a070baa2025355b69a8effc00a8",
+  "database/migrations/versions/0010_runtime_budget_caps.py": "b9c61a71a2ff4d68f189d4696f89f97d91d030eee36d157f8aa4a82c737c7dc7",
+  "database/migrations/versions/0011_runtime_event_payloads.py": "496d65e639f523c6cb3ffab38dc97d4dd57a2b6d8770d4a306540aad7124cc4d",
+  "database/migrations/versions/0012_phase4_review_fixes.py": "07f6b88428bb6e109a7687ad0865649ec1d6dfca2d1185026226bd1c1aa9bde7"
 }

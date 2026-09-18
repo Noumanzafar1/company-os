@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     console_origin: str = "http://localhost:3000"
     console_secret: SecretStr
     dev_auth_secret: SecretStr = SecretStr("")
+    fake_webhook_secret: SecretStr = SecretStr("")
     supabase_url: str = ""
     supabase_jwt_audience: str = "authenticated"
     live_sending_enabled: bool = False

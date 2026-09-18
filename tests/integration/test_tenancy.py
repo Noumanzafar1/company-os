@@ -9,6 +9,7 @@ from sqlalchemy.exc import DBAPIError
 
 from database.seeds.synthetic import key
 from tests.phase3_scope import CORE_TABLES, FOUNDATION_TABLES
+from tests.phase4_scope import RUNTIME_TABLES
 
 
 def test_real_runtime_role_and_force_rls(runtime, admin):
@@ -23,7 +24,7 @@ def test_real_runtime_role_and_force_rls(runtime, admin):
                 "SELECT relname,relrowsecurity,relforcerowsecurity FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='app' AND c.relkind='r'"
             )
         ).all()
-        assert {name for name, _, _ in tables} == FOUNDATION_TABLES | CORE_TABLES
+        assert {name for name, _, _ in tables} == FOUNDATION_TABLES | CORE_TABLES | RUNTIME_TABLES
         assert all(enabled and forced for _, enabled, forced in tables)
         assert conn.execute(text("SHOW server_version_num")).scalar_one().startswith("18")
 
@@ -43,7 +44,7 @@ def test_tenant_read_join_and_wrong_scope(runtime, letter, other):
             .scalars()
             .all()
         )
-        assert result == [key(f"workspace-{letter}")]
+        assert result == [key(f"workspace-{letter}")] * 2  # User plus scoped runtime membership.
     with transaction(runtime, key(f"user-{letter}"), key(f"workspace-{other}"), 1) as conn:
         assert conn.execute(text("SELECT * FROM app.workspaces")).all() == []
         assert conn.execute(text("SELECT * FROM app.memberships")).all() == []
