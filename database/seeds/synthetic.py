@@ -115,6 +115,9 @@ def seed(*, include_business: bool = True) -> None:
         from database.seeds.runtime import seed_runtime
 
         seed_runtime(engine)
+        from database.seeds.authority import seed_authority
+
+        seed_authority(engine)
     engine.dispose()
     print("Synthetic A/B identities ready; existing grants/revocations preserved")
 

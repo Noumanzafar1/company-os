@@ -1,4 +1,4 @@
-"""Phase 4 guard preserving foundation controls; no paid scanner/service required."""
+"""Phase 5 guard preserving foundation controls; no paid scanner/service required."""
 
 import ast
 import hashlib
@@ -23,6 +23,9 @@ BANNED = {
     "smartlead",
     "pipedrive",
     "n8n",
+    "google",
+    "googleapiclient",
+    "gmail",
     "smtplib",
     "sendgrid",
     "mailgun",

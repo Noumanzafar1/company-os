@@ -11,3 +11,10 @@
 .core-card th,.core-card td { text-align: left; padding: 10px; border-bottom: 1px solid #e4e7ed; }
 .core-state input { display: block; padding: 10px; max-width: 100%; margin: 8px 0; }
 .core-state button { cursor: pointer; padding: 10px 16px; }
+.authority-page pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #eef2ed; padding: 16px; border-radius: 6px; }
+.authority-page table { width: 100%; text-align: left; border-collapse: collapse; margin: 20px 0; }
+.authority-page td,.authority-page th { padding: 12px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.authority-page label { display: block; margin-top: 12px; }
+.authority-page input[type=checkbox] { display: inline-block; }
+.authority-page button { margin: 10px 8px 0 0; }
+.authority-page button:disabled { cursor: not-allowed; opacity: .55; }

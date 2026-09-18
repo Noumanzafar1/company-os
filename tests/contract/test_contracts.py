@@ -4,6 +4,7 @@ from pathlib import Path
 from scripts.contracts import snapshot
 from tests.phase3_scope import CORE_SUFFIXES, CORE_TABLES, FOUNDATION_PATHS, FOUNDATION_TABLES
 from tests.phase4_scope import RUNTIME_PATHS, RUNTIME_TABLES
+from tests.phase5_scope import AUTHORITY_PATHS, AUTHORITY_TABLES
 
 
 def test_openapi_snapshot_is_current():
@@ -12,7 +13,7 @@ def test_openapi_snapshot_is_current():
 
 def test_only_authorized_phase_routes_exist():
     paths = json.loads(snapshot())["paths"]
-    assert set(paths) == RUNTIME_PATHS | FOUNDATION_PATHS | {
+    assert set(paths) == AUTHORITY_PATHS | RUNTIME_PATHS | FOUNDATION_PATHS | {
         "/v1/workspaces/{workspace_id}" + suffix for suffix in CORE_SUFFIXES
     }
 
@@ -24,8 +25,8 @@ def test_migration_history_linear_and_only_authorized_tables(admin):
         names = set(
             conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname='app'")).scalars()
         )
-        assert names == FOUNDATION_TABLES | CORE_TABLES | RUNTIME_TABLES
+        assert names == FOUNDATION_TABLES | CORE_TABLES | RUNTIME_TABLES | AUTHORITY_TABLES
         assert (
             conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-            == "0012_phase4_review_fixes"
+            == "0018_phase5_review_fixes"
         )

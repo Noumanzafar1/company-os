@@ -108,6 +108,24 @@ def health(conn: Connection) -> dict[str, Any]:
             "age_seconds": lag,
         }
     )
+    authority = rows(
+        conn,
+        "SELECT (SELECT count(*) FROM app.authority_freezes) AS freezes,(SELECT count(*) FROM app.approval_requests WHERE state='pending' AND expires_at>clock_timestamp() AND expires_at<clock_timestamp()+interval '1 hour') AS expiring,(SELECT count(*) FROM app.approval_requests WHERE state='pending' AND expires_at<=clock_timestamp()) AS stale",
+    )[0]
+    components.append(
+        {
+            "name": "authority_freeze",
+            "status": "RED" if authority["freezes"] else "GREEN",
+            "count": authority["freezes"],
+        }
+    )
+    components.append(
+        {
+            "name": "approvals_nearing_expiry",
+            "status": "AMBER" if authority["expiring"] or authority["stale"] else "GREEN",
+            "count": authority["expiring"] + authority["stale"],
+        }
+    )
     overall = (
         "RED"
         if any(x["status"] == "RED" for x in components)

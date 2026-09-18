@@ -365,6 +365,296 @@
         "title": "AccountView",
         "type": "object"
       },
+      "ApprovalDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionView"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "manifest": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManifestView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "remaining_uses": {
+            "title": "Remaining Uses",
+            "type": "integer"
+          },
+          "request": {
+            "$ref": "#/components/schemas/ApprovalView"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/TargetVersion"
+            },
+            "title": "Targets",
+            "type": "array"
+          },
+          "uses": {
+            "items": {
+              "$ref": "#/components/schemas/AuthorityUseView"
+            },
+            "title": "Uses",
+            "type": "array"
+          },
+          "validation_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validation Reason"
+          }
+        },
+        "required": [
+          "request",
+          "targets",
+          "manifest",
+          "history",
+          "uses",
+          "validation_reason",
+          "remaining_uses"
+        ],
+        "title": "ApprovalDetail",
+        "type": "object"
+      },
+      "ApprovalView": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              }
+            ],
+            "title": "Action"
+          },
+          "candidate_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Candidate Version Id"
+          },
+          "correlation_id": {
+            "format": "uuid",
+            "title": "Correlation Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "effective_state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective State"
+          },
+          "expected_active_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Active Version Id"
+          },
+          "expected_policy_record_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Policy Record Version"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "maximum_spend": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Maximum Spend",
+            "type": "string"
+          },
+          "maximum_uses": {
+            "title": "Maximum Uses",
+            "type": "integer"
+          },
+          "maximum_volume": {
+            "title": "Maximum Volume",
+            "type": "integer"
+          },
+          "payload": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FakePayload"
+              },
+              {
+                "$ref": "#/components/schemas/PolicyActivationPayload"
+              }
+            ],
+            "title": "Payload"
+          },
+          "payload_hash": {
+            "title": "Payload Hash",
+            "type": "string"
+          },
+          "policy_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Policy Id"
+          },
+          "policy_version_id": {
+            "format": "uuid",
+            "title": "Policy Version Id",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "record_version": {
+            "title": "Record Version",
+            "type": "integer"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "scope_hash": {
+            "title": "Scope Hash",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "pending",
+              "approved",
+              "rejected",
+              "expired",
+              "revoked",
+              "superseded"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "supersedes_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supersedes Id"
+          },
+          "target_set_hash": {
+            "title": "Target Set Hash",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "updated_by": {
+            "format": "uuid",
+            "title": "Updated By",
+            "type": "string"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "created_at",
+          "created_by",
+          "schema_version",
+          "updated_at",
+          "updated_by",
+          "record_version",
+          "action",
+          "policy_version_id",
+          "payload",
+          "payload_hash",
+          "scope_hash",
+          "target_set_hash",
+          "maximum_uses",
+          "maximum_spend",
+          "maximum_volume",
+          "expires_at",
+          "rationale",
+          "correlation_id",
+          "supersedes_id",
+          "state"
+        ],
+        "title": "ApprovalView",
+        "type": "object"
+      },
       "AttemptView": {
         "additionalProperties": false,
         "properties": {
@@ -490,6 +780,388 @@
           "reason"
         ],
         "title": "AttentionView",
+        "type": "object"
+      },
+      "AuthorityEnvelope_ApprovalDetail_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ApprovalDetail"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[ApprovalDetail]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_ApprovalView_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ApprovalView"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[ApprovalView]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_AuthorityResult_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AuthorityResult"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[AuthorityResult]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_FreezeView_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/FreezeView"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[FreezeView]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_PolicyRecord_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PolicyRecord"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[PolicyRecord]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_list_ApprovalView__": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ApprovalView"
+            },
+            "title": "Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[list[ApprovalView]]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_list_AuthorityTargetView__": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/AuthorityTargetView"
+            },
+            "title": "Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[list[AuthorityTargetView]]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_list_PolicyView__": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/PolicyView"
+            },
+            "title": "Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[list[PolicyView]]",
+        "type": "object"
+      },
+      "AuthorityResult": {
+        "additionalProperties": false,
+        "properties": {
+          "decision_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Id"
+          },
+          "input_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Id"
+          },
+          "manifest_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manifest Id"
+          },
+          "reasons": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "result": {
+            "enum": [
+              "ALLOW",
+              "DENY",
+              "REQUIRE_APPROVAL",
+              "QUARANTINE"
+            ],
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "AuthorityResult",
+        "type": "object"
+      },
+      "AuthorityTargetView": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "record_version": {
+            "title": "Record Version",
+            "type": "integer"
+          },
+          "rights_valid": {
+            "title": "Rights Valid",
+            "type": "boolean"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "suppressed": {
+            "title": "Suppressed",
+            "type": "boolean"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "updated_by": {
+            "format": "uuid",
+            "title": "Updated By",
+            "type": "string"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "created_at",
+          "created_by",
+          "schema_version",
+          "updated_at",
+          "updated_by",
+          "record_version",
+          "label",
+          "suppressed",
+          "rights_valid"
+        ],
+        "title": "AuthorityTargetView",
+        "type": "object"
+      },
+      "AuthorityUseView": {
+        "additionalProperties": false,
+        "properties": {
+          "activation_policy_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activation Policy Id"
+          },
+          "activation_session_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activation Session Id"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "effect_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effect Id"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "manifest_id": {
+            "format": "uuid",
+            "title": "Manifest Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "spend_reserved": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Spend Reserved",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "reserved",
+              "consumed",
+              "released"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "use_number": {
+            "title": "Use Number",
+            "type": "integer"
+          },
+          "volume": {
+            "title": "Volume",
+            "type": "integer"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "created_at",
+          "created_by",
+          "schema_version",
+          "manifest_id",
+          "effect_id",
+          "job_id",
+          "use_number",
+          "spend_reserved",
+          "volume",
+          "state"
+        ],
+        "title": "AuthorityUseView",
         "type": "object"
       },
       "BudgetView": {
@@ -871,6 +1543,87 @@
           "required_evidence_keys"
         ],
         "title": "Criteria",
+        "type": "object"
+      },
+      "DecideAuthority": {
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "enum": [
+              "approve",
+              "reject",
+              "revise"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "expected_scope_hash": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Scope Hash",
+            "type": "string"
+          },
+          "rationale": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "expected_scope_hash",
+          "rationale"
+        ],
+        "title": "DecideAuthority",
+        "type": "object"
+      },
+      "DecisionView": {
+        "additionalProperties": false,
+        "properties": {
+          "correlation_id": {
+            "format": "uuid",
+            "title": "Correlation Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "approve",
+              "reject",
+              "revise",
+              "revoke"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "decision",
+          "rationale",
+          "created_by",
+          "created_at",
+          "correlation_id"
+        ],
+        "title": "DecisionView",
         "type": "object"
       },
       "DocumentInput": {
@@ -2315,6 +3068,37 @@
         "title": "Exclusions",
         "type": "object"
       },
+      "ExecuteAuthority": {
+        "additionalProperties": false,
+        "properties": {
+          "logical_key": {
+            "maxLength": 100,
+            "minLength": 8,
+            "pattern": "^[a-zA-Z0-9_.:-]+$",
+            "title": "Logical Key",
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/FakePayload"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/TargetVersion"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "payload",
+          "targets",
+          "logical_key"
+        ],
+        "title": "ExecuteAuthority",
+        "type": "object"
+      },
       "FactValue": {
         "additionalProperties": false,
         "properties": {
@@ -2368,6 +3152,33 @@
         "title": "FactValue",
         "type": "object"
       },
+      "FakePayload": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "scenario": {
+            "enum": [
+              "effect_success",
+              "effect_rejected",
+              "effect_lost",
+              "effect_unknown"
+            ],
+            "title": "Scenario",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "scenario"
+        ],
+        "title": "FakePayload",
+        "type": "object"
+      },
       "FoundationHealth": {
         "additionalProperties": false,
         "properties": {
@@ -2389,6 +3200,116 @@
           "components"
         ],
         "title": "FoundationHealth",
+        "type": "object"
+      },
+      "FreezeAuthority": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action"
+          },
+          "rationale": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rationale"
+        ],
+        "title": "FreezeAuthority",
+        "type": "object"
+      },
+      "FreezeView": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action"
+          },
+          "correlation_id": {
+            "format": "uuid",
+            "title": "Correlation Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "created_at",
+          "created_by",
+          "schema_version",
+          "action",
+          "rationale",
+          "correlation_id"
+        ],
+        "title": "FreezeView",
         "type": "object"
       },
       "HealthComponent": {
@@ -3085,6 +4006,189 @@
         "title": "LeadView",
         "type": "object"
       },
+      "ManifestScope": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              }
+            ],
+            "title": "Action"
+          },
+          "approver_id": {
+            "format": "uuid",
+            "title": "Approver Id",
+            "type": "string"
+          },
+          "assurance": {
+            "const": "aal2",
+            "title": "Assurance",
+            "type": "string"
+          },
+          "expires_at": {
+            "title": "Expires At",
+            "type": "string"
+          },
+          "maximum_spend": {
+            "title": "Maximum Spend",
+            "type": "string"
+          },
+          "maximum_uses": {
+            "title": "Maximum Uses",
+            "type": "integer"
+          },
+          "maximum_volume": {
+            "title": "Maximum Volume",
+            "type": "integer"
+          },
+          "payload_hash": {
+            "title": "Payload Hash",
+            "type": "string"
+          },
+          "policy_change": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PolicyActivationPayload"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "policy_version_id": {
+            "format": "uuid",
+            "title": "Policy Version Id",
+            "type": "string"
+          },
+          "scope_hash": {
+            "title": "Scope Hash",
+            "type": "string"
+          },
+          "target_set_hash": {
+            "title": "Target Set Hash",
+            "type": "string"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/TargetVersion"
+            },
+            "title": "Targets",
+            "type": "array"
+          },
+          "version": {
+            "const": 1,
+            "title": "Version",
+            "type": "integer"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "scope_hash",
+          "workspace_id",
+          "action",
+          "policy_version_id",
+          "payload_hash",
+          "target_set_hash",
+          "targets",
+          "maximum_uses",
+          "maximum_spend",
+          "maximum_volume",
+          "expires_at",
+          "approver_id",
+          "assurance"
+        ],
+        "title": "ManifestScope",
+        "type": "object"
+      },
+      "ManifestView": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "decision_id": {
+            "format": "uuid",
+            "title": "Decision Id",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "manifest_hash": {
+            "title": "Manifest Hash",
+            "type": "string"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/ManifestScope"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "created_at",
+          "created_by",
+          "schema_version",
+          "request_id",
+          "decision_id",
+          "scope",
+          "manifest_hash",
+          "starts_at",
+          "expires_at"
+        ],
+        "title": "ManifestView",
+        "type": "object"
+      },
       "MergeInput": {
         "additionalProperties": false,
         "properties": {
@@ -3722,6 +4826,503 @@
         "title": "PersonView",
         "type": "object"
       },
+      "PolicyActivate": {
+        "additionalProperties": false,
+        "properties": {
+          "decision_id": {
+            "format": "uuid",
+            "title": "Decision Id",
+            "type": "string"
+          },
+          "manifest_id": {
+            "format": "uuid",
+            "title": "Manifest Id",
+            "type": "string"
+          },
+          "policy_version_id": {
+            "format": "uuid",
+            "title": "Policy Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "policy_version_id",
+          "decision_id",
+          "manifest_id"
+        ],
+        "title": "PolicyActivate",
+        "type": "object"
+      },
+      "PolicyActivationPayload": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "policy.activate",
+            "default": "policy.activate",
+            "title": "Action",
+            "type": "string"
+          },
+          "candidate_content_hash": {
+            "title": "Candidate Content Hash",
+            "type": "string"
+          },
+          "candidate_effective_at": {
+            "title": "Candidate Effective At",
+            "type": "string"
+          },
+          "candidate_expires_at": {
+            "title": "Candidate Expires At",
+            "type": "string"
+          },
+          "candidate_version_id": {
+            "format": "uuid",
+            "title": "Candidate Version Id",
+            "type": "string"
+          },
+          "candidate_version_number": {
+            "title": "Candidate Version Number",
+            "type": "integer"
+          },
+          "current_active_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Active Version Id"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "policy_id": {
+            "format": "uuid",
+            "title": "Policy Id",
+            "type": "string"
+          },
+          "policy_record_version": {
+            "title": "Policy Record Version",
+            "type": "integer"
+          },
+          "rules": {
+            "$ref": "#/components/schemas/PolicyRules-Output"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "policy_id",
+          "policy_record_version",
+          "current_active_version_id",
+          "candidate_version_id",
+          "candidate_version_number",
+          "candidate_content_hash",
+          "candidate_effective_at",
+          "candidate_expires_at",
+          "rules",
+          "workspace_id"
+        ],
+        "title": "PolicyActivationPayload",
+        "type": "object"
+      },
+      "PolicyInput": {
+        "additionalProperties": false,
+        "properties": {
+          "approval_expires_at": {
+            "format": "date-time",
+            "title": "Approval Expires At",
+            "type": "string"
+          },
+          "effective_at": {
+            "format": "date-time",
+            "title": "Effective At",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "rationale": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Rationale",
+            "type": "string"
+          },
+          "rules": {
+            "$ref": "#/components/schemas/PolicyRules-Input"
+          }
+        },
+        "required": [
+          "rules",
+          "rationale",
+          "effective_at",
+          "expires_at",
+          "approval_expires_at"
+        ],
+        "title": "PolicyInput",
+        "type": "object"
+      },
+      "PolicyRecord": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              }
+            ],
+            "title": "Action"
+          },
+          "active_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Version Id"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "record_version": {
+            "title": "Record Version",
+            "type": "integer"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "updated_by": {
+            "format": "uuid",
+            "title": "Updated By",
+            "type": "string"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "created_at",
+          "created_by",
+          "schema_version",
+          "updated_at",
+          "updated_by",
+          "record_version",
+          "action",
+          "active_version_id"
+        ],
+        "title": "PolicyRecord",
+        "type": "object"
+      },
+      "PolicyRules-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              }
+            ],
+            "title": "Action"
+          },
+          "maximum_expiry_seconds": {
+            "maximum": 86400.0,
+            "minimum": 1.0,
+            "title": "Maximum Expiry Seconds",
+            "type": "integer"
+          },
+          "maximum_spend": {
+            "anyOf": [
+              {
+                "maximum": 100.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+                "type": "string"
+              }
+            ],
+            "title": "Maximum Spend"
+          },
+          "maximum_targets": {
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Maximum Targets",
+            "type": "integer"
+          },
+          "maximum_uses": {
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Maximum Uses",
+            "type": "integer"
+          },
+          "maximum_volume": {
+            "maximum": 20000.0,
+            "minimum": 1.0,
+            "title": "Maximum Volume",
+            "type": "integer"
+          },
+          "permitted_roles": {
+            "items": {
+              "enum": [
+                "founder",
+                "researcher",
+                "sdr"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Permitted Roles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "action",
+          "maximum_uses",
+          "maximum_targets",
+          "maximum_volume",
+          "maximum_spend",
+          "maximum_expiry_seconds",
+          "permitted_roles"
+        ],
+        "title": "PolicyRules",
+        "type": "object"
+      },
+      "PolicyRules-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              }
+            ],
+            "title": "Action"
+          },
+          "maximum_expiry_seconds": {
+            "maximum": 86400.0,
+            "minimum": 1.0,
+            "title": "Maximum Expiry Seconds",
+            "type": "integer"
+          },
+          "maximum_spend": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+            "title": "Maximum Spend",
+            "type": "string"
+          },
+          "maximum_targets": {
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Maximum Targets",
+            "type": "integer"
+          },
+          "maximum_uses": {
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Maximum Uses",
+            "type": "integer"
+          },
+          "maximum_volume": {
+            "maximum": 20000.0,
+            "minimum": 1.0,
+            "title": "Maximum Volume",
+            "type": "integer"
+          },
+          "permitted_roles": {
+            "items": {
+              "enum": [
+                "founder",
+                "researcher",
+                "sdr"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Permitted Roles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "action",
+          "maximum_uses",
+          "maximum_targets",
+          "maximum_volume",
+          "maximum_spend",
+          "maximum_expiry_seconds",
+          "permitted_roles"
+        ],
+        "title": "PolicyRules",
+        "type": "object"
+      },
+      "PolicyView": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "enum": [
+                  "runtime.synthetic_calculation",
+                  "runtime.synthetic_internal_action",
+                  "runtime.synthetic_external_action",
+                  "runtime.synthetic_batch_action",
+                  "runtime.synthetic_binding_decision"
+                ],
+                "type": "string"
+              },
+              {
+                "const": "policy.activate",
+                "type": "string"
+              }
+            ],
+            "title": "Action"
+          },
+          "active_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Version Id"
+          },
+          "content_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Hash"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "record_version": {
+            "title": "Record Version",
+            "type": "integer"
+          },
+          "rules": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PolicyRules-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "required": [
+          "id",
+          "record_version",
+          "action",
+          "active_version_id",
+          "version",
+          "rules",
+          "content_hash",
+          "expires_at"
+        ],
+        "title": "PolicyView",
+        "type": "object"
+      },
       "Probe": {
         "additionalProperties": false,
         "properties": {
@@ -3803,6 +5404,22 @@
         "title": "QueueCount",
         "type": "object"
       },
+      "Reason": {
+        "additionalProperties": false,
+        "properties": {
+          "rationale": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rationale"
+        ],
+        "title": "Reason",
+        "type": "object"
+      },
       "ReasonInput": {
         "additionalProperties": false,
         "properties": {
@@ -3817,6 +5434,95 @@
           "reason"
         ],
         "title": "ReasonInput",
+        "type": "object"
+      },
+      "RequestAuthority": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "runtime.synthetic_calculation",
+              "runtime.synthetic_internal_action",
+              "runtime.synthetic_external_action",
+              "runtime.synthetic_batch_action",
+              "runtime.synthetic_binding_decision"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "maximum_spend": {
+            "anyOf": [
+              {
+                "maximum": 100.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+                "type": "string"
+              }
+            ],
+            "title": "Maximum Spend"
+          },
+          "maximum_uses": {
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Maximum Uses",
+            "type": "integer"
+          },
+          "maximum_volume": {
+            "maximum": 20000.0,
+            "minimum": 1.0,
+            "title": "Maximum Volume",
+            "type": "integer"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/FakePayload"
+          },
+          "rationale": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Rationale",
+            "type": "string"
+          },
+          "supersedes_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supersedes Id"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/TargetVersion"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "action",
+          "targets",
+          "payload",
+          "maximum_uses",
+          "maximum_spend",
+          "maximum_volume",
+          "expires_at",
+          "rationale"
+        ],
+        "title": "RequestAuthority",
         "type": "object"
       },
       "ResearchInput": {
@@ -4687,6 +6393,27 @@
           "logical_key"
         ],
         "title": "SyntheticInput",
+        "type": "object"
+      },
+      "TargetVersion": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "version": {
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ],
+        "title": "TargetVersion",
         "type": "object"
       },
       "UncertainView": {
@@ -5800,6 +7527,646 @@
         "summary": "Account Correct"
       }
     },
+    "/v1/workspaces/{workspace_id}/approvals": {
+      "get": {
+        "operationId": "approvals_v1_workspaces__workspace_id__approvals_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_list_ApprovalView__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Approvals"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/approvals/request": {
+      "post": {
+        "operationId": "create_v1_workspaces__workspace_id__approvals_request_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestAuthority"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_AuthorityResult_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Create"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}": {
+      "get": {
+        "operationId": "detail_v1_workspaces__workspace_id__approvals__identifier__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_ApprovalDetail_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Detail"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}/decide": {
+      "post": {
+        "operationId": "decide_v1_workspaces__workspace_id__approvals__identifier__decide_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "if-match",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "If-Match",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecideAuthority"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_ApprovalView_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Decide"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}/execute": {
+      "post": {
+        "operationId": "execute_v1_workspaces__workspace_id__approvals__identifier__execute_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteAuthority"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_AuthorityResult_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Execute"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}/revoke": {
+      "post": {
+        "operationId": "revoke_v1_workspaces__workspace_id__approvals__identifier__revoke_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "if-match",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "If-Match",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reason"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_ApprovalView_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Revoke"
+      }
+    },
     "/v1/workspaces/{workspace_id}/attention": {
       "get": {
         "operationId": "attention_v1_workspaces__workspace_id__attention_get",
@@ -6008,6 +8375,196 @@
           }
         },
         "summary": "Snooze"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/authority/freeze": {
+      "post": {
+        "operationId": "freeze_v1_workspaces__workspace_id__authority_freeze_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FreezeAuthority"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_FreezeView_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Freeze"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/authority/targets": {
+      "get": {
+        "operationId": "targets_v1_workspaces__workspace_id__authority_targets_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_list_AuthorityTargetView__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Targets"
       }
     },
     "/v1/workspaces/{workspace_id}/contact-points": {
@@ -9717,6 +12274,316 @@
           }
         },
         "summary": "Detail People"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/policies": {
+      "get": {
+        "operationId": "policies_v1_workspaces__workspace_id__policies_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_list_PolicyView__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Policies"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/policies/activate": {
+      "post": {
+        "operationId": "activate_v1_workspaces__workspace_id__policies_activate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "if-match",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "If-Match",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyActivate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_PolicyRecord_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Activate"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/policies/propose": {
+      "post": {
+        "operationId": "propose_v1_workspaces__workspace_id__policies_propose_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "if-match",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "If-Match",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_AuthorityResult_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Propose"
       }
     },
     "/v1/workspaces/{workspace_id}/runtime-health": {

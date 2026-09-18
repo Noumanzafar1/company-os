@@ -33,6 +33,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from apps.api.authority import register as register_authority
 from apps.api.business import register
 from apps.api.runtime import register as register_runtime
 
@@ -242,6 +243,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     register(api, authenticated)
     register_runtime(api, authenticated)
+    register_authority(api, authenticated)
     return api
 
 

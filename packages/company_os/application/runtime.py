@@ -16,6 +16,13 @@ from company_os.persistence.runtime import clock, get, insert, update
 from company_os.runtime_contracts import SyntheticInput
 
 EVENTS = {
+    "policy.activated",
+    "approval.requested",
+    "approval.granted",
+    "approval.rejected",
+    "approval.revoked",
+    "approval.invalidated",
+    "approval.expired",
     "test.aggregate_changed",
     "test.effect_requested",
     "job.started",
@@ -671,7 +678,18 @@ def settle(conn: Connection, reservation_id: UUID, actual: Decimal) -> None:
 
 
 def prepare_effect(conn: Connection, claimed: dict[str, Any]) -> dict[str, Any]:
+    from company_os.application import authority
+
     job = fenced(conn, claimed)
+    bindings = rows(
+        conn,
+        "SELECT manifest_id FROM app.authority_bindings WHERE input_id=:id",
+        {"id": job["input_ref"]},
+    )
+    if bindings:
+        reason = authority.validate(conn, bindings[0]["manifest_id"])
+        if reason:
+            raise BusinessError(reason, 423)
     if job["replay_namespace"]:
         raise BusinessError("REPLAY_EFFECT_DISABLED")
     item = get(conn, "runtime_inputs", job["input_ref"])
@@ -732,12 +750,15 @@ def prepare_effect(conn: Connection, claimed: dict[str, Any]) -> dict[str, Any]:
             "reservation_id": reservation["id"],
         },
     )
+    authority.reserve(conn, effect)
     update(conn, "jobs", job, effect_id=effect["id"], budget_reservation_id=reservation["id"])
     audit(conn, "effect.prepared", effect["id"], job["correlation_id"])
     return effect
 
 
 def begin_dispatch(conn: Connection, claimed: dict[str, Any], effect_id: UUID) -> dict[str, Any]:
+    from company_os.application import authority
+
     job = fenced(conn, claimed)
     effect = get(conn, "external_effects", effect_id, lock=True)
     if effect["job_id"] != job["id"] or job["effect_id"] != effect_id or job["replay_namespace"]:
@@ -750,6 +771,17 @@ def begin_dispatch(conn: Connection, claimed: dict[str, Any], effect_id: UUID) -
         raise BusinessError("DISPATCH_CANCELLED")
     if effect["state"] != "prepared":
         raise BusinessError("EFFECT_ALREADY_DISPATCHED")
+    binding = rows(
+        conn,
+        "SELECT manifest_id FROM app.authority_bindings WHERE input_id=:id",
+        {"id": effect["request_ref"]},
+    )
+    if binding:
+        reason = authority.validate(conn, binding[0]["manifest_id"])
+        if reason:
+            raise BusinessError(reason, 423)
+        authority.validate_budget(conn, effect)
+        authority.record_runtime_decision(conn, job, None)
     effect = update(
         conn,
         "external_effects",

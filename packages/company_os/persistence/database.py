@@ -5,7 +5,7 @@ from uuid import UUID
 
 from sqlalchemy import Connection, Engine, create_engine, text
 
-EXPECTED_REVISION = "0012_phase4_review_fixes"
+EXPECTED_REVISION = "0018_phase5_review_fixes"
 
 
 def make_engine(url: str, *, pool_size: int = 5) -> Engine:

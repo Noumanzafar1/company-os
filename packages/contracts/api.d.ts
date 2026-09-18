@@ -175,6 +175,108 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/workspaces/{workspace_id}/approvals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Approvals */
+        get: operations["approvals_v1_workspaces__workspace_id__approvals_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/approvals/request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create */
+        post: operations["create_v1_workspaces__workspace_id__approvals_request_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Detail */
+        get: operations["detail_v1_workspaces__workspace_id__approvals__identifier__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}/decide": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Decide */
+        post: operations["decide_v1_workspaces__workspace_id__approvals__identifier__decide_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}/execute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Execute */
+        post: operations["execute_v1_workspaces__workspace_id__approvals__identifier__execute_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/approvals/{identifier}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke */
+        post: operations["revoke_v1_workspaces__workspace_id__approvals__identifier__revoke_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/workspaces/{workspace_id}/attention": {
         parameters: {
             query?: never;
@@ -203,6 +305,40 @@ export interface paths {
         put?: never;
         /** Snooze */
         post: operations["snooze_v1_workspaces__workspace_id__attention__identifier__snooze_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/authority/freeze": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Freeze */
+        post: operations["freeze_v1_workspaces__workspace_id__authority_freeze_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/authority/targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Targets */
+        get: operations["targets_v1_workspaces__workspace_id__authority_targets_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -756,6 +892,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/workspaces/{workspace_id}/policies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Policies */
+        get: operations["policies_v1_workspaces__workspace_id__policies_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/policies/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Activate */
+        post: operations["activate_v1_workspaces__workspace_id__policies_activate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/policies/propose": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Propose */
+        post: operations["propose_v1_workspaces__workspace_id__policies_propose_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/workspaces/{workspace_id}/runtime-health": {
         parameters: {
             query?: never;
@@ -1028,6 +1215,108 @@ export interface components {
              */
             workspace_id: string;
         };
+        /** ApprovalDetail */
+        ApprovalDetail: {
+            /** History */
+            history: components["schemas"]["DecisionView"][];
+            manifest: components["schemas"]["ManifestView"] | null;
+            /** Remaining Uses */
+            remaining_uses: number;
+            request: components["schemas"]["ApprovalView"];
+            /** Targets */
+            targets: components["schemas"]["TargetVersion"][];
+            /** Uses */
+            uses: components["schemas"]["AuthorityUseView"][];
+            /** Validation Reason */
+            validation_reason: string | null;
+        };
+        /** ApprovalView */
+        ApprovalView: {
+            /** Action */
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            /** Candidate Version Id */
+            candidate_version_id?: string | null;
+            /**
+             * Correlation Id
+             * Format: uuid
+             */
+            correlation_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Created By
+             * Format: uuid
+             */
+            created_by: string;
+            /** Effective State */
+            effective_state?: string | null;
+            /** Expected Active Version Id */
+            expected_active_version_id?: string | null;
+            /** Expected Policy Record Version */
+            expected_policy_record_version?: number | null;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Maximum Spend */
+            maximum_spend: string;
+            /** Maximum Uses */
+            maximum_uses: number;
+            /** Maximum Volume */
+            maximum_volume: number;
+            /** Payload */
+            payload: components["schemas"]["FakePayload"] | components["schemas"]["PolicyActivationPayload"];
+            /** Payload Hash */
+            payload_hash: string;
+            /** Policy Id */
+            policy_id?: string | null;
+            /**
+             * Policy Version Id
+             * Format: uuid
+             */
+            policy_version_id: string;
+            /** Rationale */
+            rationale: string;
+            /** Record Version */
+            record_version: number;
+            /** Schema Version */
+            schema_version: number;
+            /** Scope Hash */
+            scope_hash: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "pending" | "approved" | "rejected" | "expired" | "revoked" | "superseded";
+            /** Supersedes Id */
+            supersedes_id: string | null;
+            /** Target Set Hash */
+            target_set_hash: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /**
+             * Updated By
+             * Format: uuid
+             */
+            updated_by: string;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
         /** AttemptView */
         AttemptView: {
             /** Attempt No */
@@ -1075,6 +1364,154 @@ export interface components {
             snooze_until: string | null;
             /** State */
             state: string;
+        };
+        /** AuthorityEnvelope[ApprovalDetail] */
+        AuthorityEnvelope_ApprovalDetail_: {
+            data: components["schemas"]["ApprovalDetail"];
+        };
+        /** AuthorityEnvelope[ApprovalView] */
+        AuthorityEnvelope_ApprovalView_: {
+            data: components["schemas"]["ApprovalView"];
+        };
+        /** AuthorityEnvelope[AuthorityResult] */
+        AuthorityEnvelope_AuthorityResult_: {
+            data: components["schemas"]["AuthorityResult"];
+        };
+        /** AuthorityEnvelope[FreezeView] */
+        AuthorityEnvelope_FreezeView_: {
+            data: components["schemas"]["FreezeView"];
+        };
+        /** AuthorityEnvelope[PolicyRecord] */
+        AuthorityEnvelope_PolicyRecord_: {
+            data: components["schemas"]["PolicyRecord"];
+        };
+        /** AuthorityEnvelope[list[ApprovalView]] */
+        AuthorityEnvelope_list_ApprovalView__: {
+            /** Data */
+            data: components["schemas"]["ApprovalView"][];
+        };
+        /** AuthorityEnvelope[list[AuthorityTargetView]] */
+        AuthorityEnvelope_list_AuthorityTargetView__: {
+            /** Data */
+            data: components["schemas"]["AuthorityTargetView"][];
+        };
+        /** AuthorityEnvelope[list[PolicyView]] */
+        AuthorityEnvelope_list_PolicyView__: {
+            /** Data */
+            data: components["schemas"]["PolicyView"][];
+        };
+        /** AuthorityResult */
+        AuthorityResult: {
+            /** Decision Id */
+            decision_id?: string | null;
+            /** Input Id */
+            input_id?: string | null;
+            /** Manifest Id */
+            manifest_id?: string | null;
+            /**
+             * Reasons
+             * @default []
+             */
+            reasons: string[];
+            /** Request Id */
+            request_id?: string | null;
+            /**
+             * Result
+             * @enum {string}
+             */
+            result: "ALLOW" | "DENY" | "REQUIRE_APPROVAL" | "QUARANTINE";
+        };
+        /** AuthorityTargetView */
+        AuthorityTargetView: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Created By
+             * Format: uuid
+             */
+            created_by: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Label */
+            label: string;
+            /** Record Version */
+            record_version: number;
+            /** Rights Valid */
+            rights_valid: boolean;
+            /** Schema Version */
+            schema_version: number;
+            /** Suppressed */
+            suppressed: boolean;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /**
+             * Updated By
+             * Format: uuid
+             */
+            updated_by: string;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
+        /** AuthorityUseView */
+        AuthorityUseView: {
+            /** Activation Policy Id */
+            activation_policy_id?: string | null;
+            /** Activation Session Id */
+            activation_session_id?: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Created By
+             * Format: uuid
+             */
+            created_by: string;
+            /** Effect Id */
+            effect_id: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Job Id */
+            job_id: string | null;
+            /**
+             * Manifest Id
+             * Format: uuid
+             */
+            manifest_id: string;
+            /** Schema Version */
+            schema_version: number;
+            /** Spend Reserved */
+            spend_reserved: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "reserved" | "consumed" | "released";
+            /** Use Number */
+            use_number: number;
+            /** Volume */
+            volume: number;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
         };
         /** BudgetView */
         BudgetView: {
@@ -1186,6 +1623,48 @@ export interface components {
             required_problem_fact_keys: string[];
             /** Target Roles */
             target_roles: string[];
+        };
+        /** DecideAuthority */
+        DecideAuthority: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "approve" | "reject" | "revise";
+            /** Expected Scope Hash */
+            expected_scope_hash: string;
+            /** Rationale */
+            rationale: string;
+        };
+        /** DecisionView */
+        DecisionView: {
+            /**
+             * Correlation Id
+             * Format: uuid
+             */
+            correlation_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Created By
+             * Format: uuid
+             */
+            created_by: string;
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "approve" | "reject" | "revise" | "revoke";
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Rationale */
+            rationale: string;
         };
         /** DocumentInput */
         DocumentInput: {
@@ -1725,6 +2204,14 @@ export interface components {
             /** Reason Rules */
             reason_rules?: components["schemas"]["ExclusionRule"][];
         };
+        /** ExecuteAuthority */
+        ExecuteAuthority: {
+            /** Logical Key */
+            logical_key: string;
+            payload: components["schemas"]["FakePayload"];
+            /** Targets */
+            targets: components["schemas"]["TargetVersion"][];
+        };
         /** FactValue */
         FactValue: {
             /**
@@ -1737,6 +2224,16 @@ export interface components {
             /** Value */
             value: string | number | boolean | null;
         };
+        /** FakePayload */
+        FakePayload: {
+            /** Label */
+            label: string;
+            /**
+             * Scenario
+             * @enum {string}
+             */
+            scenario: "effect_success" | "effect_rejected" | "effect_lost" | "effect_unknown";
+        };
         /** FoundationHealth */
         FoundationHealth: {
             /** Components */
@@ -1747,6 +2244,47 @@ export interface components {
              * @constant
              */
             live_sending: false;
+        };
+        /** FreezeAuthority */
+        FreezeAuthority: {
+            /** Action */
+            action?: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate" | null;
+            /** Rationale */
+            rationale: string;
+        };
+        /** FreezeView */
+        FreezeView: {
+            /** Action */
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate" | null;
+            /**
+             * Correlation Id
+             * Format: uuid
+             */
+            correlation_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Created By
+             * Format: uuid
+             */
+            created_by: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Rationale */
+            rationale: string;
+            /** Schema Version */
+            schema_version: number;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
         };
         /** HealthComponent */
         HealthComponent: {
@@ -2024,6 +2562,101 @@ export interface components {
              */
             workspace_id: string;
         };
+        /** ManifestScope */
+        ManifestScope: {
+            /** Action */
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            /**
+             * Approver Id
+             * Format: uuid
+             */
+            approver_id: string;
+            /**
+             * Assurance
+             * @constant
+             */
+            assurance: "aal2";
+            /** Expires At */
+            expires_at: string;
+            /** Maximum Spend */
+            maximum_spend: string;
+            /** Maximum Uses */
+            maximum_uses: number;
+            /** Maximum Volume */
+            maximum_volume: number;
+            /** Payload Hash */
+            payload_hash: string;
+            policy_change?: components["schemas"]["PolicyActivationPayload"] | null;
+            /**
+             * Policy Version Id
+             * Format: uuid
+             */
+            policy_version_id: string;
+            /** Scope Hash */
+            scope_hash: string;
+            /** Target Set Hash */
+            target_set_hash: string;
+            /** Targets */
+            targets: components["schemas"]["TargetVersion"][];
+            /**
+             * Version
+             * @constant
+             */
+            version: 1;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
+        /** ManifestView */
+        ManifestView: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Created By
+             * Format: uuid
+             */
+            created_by: string;
+            /**
+             * Decision Id
+             * Format: uuid
+             */
+            decision_id: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Manifest Hash */
+            manifest_hash: string;
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
+            /** Schema Version */
+            schema_version: number;
+            scope: components["schemas"]["ManifestScope"];
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
         /** MergeInput */
         MergeInput: {
             /** Evidence Ids */
@@ -2239,6 +2872,180 @@ export interface components {
              */
             workspace_id: string;
         };
+        /** PolicyActivate */
+        PolicyActivate: {
+            /**
+             * Decision Id
+             * Format: uuid
+             */
+            decision_id: string;
+            /**
+             * Manifest Id
+             * Format: uuid
+             */
+            manifest_id: string;
+            /**
+             * Policy Version Id
+             * Format: uuid
+             */
+            policy_version_id: string;
+        };
+        /** PolicyActivationPayload */
+        PolicyActivationPayload: {
+            /**
+             * Action
+             * @default policy.activate
+             * @constant
+             */
+            action: "policy.activate";
+            /** Candidate Content Hash */
+            candidate_content_hash: string;
+            /** Candidate Effective At */
+            candidate_effective_at: string;
+            /** Candidate Expires At */
+            candidate_expires_at: string;
+            /**
+             * Candidate Version Id
+             * Format: uuid
+             */
+            candidate_version_id: string;
+            /** Candidate Version Number */
+            candidate_version_number: number;
+            /** Current Active Version Id */
+            current_active_version_id: string | null;
+            /** Label */
+            label: string;
+            /**
+             * Policy Id
+             * Format: uuid
+             */
+            policy_id: string;
+            /** Policy Record Version */
+            policy_record_version: number;
+            rules: components["schemas"]["PolicyRules-Output"];
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
+        /** PolicyInput */
+        PolicyInput: {
+            /**
+             * Approval Expires At
+             * Format: date-time
+             */
+            approval_expires_at: string;
+            /**
+             * Effective At
+             * Format: date-time
+             */
+            effective_at: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Rationale */
+            rationale: string;
+            rules: components["schemas"]["PolicyRules-Input"];
+        };
+        /** PolicyRecord */
+        PolicyRecord: {
+            /** Action */
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            /** Active Version Id */
+            active_version_id: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Created By
+             * Format: uuid
+             */
+            created_by: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Record Version */
+            record_version: number;
+            /** Schema Version */
+            schema_version: number;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /**
+             * Updated By
+             * Format: uuid
+             */
+            updated_by: string;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
+        /** PolicyRules */
+        "PolicyRules-Input": {
+            /** Action */
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            /** Maximum Expiry Seconds */
+            maximum_expiry_seconds: number;
+            /** Maximum Spend */
+            maximum_spend: number | string;
+            /** Maximum Targets */
+            maximum_targets: number;
+            /** Maximum Uses */
+            maximum_uses: number;
+            /** Maximum Volume */
+            maximum_volume: number;
+            /** Permitted Roles */
+            permitted_roles: ("founder" | "researcher" | "sdr")[];
+        };
+        /** PolicyRules */
+        "PolicyRules-Output": {
+            /** Action */
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            /** Maximum Expiry Seconds */
+            maximum_expiry_seconds: number;
+            /** Maximum Spend */
+            maximum_spend: string;
+            /** Maximum Targets */
+            maximum_targets: number;
+            /** Maximum Uses */
+            maximum_uses: number;
+            /** Maximum Volume */
+            maximum_volume: number;
+            /** Permitted Roles */
+            permitted_roles: ("founder" | "researcher" | "sdr")[];
+        };
+        /** PolicyView */
+        PolicyView: {
+            /** Action */
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            /** Active Version Id */
+            active_version_id: string | null;
+            /** Content Hash */
+            content_hash: string | null;
+            /** Expires At */
+            expires_at: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Record Version */
+            record_version: number;
+            rules: components["schemas"]["PolicyRules-Output"] | null;
+            /** Version */
+            version: number | null;
+        };
         /** Probe */
         Probe: {
             /**
@@ -2275,10 +3082,41 @@ export interface components {
             /** State */
             state: string;
         };
+        /** Reason */
+        Reason: {
+            /** Rationale */
+            rationale: string;
+        };
         /** ReasonInput */
         ReasonInput: {
             /** Reason */
             reason: string;
+        };
+        /** RequestAuthority */
+        RequestAuthority: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision";
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Maximum Spend */
+            maximum_spend: number | string;
+            /** Maximum Uses */
+            maximum_uses: number;
+            /** Maximum Volume */
+            maximum_volume: number;
+            payload: components["schemas"]["FakePayload"];
+            /** Rationale */
+            rationale: string;
+            /** Supersedes Id */
+            supersedes_id?: string | null;
+            /** Targets */
+            targets: components["schemas"]["TargetVersion"][];
         };
         /** ResearchInput */
         ResearchInput: {
@@ -2660,6 +3498,16 @@ export interface components {
              * @enum {string}
              */
             scenario: "success" | "transient" | "invalid" | "exhausted" | "wait" | "effect_success" | "effect_rejected" | "effect_lost" | "effect_unknown" | "safety" | "reconcile";
+        };
+        /** TargetVersion */
+        TargetVersion: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Version */
+            version: number;
         };
         /** UncertainView */
         UncertainView: {
@@ -3551,6 +4399,486 @@ export interface operations {
             };
         };
     };
+    approvals_v1_workspaces__workspace_id__approvals_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_list_ApprovalView__"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    create_v1_workspaces__workspace_id__approvals_request_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RequestAuthority"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_AuthorityResult_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    detail_v1_workspaces__workspace_id__approvals__identifier__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_ApprovalDetail_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    decide_v1_workspaces__workspace_id__approvals__identifier__decide_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": number;
+            };
+            path: {
+                workspace_id: string;
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecideAuthority"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_ApprovalView_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    execute_v1_workspaces__workspace_id__approvals__identifier__execute_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExecuteAuthority"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_AuthorityResult_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    revoke_v1_workspaces__workspace_id__approvals__identifier__revoke_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": number;
+            };
+            path: {
+                workspace_id: string;
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Reason"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_ApprovalView_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
     attention_v1_workspaces__workspace_id__attention_get: {
         parameters: {
             query?: never;
@@ -3652,6 +4980,162 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_AttentionView_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    freeze_v1_workspaces__workspace_id__authority_freeze_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FreezeAuthority"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_FreezeView_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    targets_v1_workspaces__workspace_id__authority_targets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_list_AuthorityTargetView__"];
                 };
             };
             /** @description Bad Request */
@@ -6429,6 +7913,246 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_PersonView_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    policies_v1_workspaces__workspace_id__policies_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_list_PolicyView__"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    activate_v1_workspaces__workspace_id__policies_activate_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": number;
+            };
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PolicyActivate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_PolicyRecord_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    propose_v1_workspaces__workspace_id__policies_propose_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": number;
+            };
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PolicyInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_AuthorityResult_"];
                 };
             };
             /** @description Bad Request */

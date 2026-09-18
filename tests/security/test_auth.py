@@ -111,8 +111,13 @@ def test_a_b_access_and_admin_is_not_approver(client, login):
             client.post(
                 f"/v1/workspaces/{key(f'workspace-{letter}')}/approvals", headers=headers
             ).status_code
-            == 404
+            == 405
         )
+        # Phase 5 exposes a read collection; POST is still not a state setter.
+        approvals = client.get(
+            f"/v1/workspaces/{key(f'workspace-{letter}')}/approvals", headers=headers
+        )
+        assert approvals.status_code == (200 if letter == "a" else 403)
 
 
 @pytest.mark.parametrize("field,value", [("status", "revoked"), ("expires_at", "2000-01-01")])
