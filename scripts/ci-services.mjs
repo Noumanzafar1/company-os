@@ -8,6 +8,7 @@ if(process.argv[2]==='prepare') {
   run(python,['-m','alembic','upgrade','head']);
   run(python,['-m','database.seeds.synthetic']);
 } else if(process.argv[2]==='e2e') {
+  run(python,['scripts/phase5_mfa_fixture.py']);
   const {apiEnv,consoleEnv,workerEnv}=serviceEnvironments();
   const api=spawn(python,['-m','apps.api.run','--stop-file','.local/ci-api.stop'],{stdio:'inherit',windowsHide:true,env:apiEnv});
   const worker=spawn(python,['-m','apps.worker.main','--stop-file','.local/ci-worker.stop'],{stdio:'inherit',windowsHide:true,env:workerEnv});

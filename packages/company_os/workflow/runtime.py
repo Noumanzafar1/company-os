@@ -12,6 +12,7 @@ from sqlalchemy import Engine
 from sqlalchemy.exc import SQLAlchemyError
 
 from company_os.adapters import fake_effects
+from company_os.application import authority
 from company_os.application import runtime as command
 from company_os.application.scheduler import tick
 from company_os.persistence.business import BusinessError
@@ -210,12 +211,24 @@ def execute_claim(
                 raise SystemExit("Synthetic crash before call")
             with transaction(engine, *scope) as conn:
                 current = command.fenced(conn, job)
+                authority_binding = rows(
+                    conn,
+                    "SELECT manifest_id FROM app.authority_bindings WHERE input_id=:id",
+                    {"id": effect["request_ref"]},
+                )
+                if authority_binding:
+                    denial = authority.validate(conn, authority_binding[0]["manifest_id"])
+                    if denial:
+                        raise BusinessError(denial, 423)
+                    authority.validate_budget(conn, effect)
                 if (
                     current["cancel_requested_at"]
                     or current["deadline_at"] <= clock(conn)
                     or not get(conn, "fake_endpoints", effect["connection_id"])["enabled"]
                 ):
                     raise BusinessError("DISPATCH_CANCELLED")
+                if authority_binding:
+                    authority.final_temporal_check(conn, authority_binding[0]["manifest_id"])
                 receipt = fake_effects.accept(conn, effect, scenario)
                 pulse(conn, "fake_adapter", owner)
             if crash_at in {"during_call", "after_remote_success"}:
@@ -239,6 +252,7 @@ def execute_claim(
                 raise
             with transaction(engine, *scope) as conn:
                 current = command.fenced(conn, job)
+                authority.record_runtime_decision(conn, current, error.code)
                 pending_effect = (
                     get(conn, "external_effects", current["effect_id"], lock=True)
                     if current["effect_id"]

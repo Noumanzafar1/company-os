@@ -5,7 +5,7 @@ test('synthetic A/B isolation, shell routes, session cookies and logout',async({
   await expect(page.getByRole('button',{name:/Sign in as Synthetic User A/})).toBeVisible();
   await page.getByRole('button',{name:/Sign in as Synthetic User A/}).click();
   await expect(page.getByRole('heading',{name:'Attention',exact:true})).toBeVisible();
-  await expect(page.getByRole('heading',{name:'No decisions currently require action.'})).toBeVisible();
+  await expect(page.getByText('Current decisions, with technical safety first.')).toBeVisible();
   const optionsA=await page.locator('select option').allTextContents();
   expect(optionsA).toEqual(['Workspace A']);
   const workspaceA=await page.locator('select').inputValue();
@@ -16,7 +16,7 @@ test('synthetic A/B isolation, shell routes, session cookies and logout',async({
   expect(await page.evaluate(()=>Object.keys(localStorage))).toEqual([]);
   await page.screenshot({path:'test-results/attention.png',fullPage:true});
   await page.getByRole('link',{name:/Approvals/}).click();
-  await expect(page.getByRole('heading',{name:'No approvals pending.'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Review queue'})).toBeVisible();
   await page.getByRole('link',{name:/System Health/}).click();
   await expect(page.getByText('Healthy',{exact:true})).toHaveCount(3);
   await expect(page.getByText('Not configured',{exact:true})).toHaveCount(7);

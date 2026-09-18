@@ -53,6 +53,12 @@ def db_env() -> Iterator[dict[str, str]]:
         )
         subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
         subprocess.run(
+            [sys.executable, "-m", "alembic", "downgrade", "0012_phase4_review_fixes"],
+            env=env,
+            check=True,
+        )
+        subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        subprocess.run(
             [sys.executable, "-m", "alembic", "downgrade", "0011_runtime_event_payloads"],
             env=env,
             check=True,

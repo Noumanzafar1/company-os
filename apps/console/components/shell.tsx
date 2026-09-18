@@ -35,7 +35,7 @@ export async function Shell({route,requestedWorkspace,children}:{route:string,re
       <div className="user-menu"><div><strong>{user.display_name}</strong><span>{scope?.roles.join(', ').replaceAll('_',' ') || 'No active membership'}</span></div>
         <form action="/auth/logout" method="post"><input type="hidden" name="csrf" value={csrf || ''}/><button className="text-button">Sign out</button></form></div>
     </header>
-    <main className="content"><div className="page-heading"><div><span className="eyebrow">YOUR OPERATING SPACE</span><h1>{title}</h1></div><span className="phase-tag">PHASE 04</span></div>
+    <main className="content"><div className="page-heading"><div><span className="eyebrow">YOUR OPERATING SPACE</span><h1>{title}</h1></div><span className="phase-tag">PHASE 05</span></div>
       {!scope ? <section className="empty-state" role="alert"><div className="empty-symbol">âŠ˜</div><h2>Workspace unavailable</h2><p>This workspace is unavailable or you do not have access.</p><Link href={route}>Return to your workspace</Link></section>
       : children ? children : route==='/system' ? <><p className="page-intro">Connection status for this foundation. Unconfigured services have no active connections.</p>
         {health?.data ? <section className="health-panel"><div className="panel-heading"><h2>Platform status</h2><span className="small muted">Checked {new Date(health.data.meta.as_of).toISOString().slice(11,19)} UTC</span></div>

@@ -1,0 +1,10 @@
+import { chromium } from '@playwright/test';
+import { loadEnv,python,run } from './local.mjs';
+loadEnv();
+run(python,['scripts/phase5_mfa_fixture.py']);
+const browser=await chromium.launch({channel:'chrome',headless:false});
+const context=await browser.newContext({storageState:'.local/phase5-browser.json'});
+const page=await context.newPage();
+await page.goto('http://localhost:3000/approvals');
+console.log('Synthetic founder MFA demonstration. Close the browser to end. No real provider or deployment.');
+await new Promise(resolve=>browser.on('disconnected',resolve));
