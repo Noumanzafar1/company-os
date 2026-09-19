@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import math
 import random
 from datetime import UTC, timedelta
 from decimal import Decimal
@@ -185,12 +186,20 @@ def enqueue(
     )
     if found:
         return found[0]
+    long_specs = (
+        rows(conn, "SELECT spec FROM app.long_task_specs WHERE input_id=:id", {"id": item["id"]})
+        if not effect
+        else []
+    )
     return insert(
         conn,
         "jobs",
         {
             "job_type": "reconcile_effect" if effect else "synthetic",
             "job_version": 1,
+            "timeout_seconds": math.ceil(long_specs[0]["spec"]["hard_timeout_seconds"])
+            if long_specs
+            else 30,
             "workflow_run_id": workflow,
             "subject_id": item["id"],
             "input_ref": item["id"],

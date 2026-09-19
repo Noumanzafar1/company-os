@@ -7,11 +7,12 @@ from typing import Any
 from uuid import UUID
 
 from company_os import runtime_contracts as dto
+from company_os.application import long_tasks, webhooks
 from company_os.application import runtime as commands
-from company_os.application import webhooks
 from company_os.application.identity import digest
 from company_os.contracts import Envelope, Meta
 from company_os.domain.identity import AccessDenied, SessionIdentity
+from company_os.long_contracts import LongSubmission
 from company_os.persistence.business import BusinessError
 from company_os.persistence.database import rows, transaction
 from company_os.persistence.runtime import get
@@ -91,6 +92,11 @@ def register(api: FastAPI, authenticated: Callable[..., SessionIdentity]) -> Non
             )
             effect_ref = job["effect_id"] or job["coalesced_effect_id"]
             effect = get(conn, "external_effects", effect_ref) if effect_ref else None
+            executions = rows(
+                conn,
+                "SELECT id,attempt_id,fence,state,outcome,created_at,ended_at,(details->>'forced')::boolean AS forced,(details->>'elapsed_ms')::float AS elapsed_ms FROM app.long_executions WHERE job_id=:id ORDER BY created_at LIMIT 100",
+                {"id": identifier},
+            )
             events = rows(
                 conn,
                 "SELECT * FROM app.events WHERE correlation_id=:c OR aggregate_id=:id ORDER BY created_at LIMIT 200",
@@ -102,6 +108,7 @@ def register(api: FastAPI, authenticated: Callable[..., SessionIdentity]) -> Non
                 attempts=[view(dto.AttemptView, x) for x in attempts],
                 effect=view(dto.EffectView, effect) if effect else None,
                 events=[view(dto.EventView, x) for x in events],
+                long_executions=[view(dto.LongExecutionView, x) for x in executions],
             ),
             meta=meta(request, workspace_id),
         )
@@ -172,6 +179,31 @@ def register(api: FastAPI, authenticated: Callable[..., SessionIdentity]) -> Non
                 body.model_dump(mode="json"),
                 "runtime_inputs",
                 lambda: commands.submit(conn, body, request.state.request_id),
+            )
+        return Envelope(data=view(dto.Submitted, item), meta=meta(request, workspace_id))
+
+    @api.post(prefix + "/runtime/long-tasks", response_model=Envelope[dto.Submitted])
+    def long_submit(
+        workspace_id: UUID,
+        body: LongSubmission,
+        request: Request,
+        actor: SessionIdentity = Depends(authenticated),
+    ) -> Any:
+        workspace = scope(request, actor, workspace_id)
+        mutation(request, actor, workspace)
+        if request.app.state.config.company_env not in {"development", "test"}:
+            raise AccessDenied()
+        with transaction(
+            request.app.state.engine, actor.principal_id, workspace_id, workspace["authz_epoch"]
+        ) as conn:
+            item = commands.idempotent(
+                conn,
+                actor.principal_id,
+                request.headers["idempotency-key"],
+                "runtime.long",
+                body.model_dump(mode="json"),
+                "runtime_inputs",
+                lambda: long_tasks.submit(conn, body, request.state.request_id),
             )
         return Envelope(data=view(dto.Submitted, item), meta=meta(request, workspace_id))
 

@@ -17,5 +17,7 @@
   "database/migrations/versions/0015_authority_events.py": "33a817ec095b2139f34e6bb520cdeef173578ff93a2a3dfe4fafb47a323bc5ef",
   "database/migrations/versions/0016_authority_exact_binding.py": "6ee592c54e1c4440a35e1ff32b28419833983df0265403be1507836d3c2dc46c",
   "database/migrations/versions/0017_authority_commit_boundary.py": "67257b789d2a333bb315dc97fa788636cffefacd4e9dca19cc6d525b2086b2a5",
-  "database/migrations/versions/0018_phase5_review_fixes.py": "8d1edaabe64b8423df73540bd03700215d4c8443dc21ae35171346c55b024bac"
+  "database/migrations/versions/0018_phase5_review_fixes.py": "8d1edaabe64b8423df73540bd03700215d4c8443dc21ae35171346c55b024bac",
+  "database/migrations/versions/0019_long_execution.py": "0288a1f2abc59d4e63f7942a6d69a8f99f3da29396f87b75d5dd41e1c902eff7",
+  "database/migrations/versions/0020_long_spec_lock.py": "3d139da0f57dd4427ad47f2f1ac4953bc84ef99ee5b8b0bb3607cd1f59a8edcb"
 }

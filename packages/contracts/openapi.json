@@ -3540,13 +3540,21 @@
           },
           "job": {
             "$ref": "#/components/schemas/JobView"
+          },
+          "long_executions": {
+            "items": {
+              "$ref": "#/components/schemas/LongExecutionView"
+            },
+            "title": "Long Executions",
+            "type": "array"
           }
         },
         "required": [
           "job",
           "attempts",
           "effect",
-          "events"
+          "events",
+          "long_executions"
         ],
         "title": "JobDetail",
         "type": "object"
@@ -4004,6 +4012,190 @@
           "offer_version"
         ],
         "title": "LeadView",
+        "type": "object"
+      },
+      "LongExecutionView": {
+        "additionalProperties": false,
+        "properties": {
+          "attempt_id": {
+            "format": "uuid",
+            "title": "Attempt Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "elapsed_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elapsed Ms"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "fence": {
+            "title": "Fence",
+            "type": "integer"
+          },
+          "forced": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forced"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "attempt_id",
+          "fence",
+          "state",
+          "outcome",
+          "created_at",
+          "ended_at"
+        ],
+        "title": "LongExecutionView",
+        "type": "object"
+      },
+      "LongSpec": {
+        "additionalProperties": false,
+        "properties": {
+          "cancellation_grace_seconds": {
+            "default": 0.3,
+            "maximum": 2.0,
+            "minimum": 0.05,
+            "title": "Cancellation Grace Seconds",
+            "type": "number"
+          },
+          "connect_timeout_seconds": {
+            "default": 1,
+            "maximum": 5.0,
+            "minimum": 0.05,
+            "title": "Connect Timeout Seconds",
+            "type": "number"
+          },
+          "duration_seconds": {
+            "default": 0.2,
+            "maximum": 120.0,
+            "minimum": 0.0,
+            "title": "Duration Seconds",
+            "type": "number"
+          },
+          "handler": {
+            "enum": [
+              "immediate_success",
+              "sleep_success",
+              "cooperative_cancel",
+              "ignore_cancel",
+              "infinite_cpu",
+              "child_crash",
+              "abrupt_exit",
+              "malformed_result",
+              "no_result",
+              "corrupted_result",
+              "oversized_result",
+              "transient_read_timeout",
+              "fake_remote_success",
+              "fake_remote_accept_then_hang",
+              "fake_remote_reject",
+              "network_hang",
+              "network_drop",
+              "network_malformed",
+              "network_delayed",
+              "delayed_result_after_lease_loss",
+              "process_tree",
+              "inspect_environment"
+            ],
+            "title": "Handler",
+            "type": "string"
+          },
+          "handler_version": {
+            "const": 1,
+            "default": 1,
+            "title": "Handler Version",
+            "type": "integer"
+          },
+          "hard_timeout_seconds": {
+            "default": 3,
+            "maximum": 180.0,
+            "minimum": 0.1,
+            "title": "Hard Timeout Seconds",
+            "type": "number"
+          },
+          "read_timeout_seconds": {
+            "default": 1,
+            "maximum": 120.0,
+            "minimum": 0.05,
+            "title": "Read Timeout Seconds",
+            "type": "number"
+          }
+        },
+        "required": [
+          "handler"
+        ],
+        "title": "LongSpec",
+        "type": "object"
+      },
+      "LongSubmission": {
+        "additionalProperties": false,
+        "properties": {
+          "logical_key": {
+            "maxLength": 150,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_.:-]+$",
+            "title": "Logical Key",
+            "type": "string"
+          },
+          "spec": {
+            "$ref": "#/components/schemas/LongSpec"
+          }
+        },
+        "required": [
+          "logical_key",
+          "spec"
+        ],
+        "title": "LongSubmission",
         "type": "object"
       },
       "ManifestScope": {
@@ -12674,6 +12866,106 @@
           }
         },
         "summary": "Runtime Health"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/runtime/long-tasks": {
+      "post": {
+        "operationId": "long_submit_v1_workspaces__workspace_id__runtime_long_tasks_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LongSubmission"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_Submitted_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Long Submit"
       }
     },
     "/v1/workspaces/{workspace_id}/runtime/synthetic": {

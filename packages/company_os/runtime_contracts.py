@@ -120,11 +120,24 @@ class EffectView(Model):
     reservation_id: UUID | None
 
 
+class LongExecutionView(Model):
+    id: UUID
+    attempt_id: UUID
+    fence: int
+    state: str
+    outcome: str | None
+    created_at: UtcTime
+    ended_at: UtcTime | None
+    forced: bool | None = None
+    elapsed_ms: float | None = None
+
+
 class JobDetail(Model):
     job: JobView
     attempts: list[AttemptView]
     effect: EffectView | None
     events: list[EventView]
+    long_executions: list[LongExecutionView]
 
 
 class IncidentView(Model):

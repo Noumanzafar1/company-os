@@ -3,7 +3,7 @@
 import json
 import threading
 import time
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from typing import Any
 from uuid import UUID
@@ -41,6 +41,28 @@ def maintenance(engine: Engine, scope: tuple[UUID, UUID, int], instance: str) ->
         pulse(conn, "worker", instance)
         command.refresh_coalesced(conn)
         command.recover(conn)
+        for execution in rows(
+            conn,
+            """SELECT x.* FROM app.long_executions x JOIN app.jobs j ON j.workspace_id=x.workspace_id AND j.id=x.job_id
+            WHERE x.state='active' AND (j.fence<>x.fence OR j.lease_expires_at IS NULL OR j.lease_expires_at<=clock_timestamp())
+            ORDER BY x.id FOR UPDATE OF x SKIP LOCKED""",
+        ):
+            update(
+                conn,
+                "long_executions",
+                execution,
+                state="abandoned",
+                ended_at=clock(conn),
+                outcome="PARENT_OR_LEASE_LOST",
+                details={"cleanup_confirmation": "unavailable"},
+            )
+            command.audit(
+                conn,
+                "job.long_abandoned",
+                execution["job_id"],
+                execution["id"],
+                outcome="recovery_required",
+            )
         command.dispatch_outbox(conn)
         tick(conn)
         pulse(conn, "scheduler", instance)
@@ -59,8 +81,13 @@ def run_one(
     *,
     safety: bool = False,
     crash_at: str | None = None,
+    shutdown: threading.Event | None = None,
+    stop_claim: Callable[[], bool] | None = None,
 ) -> bool:
     with transaction(engine, *scope) as conn:
+        # Check after connection/context acquisition, immediately before claim.
+        if (shutdown and shutdown.is_set()) or (stop_claim and stop_claim()):
+            return False
         job = command.claim(conn, owner, safety=safety)
     if not job:
         return False
@@ -68,7 +95,7 @@ def run_one(
         raise SystemExit("Synthetic crash after claim")
     started = time.monotonic()
     with renew_lease(engine, scope, job):
-        result = execute_claim(engine, scope, owner, job, crash_at)
+        result = execute_claim(engine, scope, owner, job, crash_at, shutdown)
     with transaction(engine, *scope) as conn:
         current = get(conn, "jobs", job["id"])
     print(
@@ -134,6 +161,7 @@ def execute_claim(
     owner: str,
     job: dict[str, Any],
     crash_at: str | None,
+    shutdown: threading.Event | None = None,
 ) -> bool:
     with transaction(engine, *scope) as conn:
         current = command.fenced(conn, job)
@@ -144,6 +172,15 @@ def execute_claim(
         command.emit(conn, "job.started", current, "job")
         item = get(conn, "runtime_inputs", current["input_ref"])
     scenario = item["scenario"]
+    if job["job_type"] != "reconcile_effect":
+        with transaction(engine, *scope) as conn:
+            specs = rows(
+                conn, "SELECT * FROM app.long_task_specs WHERE input_id=:id", {"id": item["id"]}
+            )
+        if specs:
+            from company_os.workflow.long_runtime import run_long
+
+            return run_long(engine, scope, job, specs[0], shutdown)
     if crash_at == "during_internal":
         raise SystemExit("Synthetic crash during work")
     if job["job_type"] == "reconcile_effect":

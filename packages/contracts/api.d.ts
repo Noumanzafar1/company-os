@@ -960,6 +960,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/workspaces/{workspace_id}/runtime/long-tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Long Submit */
+        post: operations["long_submit_v1_workspaces__workspace_id__runtime_long_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/workspaces/{workspace_id}/runtime/synthetic": {
         parameters: {
             query?: never;
@@ -2376,6 +2393,8 @@ export interface components {
             /** Events */
             events: components["schemas"]["EventView"][];
             job: components["schemas"]["JobView"];
+            /** Long Executions */
+            long_executions: components["schemas"]["LongExecutionView"][];
         };
         /** JobView */
         JobView: {
@@ -2561,6 +2580,81 @@ export interface components {
              * Format: uuid
              */
             workspace_id: string;
+        };
+        /** LongExecutionView */
+        LongExecutionView: {
+            /**
+             * Attempt Id
+             * Format: uuid
+             */
+            attempt_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Elapsed Ms */
+            elapsed_ms?: number | null;
+            /** Ended At */
+            ended_at: string | null;
+            /** Fence */
+            fence: number;
+            /** Forced */
+            forced?: boolean | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Outcome */
+            outcome: string | null;
+            /** State */
+            state: string;
+        };
+        /** LongSpec */
+        LongSpec: {
+            /**
+             * Cancellation Grace Seconds
+             * @default 0.3
+             */
+            cancellation_grace_seconds: number;
+            /**
+             * Connect Timeout Seconds
+             * @default 1
+             */
+            connect_timeout_seconds: number;
+            /**
+             * Duration Seconds
+             * @default 0.2
+             */
+            duration_seconds: number;
+            /**
+             * Handler
+             * @enum {string}
+             */
+            handler: "immediate_success" | "sleep_success" | "cooperative_cancel" | "ignore_cancel" | "infinite_cpu" | "child_crash" | "abrupt_exit" | "malformed_result" | "no_result" | "corrupted_result" | "oversized_result" | "transient_read_timeout" | "fake_remote_success" | "fake_remote_accept_then_hang" | "fake_remote_reject" | "network_hang" | "network_drop" | "network_malformed" | "network_delayed" | "delayed_result_after_lease_loss" | "process_tree" | "inspect_environment";
+            /**
+             * Handler Version
+             * @default 1
+             * @constant
+             */
+            handler_version: 1;
+            /**
+             * Hard Timeout Seconds
+             * @default 3
+             */
+            hard_timeout_seconds: number;
+            /**
+             * Read Timeout Seconds
+             * @default 1
+             */
+            read_timeout_seconds: number;
+        };
+        /** LongSubmission */
+        LongSubmission: {
+            /** Logical Key */
+            logical_key: string;
+            spec: components["schemas"]["LongSpec"];
         };
         /** ManifestScope */
         ManifestScope: {
@@ -8229,6 +8323,86 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_RuntimeHealth_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    long_submit_v1_workspaces__workspace_id__runtime_long_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LongSubmission"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Submitted_"];
                 };
             };
             /** @description Bad Request */
