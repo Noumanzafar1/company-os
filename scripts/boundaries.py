@@ -61,6 +61,14 @@ def secret_findings(path: str, content: str) -> list[str]:
     return findings
 
 
+def lock_findings(content: str) -> list[str]:
+    if re.search(r"WARNING:\s+The following packages were not pinned", content, re.I):
+        return [
+            "requirements.lock: incomplete hashed dependency graph; regenerate with --allow-unsafe"
+        ]
+    return []
+
+
 def import_findings(path: str, content: str) -> list[str]:
     findings = []
     tree = ast.parse(content)
@@ -184,6 +192,7 @@ def main() -> None:
     direct = {re.split(r"[\[<>=]", dep)[0].lower() for dep in pyproject["project"]["dependencies"]}
     if direct != BACKEND:
         errors.append("Backend dependency allowlist changed: requires ADR/review")
+    errors.extend(lock_findings((ROOT / "requirements.lock").read_text(encoding="utf-8")))
     frontend = json.loads((ROOT / "apps/console/package.json").read_text())["dependencies"]
     if set(frontend) != FRONTEND:
         errors.append("Frontend dependency allowlist changed: requires ADR/review")

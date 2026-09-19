@@ -3,7 +3,19 @@ from company_os.adapters.local_documents import FakeDocumentStore
 from company_os.adapters.local_source import FakeSourceProvider
 from company_os.business_contracts import FactValue, ICPVersionInput, Record
 
-from scripts.boundaries import import_findings, phase_findings
+from scripts.boundaries import ROOT, import_findings, lock_findings, phase_findings
+
+
+def test_hashed_lock_rejects_unpinned_transitive_warning():
+    lock = (ROOT / "requirements.lock").read_text(encoding="utf-8")
+    assert not lock_findings(lock)
+    warning = "# WARNING: The following packages were not pinned, but pip requires them to be\n"
+    assert lock_findings(
+        lock
+        + "\n"
+        + warning
+        + "# pinned when the requirements file includes hashes.\n# setuptools\n"
+    )
 
 
 @pytest.mark.parametrize(
