@@ -10,6 +10,7 @@ from company_os.persistence.business import BusinessError
 from company_os.persistence.database import rows
 
 IMMUTABLE = {
+    "long_task_specs",
     "runtime_completions",
     "reservation_budget_caps",
     "runtime_inputs",
@@ -23,6 +24,7 @@ IMMUTABLE = {
     "incident_evidence",
 }
 TABLES = IMMUTABLE | {
+    "long_executions",
     "fake_endpoints",
     "workflow_runs",
     "outbox",
@@ -79,9 +81,16 @@ def insert(conn: Connection, table: str, data: dict[str, Any]) -> dict[str, Any]
 def update(conn: Connection, table: str, item: dict[str, Any], **values: Any) -> dict[str, Any]:
     if table not in TABLES - IMMUTABLE or any(not k.replace("_", "").isalnum() for k in values):
         raise ValueError("Immutable/unknown runtime table")
+    expressions = []
+    for key, value in values.items():
+        if isinstance(value, dict):
+            values[key] = json.dumps(value, sort_keys=True, separators=(",", ":"), default=str)
+            expressions.append(f"{key}=CAST(:{key} AS jsonb)")
+        else:
+            expressions.append(f"{key}=:{key}")
     found = rows(
         conn,
-        f"UPDATE app.{table} SET {','.join(k + '=:' + k for k in values)},record_version=record_version+1,updated_by=app.current_principal_id() WHERE id=:id AND record_version=:version RETURNING *",
+        f"UPDATE app.{table} SET {','.join(expressions)},record_version=record_version+1,updated_by=app.current_principal_id() WHERE id=:id AND record_version=:version RETURNING *",
         {**values, "id": item["id"], "version": item["record_version"]},
     )
     if not found:

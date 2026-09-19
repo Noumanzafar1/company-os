@@ -19,6 +19,60 @@ def health(conn: Connection) -> dict[str, Any]:
         "SELECT component,max(measured_at) AS last_seen FROM app.runtime_heartbeats GROUP BY component",
     )
     components = []
+    pools = rows(
+        conn,
+        "SELECT instance FROM app.runtime_heartbeats WHERE component='long_pool' AND measured_at>clock_timestamp()-interval '60 seconds'",
+    )
+    pool_capacity = sum(
+        int(p["instance"].rsplit(":", 1)[-1])
+        for p in pools
+        if p["instance"].rsplit(":", 1)[-1] in {"1", "2", "3", "4"}
+    )
+    components.append(
+        {
+            "name": "long_pool_capacity",
+            "status": "GREEN" if pools else "UNKNOWN",
+            "count": pool_capacity if pools else None,
+        }
+    )
+    components.append(
+        {
+            "name": "long_safety_reserved_slots",
+            "status": "GREEN" if pools else "UNKNOWN",
+            "count": len(pools) if pools else None,
+        }
+    )
+    executions = rows(
+        conn,
+        """SELECT count(*) FILTER(WHERE x.state='active' AND j.fence=x.fence AND j.lease_expires_at>clock_timestamp()) AS active,
+        min(x.created_at) FILTER(WHERE x.state='active') AS oldest,
+        count(*) FILTER(WHERE x.outcome='HARD_TIMEOUT') AS timed_out,
+        count(*) FILTER(WHERE x.details->>'forced'='true') AS escalated,
+        (SELECT count(*) FROM app.audit_entries WHERE action_type='job.long_stale_completion') AS stale,
+        count(*) FILTER(WHERE x.state='abandoned' OR (x.state='active' AND (j.fence<>x.fence OR j.lease_expires_at IS NULL OR j.lease_expires_at<=clock_timestamp()))) AS orphaned
+        FROM app.long_executions x JOIN app.jobs j ON j.workspace_id=x.workspace_id AND j.id=x.job_id""",
+    )[0]
+    for name, count in (
+        ("long_active", executions["active"]),
+        ("long_timeouts", executions["timed_out"]),
+        ("long_cancellation_escalations", executions["escalated"]),
+        ("long_stale_completions", executions["stale"]),
+        ("long_orphan_cleanup_unconfirmed", executions["orphaned"]),
+    ):
+        components.append(
+            {
+                "name": name,
+                "status": "RED"
+                if name == "long_orphan_cleanup_unconfirmed" and count
+                else "AMBER"
+                if count and name != "long_active"
+                else "GREEN",
+                "count": count,
+                "age_seconds": (now - executions["oldest"]).total_seconds()
+                if name == "long_active" and executions["oldest"]
+                else None,
+            }
+        )
     for name in ("worker", "scheduler", "fake_adapter"):
         seen = next((x["last_seen"] for x in beats if x["component"] == name), None)
         age = (now - seen).total_seconds() if seen else None

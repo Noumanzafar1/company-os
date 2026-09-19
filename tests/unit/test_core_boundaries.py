@@ -36,6 +36,13 @@ def test_phase_modules_routes_and_network_rejected():
     assert not phase_findings(
         "packages/company_os/adapters/local_documents.py", "from pathlib import Path"
     )
+    for source in (
+        'url="https://api.openai.com/v1"',
+        'model="gpt-4-example"',
+        "model_router = {}",
+        "execute_prompt()",
+    ):
+        assert phase_findings("packages/company_os/workflow/later.py", source)
 
 
 def test_fake_document_store_rejects_path_input_and_verifies_hash(tmp_path):

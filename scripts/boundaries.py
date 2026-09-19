@@ -88,6 +88,12 @@ def import_findings(path: str, content: str) -> list[str]:
 def phase_findings(path: str, content: str) -> list[str]:
     """Implementation-only guard; future architecture documentation remains allowed."""
     errors = []
+    if re.search(
+        r"(?:api\.(?:openai|anthropic|apollo)\.com|gpt-[0-9]|claude-[0-9]|text-embedding-|model_router|execute_prompt)",
+        content,
+        re.I,
+    ):
+        errors.append(f"{path}: Phase 6B/provider implementation is prohibited")
     if any(
         segment in path.lower()
         for segment in [
@@ -160,6 +166,12 @@ def main() -> None:
             errors.append(f"{name}: forbidden browser/database boundary")
         if name.endswith(".sql") and not name.startswith("database/migrations/versions/"):
             errors.append(f"{name}: unversioned schema SQL")
+        if name.startswith("database/migrations/versions/") and re.search(
+            r"CREATE\s+TABLE\s+(?:app\.)?(?:ai_tasks|model_routes|prompt_versions|embeddings)\b",
+            content,
+            re.I,
+        ):
+            errors.append(f"{name}: Phase 6B schema is prohibited")
     pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text())
     direct = {re.split(r"[\[<>=]", dep)[0].lower() for dep in pyproject["project"]["dependencies"]}
     if direct != BACKEND:

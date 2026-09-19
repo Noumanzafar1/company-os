@@ -259,7 +259,14 @@ def test_effect_intent_and_uncertainty(runtime, engine, admin, scenario, expecte
                 {"id": effect["id"]},
             )
             conn.execute(text("ALTER TABLE app.fake_receipts ENABLE TRIGGER runtime_guard"))
-        assert run_one(engine, WA, "reconciler", safety=True)
+        # Earlier fixtures can leave eligible safety work. Exercise the real
+        # ordered safety lane until this effect is reconciled; never assume this
+        # newly created reconciliation is the oldest queued job.
+        for _ in range(20):
+            assert run_one(engine, WA, "reconciler", safety=True)
+            with transaction(engine, *WA) as conn:
+                if get(conn, "external_effects", effect["id"])["state"] == "confirmed":
+                    break
         with transaction(engine, *WA) as conn:
             assert get(conn, "external_effects", effect["id"])["state"] == "confirmed"
             assert get(conn, "jobs", job["id"])["state"] == "succeeded"
@@ -601,6 +608,28 @@ def test_populated_tenant_tables_and_role_boundaries(runtime, engine):
         schedule = rows(conn, "SELECT * FROM app.schedules LIMIT 1")[0]
         update(conn, "schedules", schedule, next_due_at=clock(conn) - timedelta(seconds=1))
     maintenance(engine, wb, "isolation-fixture")
+    # Phase 6A extends this populated-table test rather than excluding new rows
+    # from its cross-tenant and least-privilege assertions.
+    from company_os.application.long_tasks import submit as submit_long
+    from company_os.long_contracts import LongSpec, LongSubmission
+
+    with transaction(runtime, *B) as conn:
+        long_input = submit_long(
+            conn,
+            LongSubmission(logical_key=uuid4().hex, spec=LongSpec(handler="immediate_success")),
+            uuid4(),
+        )
+        commands.dispatch_outbox(conn)
+        long_job = rows(
+            conn, "SELECT * FROM app.jobs WHERE input_ref=:id", {"id": long_input["id"]}
+        )[0]
+        update(conn, "jobs", long_job, priority="interactive")
+    # The resumed B wait may be claimed first; both jobs are bounded and pure.
+    for _ in range(3):
+        assert run_one(engine, wb, "tenant-b-long")
+        with transaction(engine, *wb) as conn:
+            if get(conn, "jobs", long_job["id"])["state"] == "succeeded":
+                break
     with transaction(engine, *wb) as conn:
         examples = {table: rows(conn, f"SELECT * FROM app.{table} LIMIT 1") for table in TABLES}
         assert all(examples.values()), [table for table, items in examples.items() if not items]
@@ -612,6 +641,15 @@ def test_populated_tenant_tables_and_role_boundaries(runtime, engine):
                     == []
                 )
             if table not in IMMUTABLE:
+                if table == "long_executions" and engine_role is runtime:
+                    with pytest.raises(DBAPIError), transaction(engine_role, *scope) as conn:
+                        conn.execute(
+                            text(
+                                f"UPDATE app.{table} SET record_version=record_version+1 WHERE id=:id"
+                            ),
+                            {"id": example[0]["id"]},
+                        )
+                    continue
                 with transaction(engine_role, *scope) as conn:
                     changed = conn.execute(
                         text(

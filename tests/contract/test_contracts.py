@@ -13,7 +13,9 @@ def test_openapi_snapshot_is_current():
 
 def test_only_authorized_phase_routes_exist():
     paths = json.loads(snapshot())["paths"]
-    assert set(paths) == AUTHORITY_PATHS | RUNTIME_PATHS | FOUNDATION_PATHS | {
+    assert set(paths) == {
+        "/v1/workspaces/{workspace_id}/runtime/long-tasks"
+    } | AUTHORITY_PATHS | RUNTIME_PATHS | FOUNDATION_PATHS | {
         "/v1/workspaces/{workspace_id}" + suffix for suffix in CORE_SUFFIXES
     }
 
@@ -28,5 +30,5 @@ def test_migration_history_linear_and_only_authorized_tables(admin):
         assert names == FOUNDATION_TABLES | CORE_TABLES | RUNTIME_TABLES | AUTHORITY_TABLES
         assert (
             conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-            == "0018_phase5_review_fixes"
+            == "0020_long_spec_lock"
         )
