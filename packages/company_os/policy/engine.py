@@ -22,6 +22,9 @@ class ActionDefinition:
 
 REGISTRY = MappingProxyType(
     {
+        "ai.route.promote": ActionDefinition(
+            3, "synthetic_route", True, False, True, "aal2", "human", "route_promotion"
+        ),
         "policy.activate": ActionDefinition(
             3, "policy", True, False, True, "aal2", "human", "policy_activation"
         ),

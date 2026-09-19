@@ -241,6 +241,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         request.app.state.identity.logout(token, csrf, request.state.request_id)
         return Response(status_code=204)
 
+    from apps.api.ai import register as register_ai
+
+    register_ai(api, authenticated)
     register(api, authenticated)
     register_runtime(api, authenticated)
     register_authority(api, authenticated)

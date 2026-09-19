@@ -19,5 +19,11 @@
   "database/migrations/versions/0017_authority_commit_boundary.py": "67257b789d2a333bb315dc97fa788636cffefacd4e9dca19cc6d525b2086b2a5",
   "database/migrations/versions/0018_phase5_review_fixes.py": "8d1edaabe64b8423df73540bd03700215d4c8443dc21ae35171346c55b024bac",
   "database/migrations/versions/0019_long_execution.py": "0288a1f2abc59d4e63f7942a6d69a8f99f3da29396f87b75d5dd41e1c902eff7",
-  "database/migrations/versions/0020_long_spec_lock.py": "3d139da0f57dd4427ad47f2f1ac4953bc84ef99ee5b8b0bb3607cd1f59a8edcb"
+  "database/migrations/versions/0020_long_spec_lock.py": "3d139da0f57dd4427ad47f2f1ac4953bc84ef99ee5b8b0bb3607cd1f59a8edcb",
+  "database/migrations/versions/0021_ai_gateway.py": "e467b573d39cf864a5857620720ffc4a8c965f2f5cef7e8ba29726a0607d23c3",
+  "database/migrations/versions/0022_ai_route_authority.py": "6b7fd573f6bad4595dbc0647ec71f0f9921ad7ed54c8e87d36b9761b629d6705",
+  "database/migrations/versions/0023_ai_context_guard.py": "c78f2650e8009e72477244249190807f1244ca796b8e97892724a76a5a5b3ccb",
+  "database/migrations/versions/0024_ai_guard_correction.py": "c48bd2bded944588cd8fe6618584d3c6cad9e178f109241d9c06208574739359",
+  "database/migrations/versions/0025_ai_evaluation_freshness.py": "67b06c35c3d156db75020a2f44c3c5b422fd1241bb87810f92c3c44b343622d1",
+  "database/migrations/versions/0026_phase6b_review_fixes.py": "8f1b7e8d569828dcd0333455a5441f9e83242be784208c1b58336995b98103ee"
 }

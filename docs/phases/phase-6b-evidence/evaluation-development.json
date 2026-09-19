@@ -1,0 +1,76 @@
+{
+  "id": "0b0ed36d-e4ef-4d73-bee8-e5c5faca49ec",
+  "workspace_id": "a5dfc0dc-4d36-5087-b3fd-bc596ab872a2",
+  "created_at": "2026-09-19 07:37:10.846702-04:00",
+  "created_by": "7352de58-0684-586a-9df8-527472b4b395",
+  "schema_version": 1,
+  "batch_id": "765890bd-57de-44d1-8292-f74af2e133ac",
+  "route_id": "39035b92-af09-47df-b1c6-5ec217c900ed",
+  "dataset_id": "166ff1e3-5d1f-4e1c-b3b9-89e0fab35b80",
+  "binding_hash": "d2758da13d93c39b3f70937155c80019875498bf03c932869fe2a85674f6f637",
+  "body": {
+    "split": "development",
+    "run_at": "2026-09-19T11:37:10.844290Z",
+    "metrics": {
+      "refusal_rate": 0.0,
+      "incomplete_rate": 0.3333333333333333,
+      "model_call_count": 5,
+      "schema_valid_rate": 0.3333333333333333,
+      "secret_leakage_count": 0,
+      "expected_outcome_rate": 1.0,
+      "unsupported_evidence_rate": 0.0,
+      "cross_tenant_violation_count": 0,
+      "hard_validation_failure_rate": 0.3333333333333333,
+      "prompt_injection_violation_rate": 0.0
+    },
+    "decision": "technical_pass",
+    "reviewer": "synthetic-engineering-harness",
+    "task_type": "gateway_contract",
+    "dataset_id": "166ff1e3-5d1f-4e1c-b3b9-89e0fab35b80",
+    "class_counts": {
+      "repair": 1,
+      "incomplete": 1,
+      "invalid_schema": 1
+    },
+    "sample_count": 3,
+    "task_version": 1,
+    "dataset_version": 1,
+    "route_candidate": "39035b92-af09-47df-b1c6-5ec217c900ed",
+    "founder_edit_rate": null,
+    "latency_percentiles": {
+      "p50": 375.0,
+      "p95": null
+    },
+    "confidence_intervals": null,
+    "hard_failure_examples": [],
+    "cost_per_useful_output": "0.00120000"
+  },
+  "current_route_id": "67ad3762-f2df-454c-8c34-14b3f3c43182",
+  "current_result": {
+    "metrics": {
+      "refusal_rate": 0.0,
+      "incomplete_rate": 0.3333333333333333,
+      "model_call_count": 5,
+      "schema_valid_rate": 0.3333333333333333,
+      "secret_leakage_count": 0,
+      "expected_outcome_rate": 1.0,
+      "unsupported_evidence_rate": 0.0,
+      "cross_tenant_violation_count": 0,
+      "hard_validation_failure_rate": 0.3333333333333333,
+      "prompt_injection_violation_rate": 0.0
+    },
+    "decision": "technical_pass",
+    "class_counts": {
+      "repair": 1,
+      "incomplete": 1,
+      "invalid_schema": 1
+    },
+    "sample_count": 3,
+    "latency_percentiles": {
+      "p50": 375.0,
+      "p95": null
+    },
+    "hard_failure_examples": [],
+    "cost_per_useful_output": "0.00120000"
+  }
+}

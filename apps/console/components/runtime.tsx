@@ -14,7 +14,7 @@ export async function RuntimePage({workspace,kind='health',identifier,result}:{w
   const prefix=`/v1/workspaces/${encodeURIComponent(selected)}`;
   const csrf=(await cookies()).get(CSRF_COOKIE)?.value || '';
   const unavailable=<p role="alert" className="notice error">Runtime records unavailable or access denied.</p>;
-  const nav=<nav aria-label="Runtime navigation">{[['','Health'],['/jobs','Jobs and dead letters'],['/events','Event trace'],['/incidents','Incidents']].map(([path,label])=><Link className="outline-link" key={path} href={`/system${path}?workspace=${selected}`}>{label}</Link>)}</nav>;
+  const nav=<nav aria-label="Runtime navigation">{[['','Health'],['/jobs','Jobs and dead letters'],['/events','Event trace'],['/incidents','Incidents'],['/ai','AI gateway']].map(([path,label])=><Link className="outline-link" key={path} href={`/system${path}?workspace=${selected}`}>{label}</Link>)}</nav>;
   let content;
   if(kind==='health') {
     const foundation=await apiGet<Health>(`${prefix}/health`);

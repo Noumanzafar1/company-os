@@ -1,5 +1,6 @@
 """Bounded parent-owned execution supervisor; handler goodwill is unnecessary."""
 
+import json
 import os
 import subprocess
 import sys
@@ -8,10 +9,12 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import IO
+from typing import IO, Any
 
 from pydantic import ValidationError
 
+from company_os.ai.contracts import ProviderCall, ProviderReply
+from company_os.ai.credentials import OfflineCredential
 from company_os.long_contracts import MAX_MESSAGE, ExecutionEnvelope, ExecutionResult
 from company_os.workflow.process_tree import ProcessTree
 
@@ -19,7 +22,7 @@ from company_os.workflow.process_tree import ProcessTree
 @dataclass(frozen=True)
 class Outcome:
     code: str
-    result: ExecutionResult | None
+    result: Any
     forced: bool
     pid: int
     startup_ms: float
@@ -44,12 +47,29 @@ def close_pipe(stream: IO[bytes] | None) -> None:
 
 
 def execute(
-    envelope: ExecutionEnvelope,
+    envelope: ExecutionEnvelope | ProviderCall,
     control: Callable[[], str | None],
     observe: Callable[[str, int], None] = lambda *_: None,
+    *,
+    offline_credential: OfflineCredential | None = None,
 ) -> Outcome:
+    if offline_credential and (
+        not isinstance(envelope, ProviderCall)
+        or envelope.route.primary_provider != offline_credential.provider
+    ):
+        raise ValueError("CREDENTIAL_PROVIDER_MISMATCH")
+    if (
+        isinstance(envelope, ProviderCall)
+        and envelope.route.primary_provider in {"openai", "anthropic"}
+        and offline_credential is None
+    ):
+        raise ValueError("LIVE_AUTHORIZATION_REQUIRED")
     started = time.monotonic()
-    deadline = started + envelope.spec.hard_timeout_seconds
+    provider_call = isinstance(envelope, ProviderCall)
+    limits = envelope if isinstance(envelope, ProviderCall) else envelope.spec
+    deadline = started + limits.hard_timeout_seconds
+    max_message = 65536 if provider_call else MAX_MESSAGE
+    entrypoint = "provider_child.py" if provider_call else "long_child.py"
 
     def invalidation() -> str | None:
         return control() or ("HARD_TIMEOUT" if time.monotonic() >= deadline else None)
@@ -57,7 +77,7 @@ def execute(
     tree = ProcessTree()
     child = None
     forced = False
-    result = None
+    result: Any = None
     code = "CHILD_CRASH"
     startup = 0.0
     cleanup = started
@@ -67,7 +87,7 @@ def execute(
     receive_times: list[float] = []
     try:
         child = subprocess.Popen(
-            [sys.executable, "-I", str(Path(__file__).with_name("long_child.py"))],
+            [sys.executable, "-I", str(Path(__file__).with_name(entrypoint))],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
@@ -81,12 +101,12 @@ def execute(
         tree.attach(child)
         assert child.stdin is not None and child.stdout is not None
         raw = envelope.model_dump_json().encode() + b"\n"
-        if len(raw) > MAX_MESSAGE:
+        if len(raw) > max_message:
             raise ValueError("ENVELOPE_TOO_LARGE")
 
         def read() -> None:
             assert child is not None and child.stdout is not None
-            while len(data) <= MAX_MESSAGE:
+            while len(data) <= max_message:
                 chunk = child.stdout.read(1)
                 if not chunk:
                     return
@@ -101,6 +121,20 @@ def execute(
         reader.start()
         observe("child_started", child.pid)
         child.stdin.write(raw)
+        if offline_credential:
+            # Separate bounded one-time channel after tree.attach; never part of envelope.
+            secret = (
+                json.dumps(
+                    {
+                        "provider": offline_credential.provider,
+                        "key": offline_credential.value,
+                        "mode": "offline-contract",
+                    }
+                ).encode()
+                + b"\n"
+            )
+            child.stdin.write(secret)
+            del secret
         child.stdin.flush()
         startup = (time.monotonic() - started) * 1000
         reason = None
@@ -118,7 +152,7 @@ def execute(
                 except (BrokenPipeError, OSError):
                     pass
                 try:
-                    child.wait(timeout=envelope.spec.cancellation_grace_seconds)
+                    child.wait(timeout=limits.cancellation_grace_seconds)
                 except subprocess.TimeoutExpired:
                     forced = True
                     observe("forced_termination", child.pid)
@@ -137,12 +171,18 @@ def execute(
             code = invalidation() or code
         if code == "RESULT":
             try:
-                result = ExecutionResult.model_validate_json(bytes(data))
+                if isinstance(envelope, ProviderCall):
+                    result = ProviderReply.model_validate_json(bytes(data))
+                else:
+                    result = ExecutionResult.model_validate_json(bytes(data))
+                    if (
+                        result.handler_version != envelope.spec.handler_version
+                        or result.output_reference != envelope.input_reference
+                    ):
+                        raise ValueError("RESULT_BINDING")
                 if (
                     result.execution_id != envelope.execution_id
                     or result.input_hash != envelope.input_hash
-                    or result.handler_version != envelope.spec.handler_version
-                    or result.output_reference != envelope.input_reference
                 ):
                     raise ValueError("RESULT_BINDING")
             except (ValueError, ValidationError):

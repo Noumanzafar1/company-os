@@ -16,7 +16,7 @@ SyntheticAction = Literal[
     "runtime.synthetic_batch_action",
     "runtime.synthetic_binding_decision",
 ]
-Action = SyntheticAction | Literal["policy.activate"]
+Action = SyntheticAction | Literal["policy.activate", "ai.route.promote"]
 Money = Annotated[Decimal, Field(ge=0, le=100, max_digits=12, decimal_places=8)]
 
 
@@ -142,10 +142,21 @@ class MutableAuthorityRecord(AuthorityRecord):
     record_version: int
 
 
+class RoutePromotionPayload(Model):
+    label: str
+    route_id: UUID
+    route_hash: str
+    evaluation_id: UUID
+    binding_hash: str
+    rollback_route_id: UUID
+    current_route_id: UUID
+    action: Literal["ai.route.promote"] = "ai.route.promote"
+
+
 class ApprovalView(MutableAuthorityRecord):
     action: Action
     policy_version_id: UUID
-    payload: FakePayload | PolicyActivationPayload
+    payload: FakePayload | PolicyActivationPayload | RoutePromotionPayload
     payload_hash: str
     scope_hash: str
     target_set_hash: str
@@ -197,6 +208,7 @@ class AuthorityUseView(AuthorityRecord):
     job_id: UUID | None
     activation_policy_id: UUID | None = None
     activation_session_id: UUID | None = None
+    activation_route_id: UUID | None = None
     use_number: int
     spend_reserved: Decimal
     volume: int

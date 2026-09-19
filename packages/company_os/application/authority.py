@@ -415,6 +415,8 @@ def execute(
     request = get(conn, "approval_requests", identifier)
     if request["action"] == "policy.activate":
         raise BusinessError("POLICY_ACTIVATION_COMMAND_REQUIRED", 423)
+    if request["action"] == "ai.route.promote":
+        raise BusinessError("ROUTE_PROMOTION_COMMAND_REQUIRED", 423)
     code = validate(conn, manifest[0]["id"])
     payload_hash = canonical_hash(body.payload.model_dump(mode="json"))
     cohort_hash = target_hash([x.model_dump() for x in body.targets])

@@ -11,6 +11,7 @@ from database.seeds.synthetic import key
 from tests.phase3_scope import CORE_TABLES, FOUNDATION_TABLES
 from tests.phase4_scope import RUNTIME_TABLES
 from tests.phase5_scope import AUTHORITY_TABLES
+from tests.phase6b_scope import AI_TABLES
 
 
 def test_real_runtime_role_and_force_rls(runtime, admin):
@@ -27,7 +28,7 @@ def test_real_runtime_role_and_force_rls(runtime, admin):
         ).all()
         assert {
             name for name, _, _ in tables
-        } == FOUNDATION_TABLES | CORE_TABLES | RUNTIME_TABLES | AUTHORITY_TABLES
+        } == FOUNDATION_TABLES | CORE_TABLES | RUNTIME_TABLES | AUTHORITY_TABLES | AI_TABLES
         assert all(enabled and forced for _, enabled, forced in tables)
         assert conn.execute(text("SHOW server_version_num")).scalar_one().startswith("18")
 

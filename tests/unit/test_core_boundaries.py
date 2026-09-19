@@ -30,7 +30,14 @@ def test_later_phase_dependencies_rejected(dependency):
 
 
 def test_phase_modules_routes_and_network_rejected():
-    assert phase_findings("packages/company_os/ai/gateway.py", "pass")
+    assert not phase_findings("packages/company_os/ai/gateway.py", "pass")
+    assert not import_findings(
+        "packages/company_os/ai/sdk_providers.py", "import openai; import anthropic"
+    )
+    assert import_findings(
+        "packages/company_os/application/example.py",
+        "from company_os.ai.sdk_providers import OpenAIProvider",
+    )
     assert phase_findings("apps/api/later.py", 'route="/campaigns/release"')
     assert phase_findings("packages/company_os/adapters/provider.py", "import httpx")
     assert not phase_findings(

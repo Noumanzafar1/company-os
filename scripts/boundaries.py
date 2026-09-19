@@ -40,6 +40,9 @@ BACKEND = {
     "psycopg",
     "pyjwt",
     "httpx",
+    "httpx2",
+    "openai",
+    "anthropic",
 }
 FRONTEND = {"next", "react", "react-dom", "jose", "server-only"}
 SECRET_PATTERNS = [
@@ -70,7 +73,10 @@ def import_findings(path: str, content: str) -> list[str]:
             else []
         )
         for name in names:
-            if name.split(".")[0] in BANNED:
+            if name.split(".")[0] in BANNED and not (
+                name.split(".")[0] in {"openai", "anthropic"}
+                and path == "packages/company_os/ai/sdk_providers.py"
+            ):
                 findings.append(f"{path}: prohibited dependency {name}")
             if "/domain/" in path and name.split(".")[0] in {
                 "fastapi",
@@ -80,7 +86,9 @@ def import_findings(path: str, content: str) -> list[str]:
                 "jwt",
             }:
                 findings.append(f"{path}: domain cannot import {name}")
-            if "/application/" in path and name.startswith("company_os.adapters"):
+            if "/application/" in path and name.startswith(
+                ("company_os.adapters", "company_os.ai.sdk_providers", "company_os.ai.providers")
+            ):
                 findings.append(f"{path}: application depends on concrete adapter")
     return findings
 
@@ -88,23 +96,23 @@ def import_findings(path: str, content: str) -> list[str]:
 def phase_findings(path: str, content: str) -> list[str]:
     """Implementation-only guard; future architecture documentation remains allowed."""
     errors = []
-    if re.search(
+    ai_module = path.startswith("packages/company_os/ai/")
+    if not ai_module and re.search(
         r"(?:api\.(?:openai|anthropic|apollo)\.com|gpt-[0-9]|claude-[0-9]|text-embedding-|model_router|execute_prompt)",
         content,
         re.I,
     ):
-        errors.append(f"{path}: Phase 6B/provider implementation is prohibited")
+        errors.append(f"{path}: Provider use outside the AI module is prohibited")
     if any(
         segment in path.lower()
         for segment in [
-            "/ai/",
             "/campaigns/",
             "/providers/",
         ]
     ):
         errors.append(f"{path}: later-phase implementation module")
     if re.search(
-        r"[\"']/(?:v1/)?(?:campaigns|ai-tasks|opportunities|messages/.*/dispatch)(?:/|[\"'])",
+        r"[\"']/(?:v1/)?(?:campaigns|opportunities|messages/.*/dispatch)(?:/|[\"'])",
         content,
     ):
         errors.append(f"{path}: later-phase route")
