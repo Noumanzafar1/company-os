@@ -1,6 +1,890 @@
 {
   "components": {
     "schemas": {
+      "AIEvaluation": {
+        "additionalProperties": false,
+        "properties": {
+          "class_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Class Counts",
+            "type": "object"
+          },
+          "confidence_intervals": {
+            "title": "Confidence Intervals",
+            "type": "null"
+          },
+          "cost_per_useful_output": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Per Useful Output"
+          },
+          "dataset_id": {
+            "format": "uuid",
+            "title": "Dataset Id",
+            "type": "string"
+          },
+          "dataset_version": {
+            "title": "Dataset Version",
+            "type": "integer"
+          },
+          "decision": {
+            "enum": [
+              "technical_pass",
+              "technical_fail"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "founder_edit_rate": {
+            "title": "Founder Edit Rate",
+            "type": "null"
+          },
+          "hard_failure_examples": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hard Failure Examples",
+            "type": "array"
+          },
+          "latency_percentiles": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Latency Percentiles",
+            "type": "object"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Metrics",
+            "type": "object"
+          },
+          "reviewer": {
+            "const": "synthetic-engineering-harness",
+            "default": "synthetic-engineering-harness",
+            "title": "Reviewer",
+            "type": "string"
+          },
+          "route_candidate": {
+            "format": "uuid",
+            "title": "Route Candidate",
+            "type": "string"
+          },
+          "run_at": {
+            "format": "date-time",
+            "title": "Run At",
+            "type": "string"
+          },
+          "sample_count": {
+            "title": "Sample Count",
+            "type": "integer"
+          },
+          "split": {
+            "enum": [
+              "seed",
+              "development",
+              "holdout",
+              "adversarial"
+            ],
+            "title": "Split",
+            "type": "string"
+          },
+          "task_type": {
+            "const": "gateway_contract",
+            "default": "gateway_contract",
+            "title": "Task Type",
+            "type": "string"
+          },
+          "task_version": {
+            "const": 1,
+            "default": 1,
+            "title": "Task Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "dataset_id",
+          "dataset_version",
+          "split",
+          "route_candidate",
+          "sample_count",
+          "class_counts",
+          "metrics",
+          "hard_failure_examples",
+          "cost_per_useful_output",
+          "latency_percentiles",
+          "decision",
+          "run_at"
+        ],
+        "title": "AIEvaluation",
+        "type": "object"
+      },
+      "AIHealth": {
+        "additionalProperties": false,
+        "properties": {
+          "budgets": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Budgets",
+            "type": "array"
+          },
+          "counts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Counts",
+            "type": "array"
+          },
+          "evaluations": {
+            "items": {
+              "$ref": "#/components/schemas/EvaluationView"
+            },
+            "title": "Evaluations",
+            "type": "array"
+          },
+          "providers": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Providers",
+            "type": "array"
+          },
+          "routes": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Routes",
+            "type": "array"
+          },
+          "tasks": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "warning": {
+            "title": "Warning",
+            "type": "string"
+          }
+        },
+        "required": [
+          "providers",
+          "tasks",
+          "counts",
+          "routes",
+          "evaluations",
+          "budgets",
+          "warning"
+        ],
+        "title": "AIHealth",
+        "type": "object"
+      },
+      "AIInspection": {
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContextPack"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "context_current": {
+            "title": "Context Current",
+            "type": "boolean"
+          },
+          "correlation_id": {
+            "format": "uuid",
+            "title": "Correlation Id",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "job_id": {
+            "format": "uuid",
+            "title": "Job Id",
+            "type": "string"
+          },
+          "model_runs": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Model Runs",
+            "type": "array"
+          },
+          "record_version": {
+            "title": "Record Version",
+            "type": "integer"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AIResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "route": {
+            "$ref": "#/components/schemas/AIRoute"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "task": {
+            "$ref": "#/components/schemas/AITask"
+          }
+        },
+        "required": [
+          "id",
+          "job_id",
+          "state",
+          "record_version",
+          "task",
+          "context",
+          "context_current",
+          "route",
+          "result",
+          "model_runs",
+          "correlation_id"
+        ],
+        "title": "AIInspection",
+        "type": "object"
+      },
+      "AIRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "scenario": {
+            "default": "success",
+            "enum": [
+              "success",
+              "refusal",
+              "malformed",
+              "invalid_schema",
+              "incomplete",
+              "repair",
+              "timeout",
+              "connection_failure",
+              "rate_limit",
+              "overloaded",
+              "uncertain",
+              "unsupported_schema",
+              "unsupported_model",
+              "incorrect_usage",
+              "delayed",
+              "injection",
+              "forged_evidence",
+              "unsupported_claim",
+              "secret",
+              "tool_url",
+              "tool_shell",
+              "cross_workspace",
+              "authority",
+              "oversized",
+              "fallback_denied",
+              "budget_exhausted",
+              "max_calls",
+              "revocation"
+            ],
+            "title": "Scenario",
+            "type": "string"
+          },
+          "task_type": {
+            "const": "gateway_contract",
+            "default": "gateway_contract",
+            "title": "Task Type",
+            "type": "string"
+          }
+        },
+        "title": "AIRequest",
+        "type": "object"
+      },
+      "AIResult": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_evidence_map": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Claim"
+            },
+            "title": "Claim Evidence Map",
+            "type": "array"
+          },
+          "confirmed_usd": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed Usd"
+          },
+          "estimated_usd": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+            "title": "Estimated Usd",
+            "type": "string"
+          },
+          "latency_ms": {
+            "minimum": 0.0,
+            "title": "Latency Ms",
+            "type": "number"
+          },
+          "model_id": {
+            "title": "Model Id",
+            "type": "string"
+          },
+          "price_version": {
+            "format": "uuid",
+            "title": "Price Version",
+            "type": "string"
+          },
+          "prompt_version": {
+            "format": "uuid",
+            "title": "Prompt Version",
+            "type": "string"
+          },
+          "proposed_actions": {
+            "default": [],
+            "maxItems": 0,
+            "minItems": 0,
+            "title": "Proposed Actions",
+            "type": "array"
+          },
+          "provider": {
+            "enum": [
+              "fake_openai",
+              "fake_anthropic",
+              "openai",
+              "anthropic"
+            ],
+            "title": "Provider",
+            "type": "string"
+          },
+          "provider_request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Request Id"
+          },
+          "reported_model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reported Model Version"
+          },
+          "reservation_id": {
+            "format": "uuid",
+            "title": "Reservation Id",
+            "type": "string"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TypedProposal"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "route_version": {
+            "format": "uuid",
+            "title": "Route Version",
+            "type": "string"
+          },
+          "schema_version": {
+            "format": "uuid",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "proposed",
+              "refused",
+              "incomplete",
+              "invalid",
+              "quarantined"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "task_id": {
+            "format": "uuid",
+            "title": "Task Id",
+            "type": "string"
+          },
+          "uncertainties": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Uncertainties",
+            "type": "array"
+          },
+          "unknowns": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Unknowns",
+            "type": "array"
+          },
+          "usage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Usage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "validation": {
+            "$ref": "#/components/schemas/Validation"
+          }
+        },
+        "required": [
+          "task_id",
+          "status",
+          "result",
+          "provider",
+          "model_id",
+          "route_version",
+          "prompt_version",
+          "schema_version",
+          "usage",
+          "estimated_usd",
+          "price_version",
+          "reservation_id",
+          "latency_ms",
+          "validation"
+        ],
+        "title": "AIResult",
+        "type": "object"
+      },
+      "AIRoute": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed_sensitivity": {
+            "default": [
+              "synthetic"
+            ],
+            "items": {
+              "const": "synthetic",
+              "type": "string"
+            },
+            "title": "Allowed Sensitivity",
+            "type": "array"
+          },
+          "capabilities_required": {
+            "default": [
+              "structured_output"
+            ],
+            "items": {
+              "const": "structured_output",
+              "type": "string"
+            },
+            "title": "Capabilities Required",
+            "type": "array"
+          },
+          "context_policy_version": {
+            "const": "deterministic-synthetic-1",
+            "default": "deterministic-synthetic-1",
+            "title": "Context Policy Version",
+            "type": "string"
+          },
+          "environment": {
+            "const": "technical",
+            "default": "technical",
+            "title": "Environment",
+            "type": "string"
+          },
+          "fallback_model_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Model Id"
+          },
+          "fallback_provider": {
+            "anyOf": [
+              {
+                "enum": [
+                  "fake_openai",
+                  "fake_anthropic",
+                  "openai",
+                  "anthropic"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Provider"
+          },
+          "max_cost_usd": {
+            "default": "0.05",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+            "title": "Max Cost Usd",
+            "type": "string"
+          },
+          "max_input_tokens": {
+            "default": 8000,
+            "title": "Max Input Tokens",
+            "type": "integer"
+          },
+          "max_output_tokens": {
+            "default": 512,
+            "title": "Max Output Tokens",
+            "type": "integer"
+          },
+          "model_snapshot": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Snapshot"
+          },
+          "price_config_version": {
+            "format": "uuid",
+            "title": "Price Config Version",
+            "type": "string"
+          },
+          "primary_model_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Primary Model Id",
+            "type": "string"
+          },
+          "primary_provider": {
+            "enum": [
+              "fake_openai",
+              "fake_anthropic",
+              "openai",
+              "anthropic"
+            ],
+            "title": "Primary Provider",
+            "type": "string"
+          },
+          "prompt_version": {
+            "format": "uuid",
+            "title": "Prompt Version",
+            "type": "string"
+          },
+          "provider_options_ref": {
+            "const": "no-tools-no-store-v1",
+            "default": "no-tools-no-store-v1",
+            "title": "Provider Options Ref",
+            "type": "string"
+          },
+          "quality_evaluation_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quality Evaluation Id"
+          },
+          "region_policy": {
+            "default": "offline",
+            "enum": [
+              "offline",
+              "preflight_required"
+            ],
+            "title": "Region Policy",
+            "type": "string"
+          },
+          "review_policy": {
+            "const": "proposal_only",
+            "default": "proposal_only",
+            "title": "Review Policy",
+            "type": "string"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "format": "uuid",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "task_type": {
+            "const": "gateway_contract",
+            "default": "gateway_contract",
+            "title": "Task Type",
+            "type": "string"
+          },
+          "task_version": {
+            "const": 1,
+            "default": 1,
+            "title": "Task Version",
+            "type": "integer"
+          },
+          "timeout_seconds": {
+            "default": 10,
+            "title": "Timeout Seconds",
+            "type": "integer"
+          },
+          "version": {
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "route_id",
+          "version",
+          "primary_provider",
+          "primary_model_id",
+          "prompt_version",
+          "schema_version",
+          "price_config_version"
+        ],
+        "title": "AIRoute",
+        "type": "object"
+      },
+      "AIStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "job_id": {
+            "format": "uuid",
+            "title": "Job Id",
+            "type": "string"
+          },
+          "record_version": {
+            "title": "Record Version",
+            "type": "integer"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "job_id",
+          "state",
+          "record_version"
+        ],
+        "title": "AIStatus",
+        "type": "object"
+      },
+      "AITask": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed_providers": {
+            "items": {
+              "enum": [
+                "fake_openai",
+                "fake_anthropic",
+                "openai",
+                "anthropic"
+              ],
+              "type": "string"
+            },
+            "title": "Allowed Providers",
+            "type": "array"
+          },
+          "allowed_tools": {
+            "default": [],
+            "maxItems": 0,
+            "minItems": 0,
+            "title": "Allowed Tools",
+            "type": "array"
+          },
+          "context_pack_id": {
+            "format": "uuid",
+            "title": "Context Pack Id",
+            "type": "string"
+          },
+          "deadline_at": {
+            "format": "date-time",
+            "title": "Deadline At",
+            "type": "string"
+          },
+          "evaluation_policy_id": {
+            "format": "uuid",
+            "title": "Evaluation Policy Id",
+            "type": "string"
+          },
+          "evidence_refs": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceRef"
+            },
+            "title": "Evidence Refs",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "max_cost_usd": {
+            "default": "0.05",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,4}|(?=[\\d.]{1,13}0*$)\\d{0,4}\\.\\d{0,8}0*$)",
+            "title": "Max Cost Usd",
+            "type": "string"
+          },
+          "max_input_tokens": {
+            "default": 8000,
+            "maximum": 8000.0,
+            "minimum": 1.0,
+            "title": "Max Input Tokens",
+            "type": "integer"
+          },
+          "max_model_calls": {
+            "default": 2,
+            "maximum": 2.0,
+            "minimum": 1.0,
+            "title": "Max Model Calls",
+            "type": "integer"
+          },
+          "max_output_tokens": {
+            "default": 512,
+            "maximum": 1500.0,
+            "minimum": 1.0,
+            "title": "Max Output Tokens",
+            "type": "integer"
+          },
+          "output_schema_id": {
+            "const": "gateway-output:1",
+            "default": "gateway-output:1",
+            "title": "Output Schema Id",
+            "type": "string"
+          },
+          "policy_version_id": {
+            "format": "uuid",
+            "title": "Policy Version Id",
+            "type": "string"
+          },
+          "sensitivity": {
+            "const": "synthetic",
+            "default": "synthetic",
+            "title": "Sensitivity",
+            "type": "string"
+          },
+          "subject_refs": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceRef"
+            },
+            "title": "Subject Refs",
+            "type": "array"
+          },
+          "task_type": {
+            "const": "gateway_contract",
+            "default": "gateway_contract",
+            "title": "Task Type",
+            "type": "string"
+          },
+          "task_version": {
+            "const": 1,
+            "default": 1,
+            "title": "Task Version",
+            "type": "integer"
+          },
+          "timeout_seconds": {
+            "default": 10,
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Timeout Seconds",
+            "type": "integer"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "subject_refs",
+          "allowed_providers",
+          "context_pack_id",
+          "evidence_refs",
+          "policy_version_id",
+          "evaluation_policy_id",
+          "deadline_at"
+        ],
+        "title": "AITask",
+        "type": "object"
+      },
       "AccountDetail": {
         "additionalProperties": false,
         "properties": {
@@ -446,7 +1330,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               }
             ],
@@ -543,6 +1430,9 @@
               },
               {
                 "$ref": "#/components/schemas/PolicyActivationPayload"
+              },
+              {
+                "$ref": "#/components/schemas/RoutePromotionPayload"
               }
             ],
             "title": "Payload"
@@ -782,6 +1672,45 @@
         "title": "AttentionView",
         "type": "object"
       },
+      "AuthorityEnvelope_AIHealth_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AIHealth"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[AIHealth]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_AIInspection_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AIInspection"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[AIInspection]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_AIStatus_": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AIStatus"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[AIStatus]",
+        "type": "object"
+      },
       "AuthorityEnvelope_ApprovalDetail_": {
         "additionalProperties": false,
         "properties": {
@@ -845,6 +1774,21 @@
           "data"
         ],
         "title": "AuthorityEnvelope[PolicyRecord]",
+        "type": "object"
+      },
+      "AuthorityEnvelope_dict_str__Any__": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "AuthorityEnvelope[dict[str, Any]]",
         "type": "object"
       },
       "AuthorityEnvelope_list_ApprovalView__": {
@@ -1059,6 +2003,18 @@
             ],
             "title": "Activation Policy Id"
           },
+          "activation_route_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activation Route Id"
+          },
           "activation_session_id": {
             "anyOf": [
               {
@@ -1224,6 +2180,34 @@
         "title": "CallbackReceipt",
         "type": "object"
       },
+      "Claim": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "key": {
+            "const": "fixture_colour",
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "key",
+          "value"
+        ],
+        "title": "Claim",
+        "type": "object"
+      },
       "CommandResult": {
         "additionalProperties": false,
         "properties": {
@@ -1342,6 +2326,136 @@
           "source_id"
         ],
         "title": "ContactInput",
+        "type": "object"
+      },
+      "ContextPack": {
+        "additionalProperties": false,
+        "properties": {
+          "authz_epoch": {
+            "title": "Authz Epoch",
+            "type": "integer"
+          },
+          "company_brief_version": {
+            "const": "synthetic-v1",
+            "default": "synthetic-v1",
+            "title": "Company Brief Version",
+            "type": "string"
+          },
+          "content_hash": {
+            "title": "Content Hash",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "document_excerpts": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Document Excerpts",
+            "type": "array"
+          },
+          "document_permission_epochs": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Document Permission Epochs",
+            "type": "object"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "omissions": {
+            "default": [
+              "No business records selected"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Omissions",
+            "type": "array"
+          },
+          "output_schema": {
+            "default": "gateway-output:1",
+            "title": "Output Schema",
+            "type": "string"
+          },
+          "policy_version": {
+            "format": "uuid",
+            "title": "Policy Version",
+            "type": "string"
+          },
+          "redactions": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Redactions",
+            "type": "array"
+          },
+          "selected_records": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceRef"
+            },
+            "title": "Selected Records",
+            "type": "array"
+          },
+          "task_type": {
+            "const": "gateway_contract",
+            "default": "gateway_contract",
+            "title": "Task Type",
+            "type": "string"
+          },
+          "token_estimate": {
+            "maximum": 8000.0,
+            "minimum": 1.0,
+            "title": "Token Estimate",
+            "type": "integer"
+          },
+          "tool_descriptors": {
+            "default": [],
+            "maxItems": 0,
+            "minItems": 0,
+            "title": "Tool Descriptors",
+            "type": "array"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspace_id",
+          "created_at",
+          "expires_at",
+          "authz_epoch",
+          "document_permission_epochs",
+          "policy_version",
+          "selected_records",
+          "evidence",
+          "document_excerpts",
+          "token_estimate",
+          "content_hash"
+        ],
+        "title": "ContextPack",
         "type": "object"
       },
       "CorrectionInput": {
@@ -2545,6 +3659,61 @@
         "title": "ErrorEnvelope",
         "type": "object"
       },
+      "EvaluationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "dataset": {
+            "default": "adversarial",
+            "enum": [
+              "seed",
+              "development",
+              "holdout",
+              "adversarial"
+            ],
+            "title": "Dataset",
+            "type": "string"
+          }
+        },
+        "title": "EvaluationRequest",
+        "type": "object"
+      },
+      "EvaluationView": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/AIEvaluation"
+          },
+          "current_result": {
+            "additionalProperties": true,
+            "title": "Current Result",
+            "type": "object"
+          },
+          "current_route_id": {
+            "format": "uuid",
+            "title": "Current Route Id",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "route_id",
+          "body",
+          "current_route_id",
+          "current_result"
+        ],
+        "title": "EvaluationView",
+        "type": "object"
+      },
       "EventView": {
         "additionalProperties": false,
         "properties": {
@@ -2684,6 +3853,31 @@
           "trace_id"
         ],
         "title": "EventView",
+        "type": "object"
+      },
+      "Evidence": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "const": "fixture_colour",
+            "default": "fixture_colour",
+            "title": "Key",
+            "type": "string"
+          },
+          "ref": {
+            "$ref": "#/components/schemas/ResourceRef"
+          },
+          "value": {
+            "const": "blue",
+            "default": "blue",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ref"
+        ],
+        "title": "Evidence",
         "type": "object"
       },
       "EvidenceInput": {
@@ -3218,7 +4412,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               },
               {
@@ -3256,7 +4453,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               },
               {
@@ -4214,7 +5414,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               }
             ],
@@ -5179,7 +6382,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               }
             ],
@@ -5267,7 +6473,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               }
             ],
@@ -5353,7 +6562,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               }
             ],
@@ -5430,7 +6642,10 @@
                 "type": "string"
               },
               {
-                "const": "policy.activate",
+                "enum": [
+                  "policy.activate",
+                  "ai.route.promote"
+                ],
                 "type": "string"
               }
             ],
@@ -5564,6 +6779,33 @@
           "workspaces"
         ],
         "title": "Profile",
+        "type": "object"
+      },
+      "PromotionRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "evaluation_id": {
+            "format": "uuid",
+            "title": "Evaluation Id",
+            "type": "string"
+          },
+          "rollback_route_id": {
+            "format": "uuid",
+            "title": "Rollback Route Id",
+            "type": "string"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "route_id",
+          "evaluation_id",
+          "rollback_route_id"
+        ],
+        "title": "PromotionRequest",
         "type": "object"
       },
       "QueueCount": {
@@ -5737,6 +6979,48 @@
         "title": "ResearchInput",
         "type": "object"
       },
+      "ResourceRef": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "observed_at": {
+            "format": "date-time",
+            "title": "Observed At",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "synthetic_evidence",
+              "synthetic_document"
+            ],
+            "title": "Type",
+            "type": "string"
+          },
+          "validity": {
+            "const": "current",
+            "default": "current",
+            "title": "Validity",
+            "type": "string"
+          },
+          "version": {
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "type",
+          "id",
+          "version",
+          "observed_at"
+        ],
+        "title": "ResourceRef",
+        "type": "object"
+      },
       "RetractionInput": {
         "additionalProperties": false,
         "properties": {
@@ -5802,6 +7086,60 @@
           "evidence_ids"
         ],
         "title": "ReversalInput",
+        "type": "object"
+      },
+      "RoutePromotionPayload": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "const": "ai.route.promote",
+            "default": "ai.route.promote",
+            "title": "Action",
+            "type": "string"
+          },
+          "binding_hash": {
+            "title": "Binding Hash",
+            "type": "string"
+          },
+          "current_route_id": {
+            "format": "uuid",
+            "title": "Current Route Id",
+            "type": "string"
+          },
+          "evaluation_id": {
+            "format": "uuid",
+            "title": "Evaluation Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "rollback_route_id": {
+            "format": "uuid",
+            "title": "Rollback Route Id",
+            "type": "string"
+          },
+          "route_hash": {
+            "title": "Route Hash",
+            "type": "string"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "route_id",
+          "route_hash",
+          "evaluation_id",
+          "binding_hash",
+          "rollback_route_id",
+          "current_route_id"
+        ],
+        "title": "RoutePromotionPayload",
         "type": "object"
       },
       "RuntimeCommand": {
@@ -6608,6 +7946,51 @@
         "title": "TargetVersion",
         "type": "object"
       },
+      "TypedProposal": {
+        "additionalProperties": false,
+        "properties": {
+          "claims": {
+            "items": {
+              "$ref": "#/components/schemas/Claim"
+            },
+            "maxItems": 4,
+            "title": "Claims",
+            "type": "array"
+          },
+          "proposed_actions": {
+            "default": [],
+            "maxItems": 0,
+            "minItems": 0,
+            "title": "Proposed Actions",
+            "type": "array"
+          },
+          "uncertainties": {
+            "items": {
+              "const": "synthetic fixture only",
+              "type": "string"
+            },
+            "maxItems": 1,
+            "title": "Uncertainties",
+            "type": "array"
+          },
+          "unknowns": {
+            "items": {
+              "const": "business facts unavailable",
+              "type": "string"
+            },
+            "maxItems": 1,
+            "title": "Unknowns",
+            "type": "array"
+          }
+        },
+        "required": [
+          "claims",
+          "unknowns",
+          "uncertainties"
+        ],
+        "title": "TypedProposal",
+        "type": "object"
+      },
       "UncertainView": {
         "additionalProperties": false,
         "properties": {
@@ -6658,6 +8041,87 @@
           "job_id"
         ],
         "title": "UncertainView",
+        "type": "object"
+      },
+      "Usage": {
+        "additionalProperties": false,
+        "properties": {
+          "billable_units": {
+            "default": 1,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Billable Units",
+            "type": "integer"
+          },
+          "cache_creation_tokens": {
+            "default": 0,
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Cache Creation Tokens",
+            "type": "integer"
+          },
+          "cached_tokens": {
+            "default": 0,
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Cached Tokens",
+            "type": "integer"
+          },
+          "input_tokens": {
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Input Tokens",
+            "type": "integer"
+          },
+          "output_tokens": {
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Output Tokens",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "input_tokens",
+          "output_tokens"
+        ],
+        "title": "Usage",
+        "type": "object"
+      },
+      "Validation": {
+        "additionalProperties": false,
+        "properties": {
+          "defects": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Defects",
+            "type": "array"
+          },
+          "evidence": {
+            "title": "Evidence",
+            "type": "boolean"
+          },
+          "policy": {
+            "title": "Policy",
+            "type": "boolean"
+          },
+          "schema_valid": {
+            "title": "Schema Valid",
+            "type": "boolean"
+          },
+          "semantic": {
+            "title": "Semantic",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "schema_valid",
+          "evidence",
+          "policy",
+          "semantic"
+        ],
+        "title": "Validation",
         "type": "object"
       },
       "Workspace": {
@@ -7717,6 +9181,736 @@
           }
         },
         "summary": "Account Correct"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/ai-evaluations": {
+      "post": {
+        "operationId": "evaluate_v1_workspaces__workspace_id__ai_evaluations_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_dict_str__Any__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Evaluate"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/ai-health": {
+      "get": {
+        "operationId": "health_v1_workspaces__workspace_id__ai_health_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_AIHealth_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/ai-routes/propose": {
+      "post": {
+        "operationId": "propose_v1_workspaces__workspace_id__ai_routes_propose_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromotionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_dict_str__Any__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Propose"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/ai-routes/{identifier}/promote": {
+      "post": {
+        "operationId": "promote_v1_workspaces__workspace_id__ai_routes__identifier__promote_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "if-match",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "If-Match",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reason"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_dict_str__Any__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Promote"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/ai-tasks": {
+      "post": {
+        "operationId": "submit_v1_workspaces__workspace_id__ai_tasks_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AIRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_AIStatus_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Submit"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/ai-tasks/{identifier}": {
+      "get": {
+        "operationId": "inspect_v1_workspaces__workspace_id__ai_tasks__identifier__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_AIInspection_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Inspect"
+      }
+    },
+    "/v1/workspaces/{workspace_id}/ai-tasks/{identifier}/revoke-context": {
+      "post": {
+        "operationId": "revoke_v1_workspaces__workspace_id__ai_tasks__identifier__revoke_context_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "if-match",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "If-Match",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reason"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorityEnvelope_dict_str__Any__"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Revoke"
       }
     },
     "/v1/workspaces/{workspace_id}/approvals": {

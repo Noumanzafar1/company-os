@@ -3,7 +3,19 @@ from company_os.adapters.local_documents import FakeDocumentStore
 from company_os.adapters.local_source import FakeSourceProvider
 from company_os.business_contracts import FactValue, ICPVersionInput, Record
 
-from scripts.boundaries import import_findings, phase_findings
+from scripts.boundaries import ROOT, import_findings, lock_findings, phase_findings
+
+
+def test_hashed_lock_rejects_unpinned_transitive_warning():
+    lock = (ROOT / "requirements.lock").read_text(encoding="utf-8")
+    assert not lock_findings(lock)
+    warning = "# WARNING: The following packages were not pinned, but pip requires them to be\n"
+    assert lock_findings(
+        lock
+        + "\n"
+        + warning
+        + "# pinned when the requirements file includes hashes.\n# setuptools\n"
+    )
 
 
 @pytest.mark.parametrize(
@@ -30,7 +42,14 @@ def test_later_phase_dependencies_rejected(dependency):
 
 
 def test_phase_modules_routes_and_network_rejected():
-    assert phase_findings("packages/company_os/ai/gateway.py", "pass")
+    assert not phase_findings("packages/company_os/ai/gateway.py", "pass")
+    assert not import_findings(
+        "packages/company_os/ai/sdk_providers.py", "import openai; import anthropic"
+    )
+    assert import_findings(
+        "packages/company_os/application/example.py",
+        "from company_os.ai.sdk_providers import OpenAIProvider",
+    )
     assert phase_findings("apps/api/later.py", 'route="/campaigns/release"')
     assert phase_findings("packages/company_os/adapters/provider.py", "import httpx")
     assert not phase_findings(

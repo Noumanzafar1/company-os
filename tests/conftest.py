@@ -52,6 +52,14 @@ def db_env() -> Iterator[dict[str, str]]:
             check=True,
         )
         subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
+        for baseline in ("0025_ai_evaluation_freshness", "0020_long_spec_lock"):
+            subprocess.run(
+                [sys.executable, "-m", "alembic", "downgrade", baseline], env=env, check=True
+            )
+            subprocess.run(
+                [sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True
+            )
+
         subprocess.run(
             [sys.executable, "-m", "alembic", "downgrade", "0018_phase5_review_fixes"],
             env=env,

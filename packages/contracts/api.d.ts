@@ -175,6 +175,125 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/workspaces/{workspace_id}/ai-evaluations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Evaluate */
+        post: operations["evaluate_v1_workspaces__workspace_id__ai_evaluations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/ai-health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health */
+        get: operations["health_v1_workspaces__workspace_id__ai_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/ai-routes/propose": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Propose */
+        post: operations["propose_v1_workspaces__workspace_id__ai_routes_propose_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/ai-routes/{identifier}/promote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Promote */
+        post: operations["promote_v1_workspaces__workspace_id__ai_routes__identifier__promote_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/ai-tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit */
+        post: operations["submit_v1_workspaces__workspace_id__ai_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/ai-tasks/{identifier}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Inspect */
+        get: operations["inspect_v1_workspaces__workspace_id__ai_tasks__identifier__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspaces/{workspace_id}/ai-tasks/{identifier}/revoke-context": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke */
+        post: operations["revoke_v1_workspaces__workspace_id__ai_tasks__identifier__revoke_context_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/workspaces/{workspace_id}/approvals": {
         parameters: {
             query?: never;
@@ -1135,6 +1254,454 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AIEvaluation */
+        AIEvaluation: {
+            /** Class Counts */
+            class_counts: {
+                [key: string]: number;
+            };
+            /** Confidence Intervals */
+            confidence_intervals?: null;
+            /** Cost Per Useful Output */
+            cost_per_useful_output: string | null;
+            /**
+             * Dataset Id
+             * Format: uuid
+             */
+            dataset_id: string;
+            /** Dataset Version */
+            dataset_version: number;
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "technical_pass" | "technical_fail";
+            /** Founder Edit Rate */
+            founder_edit_rate?: null;
+            /** Hard Failure Examples */
+            hard_failure_examples: string[];
+            /** Latency Percentiles */
+            latency_percentiles: {
+                [key: string]: number | null;
+            };
+            /** Metrics */
+            metrics: {
+                [key: string]: number | null;
+            };
+            /**
+             * Reviewer
+             * @default synthetic-engineering-harness
+             * @constant
+             */
+            reviewer: "synthetic-engineering-harness";
+            /**
+             * Route Candidate
+             * Format: uuid
+             */
+            route_candidate: string;
+            /**
+             * Run At
+             * Format: date-time
+             */
+            run_at: string;
+            /** Sample Count */
+            sample_count: number;
+            /**
+             * Split
+             * @enum {string}
+             */
+            split: "seed" | "development" | "holdout" | "adversarial";
+            /**
+             * Task Type
+             * @default gateway_contract
+             * @constant
+             */
+            task_type: "gateway_contract";
+            /**
+             * Task Version
+             * @default 1
+             * @constant
+             */
+            task_version: 1;
+        };
+        /** AIHealth */
+        AIHealth: {
+            /** Budgets */
+            budgets: {
+                [key: string]: unknown;
+            }[];
+            /** Counts */
+            counts: {
+                [key: string]: unknown;
+            }[];
+            /** Evaluations */
+            evaluations: components["schemas"]["EvaluationView"][];
+            /** Providers */
+            providers: {
+                [key: string]: unknown;
+            }[];
+            /** Routes */
+            routes: {
+                [key: string]: unknown;
+            }[];
+            /** Tasks */
+            tasks: {
+                [key: string]: unknown;
+            }[];
+            /** Warning */
+            warning: string;
+        };
+        /** AIInspection */
+        AIInspection: {
+            context: components["schemas"]["ContextPack"] | null;
+            /** Context Current */
+            context_current: boolean;
+            /**
+             * Correlation Id
+             * Format: uuid
+             */
+            correlation_id: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Job Id
+             * Format: uuid
+             */
+            job_id: string;
+            /** Model Runs */
+            model_runs: {
+                [key: string]: unknown;
+            }[];
+            /** Record Version */
+            record_version: number;
+            result: components["schemas"]["AIResult"] | null;
+            route: components["schemas"]["AIRoute"];
+            /** State */
+            state: string;
+            task: components["schemas"]["AITask"];
+        };
+        /** AIRequest */
+        AIRequest: {
+            /**
+             * Scenario
+             * @default success
+             * @enum {string}
+             */
+            scenario: "success" | "refusal" | "malformed" | "invalid_schema" | "incomplete" | "repair" | "timeout" | "connection_failure" | "rate_limit" | "overloaded" | "uncertain" | "unsupported_schema" | "unsupported_model" | "incorrect_usage" | "delayed" | "injection" | "forged_evidence" | "unsupported_claim" | "secret" | "tool_url" | "tool_shell" | "cross_workspace" | "authority" | "oversized" | "fallback_denied" | "budget_exhausted" | "max_calls" | "revocation";
+            /**
+             * Task Type
+             * @default gateway_contract
+             * @constant
+             */
+            task_type: "gateway_contract";
+        };
+        /** AIResult */
+        AIResult: {
+            /**
+             * Claim Evidence Map
+             * @default []
+             */
+            claim_evidence_map: components["schemas"]["Claim"][];
+            /** Confirmed Usd */
+            confirmed_usd?: string | null;
+            /** Estimated Usd */
+            estimated_usd: string;
+            /** Latency Ms */
+            latency_ms: number;
+            /** Model Id */
+            model_id: string;
+            /**
+             * Price Version
+             * Format: uuid
+             */
+            price_version: string;
+            /**
+             * Prompt Version
+             * Format: uuid
+             */
+            prompt_version: string;
+            /**
+             * Proposed Actions
+             * @default []
+             */
+            proposed_actions: unknown[];
+            /**
+             * Provider
+             * @enum {string}
+             */
+            provider: "fake_openai" | "fake_anthropic" | "openai" | "anthropic";
+            /** Provider Request Id */
+            provider_request_id?: string | null;
+            /** Reported Model Version */
+            reported_model_version?: string | null;
+            /**
+             * Reservation Id
+             * Format: uuid
+             */
+            reservation_id: string;
+            result: components["schemas"]["TypedProposal"] | null;
+            /**
+             * Route Version
+             * Format: uuid
+             */
+            route_version: string;
+            /**
+             * Schema Version
+             * Format: uuid
+             */
+            schema_version: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "proposed" | "refused" | "incomplete" | "invalid" | "quarantined";
+            /**
+             * Task Id
+             * Format: uuid
+             */
+            task_id: string;
+            /**
+             * Uncertainties
+             * @default []
+             */
+            uncertainties: string[];
+            /**
+             * Unknowns
+             * @default []
+             */
+            unknowns: string[];
+            usage: components["schemas"]["Usage"] | null;
+            validation: components["schemas"]["Validation"];
+        };
+        /** AIRoute */
+        AIRoute: {
+            /**
+             * Allowed Sensitivity
+             * @default [
+             *       "synthetic"
+             *     ]
+             */
+            allowed_sensitivity: "synthetic"[];
+            /**
+             * Capabilities Required
+             * @default [
+             *       "structured_output"
+             *     ]
+             */
+            capabilities_required: "structured_output"[];
+            /**
+             * Context Policy Version
+             * @default deterministic-synthetic-1
+             * @constant
+             */
+            context_policy_version: "deterministic-synthetic-1";
+            /**
+             * Environment
+             * @default technical
+             * @constant
+             */
+            environment: "technical";
+            /** Fallback Model Id */
+            fallback_model_id?: string | null;
+            /** Fallback Provider */
+            fallback_provider?: ("fake_openai" | "fake_anthropic" | "openai" | "anthropic") | null;
+            /**
+             * Max Cost Usd
+             * @default 0.05
+             */
+            max_cost_usd: string;
+            /**
+             * Max Input Tokens
+             * @default 8000
+             */
+            max_input_tokens: number;
+            /**
+             * Max Output Tokens
+             * @default 512
+             */
+            max_output_tokens: number;
+            /** Model Snapshot */
+            model_snapshot?: string | null;
+            /**
+             * Price Config Version
+             * Format: uuid
+             */
+            price_config_version: string;
+            /** Primary Model Id */
+            primary_model_id: string;
+            /**
+             * Primary Provider
+             * @enum {string}
+             */
+            primary_provider: "fake_openai" | "fake_anthropic" | "openai" | "anthropic";
+            /**
+             * Prompt Version
+             * Format: uuid
+             */
+            prompt_version: string;
+            /**
+             * Provider Options Ref
+             * @default no-tools-no-store-v1
+             * @constant
+             */
+            provider_options_ref: "no-tools-no-store-v1";
+            /** Quality Evaluation Id */
+            quality_evaluation_id?: string | null;
+            /**
+             * Region Policy
+             * @default offline
+             * @enum {string}
+             */
+            region_policy: "offline" | "preflight_required";
+            /**
+             * Review Policy
+             * @default proposal_only
+             * @constant
+             */
+            review_policy: "proposal_only";
+            /**
+             * Route Id
+             * Format: uuid
+             */
+            route_id: string;
+            /**
+             * Schema Version
+             * Format: uuid
+             */
+            schema_version: string;
+            /**
+             * Task Type
+             * @default gateway_contract
+             * @constant
+             */
+            task_type: "gateway_contract";
+            /**
+             * Task Version
+             * @default 1
+             * @constant
+             */
+            task_version: 1;
+            /**
+             * Timeout Seconds
+             * @default 10
+             */
+            timeout_seconds: number;
+            /** Version */
+            version: number;
+        };
+        /** AIStatus */
+        AIStatus: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Job Id
+             * Format: uuid
+             */
+            job_id: string;
+            /** Record Version */
+            record_version: number;
+            /** State */
+            state: string;
+        };
+        /** AITask */
+        AITask: {
+            /** Allowed Providers */
+            allowed_providers: ("fake_openai" | "fake_anthropic" | "openai" | "anthropic")[];
+            /**
+             * Allowed Tools
+             * @default []
+             */
+            allowed_tools: unknown[];
+            /**
+             * Context Pack Id
+             * Format: uuid
+             */
+            context_pack_id: string;
+            /**
+             * Deadline At
+             * Format: date-time
+             */
+            deadline_at: string;
+            /**
+             * Evaluation Policy Id
+             * Format: uuid
+             */
+            evaluation_policy_id: string;
+            /** Evidence Refs */
+            evidence_refs: components["schemas"]["ResourceRef"][];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Max Cost Usd
+             * @default 0.05
+             */
+            max_cost_usd: string;
+            /**
+             * Max Input Tokens
+             * @default 8000
+             */
+            max_input_tokens: number;
+            /**
+             * Max Model Calls
+             * @default 2
+             */
+            max_model_calls: number;
+            /**
+             * Max Output Tokens
+             * @default 512
+             */
+            max_output_tokens: number;
+            /**
+             * Output Schema Id
+             * @default gateway-output:1
+             * @constant
+             */
+            output_schema_id: "gateway-output:1";
+            /**
+             * Policy Version Id
+             * Format: uuid
+             */
+            policy_version_id: string;
+            /**
+             * Sensitivity
+             * @default synthetic
+             * @constant
+             */
+            sensitivity: "synthetic";
+            /** Subject Refs */
+            subject_refs: components["schemas"]["ResourceRef"][];
+            /**
+             * Task Type
+             * @default gateway_contract
+             * @constant
+             */
+            task_type: "gateway_contract";
+            /**
+             * Task Version
+             * @default 1
+             * @constant
+             */
+            task_version: 1;
+            /**
+             * Timeout Seconds
+             * @default 10
+             */
+            timeout_seconds: number;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
         /** AccountDetail */
         AccountDetail: {
             account: components["schemas"]["AccountView"];
@@ -1250,7 +1817,7 @@ export interface components {
         /** ApprovalView */
         ApprovalView: {
             /** Action */
-            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote");
             /** Candidate Version Id */
             candidate_version_id?: string | null;
             /**
@@ -1291,7 +1858,7 @@ export interface components {
             /** Maximum Volume */
             maximum_volume: number;
             /** Payload */
-            payload: components["schemas"]["FakePayload"] | components["schemas"]["PolicyActivationPayload"];
+            payload: components["schemas"]["FakePayload"] | components["schemas"]["PolicyActivationPayload"] | components["schemas"]["RoutePromotionPayload"];
             /** Payload Hash */
             payload_hash: string;
             /** Policy Id */
@@ -1382,6 +1949,18 @@ export interface components {
             /** State */
             state: string;
         };
+        /** AuthorityEnvelope[AIHealth] */
+        AuthorityEnvelope_AIHealth_: {
+            data: components["schemas"]["AIHealth"];
+        };
+        /** AuthorityEnvelope[AIInspection] */
+        AuthorityEnvelope_AIInspection_: {
+            data: components["schemas"]["AIInspection"];
+        };
+        /** AuthorityEnvelope[AIStatus] */
+        AuthorityEnvelope_AIStatus_: {
+            data: components["schemas"]["AIStatus"];
+        };
         /** AuthorityEnvelope[ApprovalDetail] */
         AuthorityEnvelope_ApprovalDetail_: {
             data: components["schemas"]["ApprovalDetail"];
@@ -1401,6 +1980,13 @@ export interface components {
         /** AuthorityEnvelope[PolicyRecord] */
         AuthorityEnvelope_PolicyRecord_: {
             data: components["schemas"]["PolicyRecord"];
+        };
+        /** AuthorityEnvelope[dict[str, Any]] */
+        AuthorityEnvelope_dict_str__Any__: {
+            /** Data */
+            data: {
+                [key: string]: unknown;
+            };
         };
         /** AuthorityEnvelope[list[ApprovalView]] */
         AuthorityEnvelope_list_ApprovalView__: {
@@ -1485,6 +2071,8 @@ export interface components {
         AuthorityUseView: {
             /** Activation Policy Id */
             activation_policy_id?: string | null;
+            /** Activation Route Id */
+            activation_route_id?: string | null;
             /** Activation Session Id */
             activation_session_id?: string | null;
             /**
@@ -1558,6 +2146,21 @@ export interface components {
             /** State */
             state: string;
         };
+        /** Claim */
+        Claim: {
+            /**
+             * Evidence Id
+             * Format: uuid
+             */
+            evidence_id: string;
+            /**
+             * Key
+             * @constant
+             */
+            key: "fixture_colour";
+            /** Value */
+            value: string;
+        };
         /** CommandResult */
         CommandResult: {
             /**
@@ -1603,6 +2206,84 @@ export interface components {
             source_id: string;
             /** Value */
             value: string;
+        };
+        /** ContextPack */
+        ContextPack: {
+            /** Authz Epoch */
+            authz_epoch: number;
+            /**
+             * Company Brief Version
+             * @default synthetic-v1
+             * @constant
+             */
+            company_brief_version: "synthetic-v1";
+            /** Content Hash */
+            content_hash: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Document Excerpts */
+            document_excerpts: string[];
+            /** Document Permission Epochs */
+            document_permission_epochs: {
+                [key: string]: number;
+            };
+            /** Evidence */
+            evidence: components["schemas"]["Evidence"][];
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Omissions
+             * @default [
+             *       "No business records selected"
+             *     ]
+             */
+            omissions: string[];
+            /**
+             * Output Schema
+             * @default gateway-output:1
+             */
+            output_schema: string;
+            /**
+             * Policy Version
+             * Format: uuid
+             */
+            policy_version: string;
+            /**
+             * Redactions
+             * @default []
+             */
+            redactions: string[];
+            /** Selected Records */
+            selected_records: components["schemas"]["ResourceRef"][];
+            /**
+             * Task Type
+             * @default gateway_contract
+             * @constant
+             */
+            task_type: "gateway_contract";
+            /** Token Estimate */
+            token_estimate: number;
+            /**
+             * Tool Descriptors
+             * @default []
+             */
+            tool_descriptors: unknown[];
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
         };
         /** CorrectionInput */
         CorrectionInput: {
@@ -2022,6 +2703,38 @@ export interface components {
         ErrorEnvelope: {
             error: components["schemas"]["ErrorDetail"];
         };
+        /** EvaluationRequest */
+        EvaluationRequest: {
+            /**
+             * Dataset
+             * @default adversarial
+             * @enum {string}
+             */
+            dataset: "seed" | "development" | "holdout" | "adversarial";
+        };
+        /** EvaluationView */
+        EvaluationView: {
+            body: components["schemas"]["AIEvaluation"];
+            /** Current Result */
+            current_result: {
+                [key: string]: unknown;
+            };
+            /**
+             * Current Route Id
+             * Format: uuid
+             */
+            current_route_id: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Route Id
+             * Format: uuid
+             */
+            route_id: string;
+        };
         /** EventView */
         EventView: {
             /**
@@ -2083,6 +2796,22 @@ export interface components {
              * Format: uuid
              */
             workspace_id: string;
+        };
+        /** Evidence */
+        Evidence: {
+            /**
+             * Key
+             * @default fixture_colour
+             * @constant
+             */
+            key: "fixture_colour";
+            ref: components["schemas"]["ResourceRef"];
+            /**
+             * Value
+             * @default blue
+             * @constant
+             */
+            value: "blue";
         };
         /** EvidenceInput */
         EvidenceInput: {
@@ -2265,14 +2994,14 @@ export interface components {
         /** FreezeAuthority */
         FreezeAuthority: {
             /** Action */
-            action?: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate" | null;
+            action?: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote") | null;
             /** Rationale */
             rationale: string;
         };
         /** FreezeView */
         FreezeView: {
             /** Action */
-            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate" | null;
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote") | null;
             /**
              * Correlation Id
              * Format: uuid
@@ -2659,7 +3388,7 @@ export interface components {
         /** ManifestScope */
         ManifestScope: {
             /** Action */
-            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote");
             /**
              * Approver Id
              * Format: uuid
@@ -3047,7 +3776,7 @@ export interface components {
         /** PolicyRecord */
         PolicyRecord: {
             /** Action */
-            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote");
             /** Active Version Id */
             active_version_id: string | null;
             /**
@@ -3088,7 +3817,7 @@ export interface components {
         /** PolicyRules */
         "PolicyRules-Input": {
             /** Action */
-            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote");
             /** Maximum Expiry Seconds */
             maximum_expiry_seconds: number;
             /** Maximum Spend */
@@ -3105,7 +3834,7 @@ export interface components {
         /** PolicyRules */
         "PolicyRules-Output": {
             /** Action */
-            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote");
             /** Maximum Expiry Seconds */
             maximum_expiry_seconds: number;
             /** Maximum Spend */
@@ -3122,7 +3851,7 @@ export interface components {
         /** PolicyView */
         PolicyView: {
             /** Action */
-            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | "policy.activate";
+            action: ("runtime.synthetic_calculation" | "runtime.synthetic_internal_action" | "runtime.synthetic_external_action" | "runtime.synthetic_batch_action" | "runtime.synthetic_binding_decision") | ("policy.activate" | "ai.route.promote");
             /** Active Version Id */
             active_version_id: string | null;
             /** Content Hash */
@@ -3161,6 +3890,24 @@ export interface components {
             principal_id: string;
             /** Workspaces */
             workspaces: components["schemas"]["Workspace"][];
+        };
+        /** PromotionRequest */
+        PromotionRequest: {
+            /**
+             * Evaluation Id
+             * Format: uuid
+             */
+            evaluation_id: string;
+            /**
+             * Rollback Route Id
+             * Format: uuid
+             */
+            rollback_route_id: string;
+            /**
+             * Route Id
+             * Format: uuid
+             */
+            route_id: string;
         };
         /** QueueCount */
         QueueCount: {
@@ -3217,6 +3964,32 @@ export interface components {
             /** Evidence Ids */
             evidence_ids: string[];
         };
+        /** ResourceRef */
+        ResourceRef: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Observed At
+             * Format: date-time
+             */
+            observed_at: string;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "synthetic_evidence" | "synthetic_document";
+            /**
+             * Validity
+             * @default current
+             * @constant
+             */
+            validity: "current";
+            /** Version */
+            version: number;
+        };
         /** RetractionInput */
         RetractionInput: {
             /** Reason */
@@ -3234,6 +4007,41 @@ export interface components {
             retired_version: number;
             /** Survivor Version */
             survivor_version: number;
+        };
+        /** RoutePromotionPayload */
+        RoutePromotionPayload: {
+            /**
+             * Action
+             * @default ai.route.promote
+             * @constant
+             */
+            action: "ai.route.promote";
+            /** Binding Hash */
+            binding_hash: string;
+            /**
+             * Current Route Id
+             * Format: uuid
+             */
+            current_route_id: string;
+            /**
+             * Evaluation Id
+             * Format: uuid
+             */
+            evaluation_id: string;
+            /** Label */
+            label: string;
+            /**
+             * Rollback Route Id
+             * Format: uuid
+             */
+            rollback_route_id: string;
+            /** Route Hash */
+            route_hash: string;
+            /**
+             * Route Id
+             * Format: uuid
+             */
+            route_id: string;
         };
         /** RuntimeCommand */
         RuntimeCommand: {
@@ -3603,6 +4411,20 @@ export interface components {
             /** Version */
             version: number;
         };
+        /** TypedProposal */
+        TypedProposal: {
+            /** Claims */
+            claims: components["schemas"]["Claim"][];
+            /**
+             * Proposed Actions
+             * @default []
+             */
+            proposed_actions: unknown[];
+            /** Uncertainties */
+            uncertainties: "synthetic fixture only"[];
+            /** Unknowns */
+            unknowns: "business facts unavailable"[];
+        };
         /** UncertainView */
         UncertainView: {
             /** Dispatch Started At */
@@ -3621,6 +4443,44 @@ export interface components {
             reconcile_after: string | null;
             /** State */
             state: string;
+        };
+        /** Usage */
+        Usage: {
+            /**
+             * Billable Units
+             * @default 1
+             */
+            billable_units: number;
+            /**
+             * Cache Creation Tokens
+             * @default 0
+             */
+            cache_creation_tokens: number;
+            /**
+             * Cached Tokens
+             * @default 0
+             */
+            cached_tokens: number;
+            /** Input Tokens */
+            input_tokens: number;
+            /** Output Tokens */
+            output_tokens: number;
+        };
+        /** Validation */
+        Validation: {
+            /**
+             * Defects
+             * @default []
+             */
+            defects: string[];
+            /** Evidence */
+            evidence: boolean;
+            /** Policy */
+            policy: boolean;
+            /** Schema Valid */
+            schema_valid: boolean;
+            /** Semantic */
+            semantic: boolean;
         };
         /** Workspace */
         Workspace: {
@@ -4435,6 +5295,565 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CommandResult"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    evaluate_v1_workspaces__workspace_id__ai_evaluations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EvaluationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_dict_str__Any__"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    health_v1_workspaces__workspace_id__ai_health_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_AIHealth_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    propose_v1_workspaces__workspace_id__ai_routes_propose_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PromotionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_dict_str__Any__"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    promote_v1_workspaces__workspace_id__ai_routes__identifier__promote_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": number;
+            };
+            path: {
+                workspace_id: string;
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Reason"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_dict_str__Any__"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    submit_v1_workspaces__workspace_id__ai_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_AIStatus_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    inspect_v1_workspaces__workspace_id__ai_tasks__identifier__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_AIInspection_"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+        };
+    };
+    revoke_v1_workspaces__workspace_id__ai_tasks__identifier__revoke_context_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "if-match": number;
+            };
+            path: {
+                workspace_id: string;
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Reason"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthorityEnvelope_dict_str__Any__"];
                 };
             };
             /** @description Bad Request */

@@ -41,6 +41,12 @@ def maintenance(engine: Engine, scope: tuple[UUID, UUID, int], instance: str) ->
         pulse(conn, "worker", instance)
         command.refresh_coalesced(conn)
         command.recover(conn)
+        from company_os.application.ai_gateway import recover as recover_ai
+
+        recover_ai(conn)
+        from company_os.application.ai_evaluations import finalize
+
+        finalize(conn)
         for execution in rows(
             conn,
             """SELECT x.* FROM app.long_executions x JOIN app.jobs j ON j.workspace_id=x.workspace_id AND j.id=x.job_id
@@ -172,6 +178,12 @@ def execute_claim(
         command.emit(conn, "job.started", current, "job")
         item = get(conn, "runtime_inputs", current["input_ref"])
     scenario = item["scenario"]
+    with transaction(engine, *scope) as conn:
+        ai_runs = rows(conn, "SELECT * FROM app.agent_runs WHERE input_id=:id", {"id": item["id"]})
+    if ai_runs:
+        from company_os.workflow.ai_runtime import run_ai
+
+        return run_ai(engine, scope, job, ai_runs[0], shutdown)
     if job["job_type"] != "reconcile_effect":
         with transaction(engine, *scope) as conn:
             specs = rows(

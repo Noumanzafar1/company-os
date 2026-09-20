@@ -631,7 +631,16 @@ def reserve(
     return reservation
 
 
-def settle(conn: Connection, reservation_id: UUID, actual: Decimal) -> None:
+def settle(
+    conn: Connection,
+    reservation_id: UUID,
+    actual: Decimal,
+    *,
+    provider: str = "fake_local",
+    task_type: str = "synthetic",
+    rate_version: str = "phase-4-fake-v1",
+    cost_status: str = "confirmed",
+) -> None:
     # Lock budget before reservation for both reservation and settlement paths.
     seen = get(conn, "budget_reservations", reservation_id)
     cap_ids = [seen["budget_id"]] + [
@@ -674,14 +683,14 @@ def settle(conn: Connection, reservation_id: UUID, actual: Decimal) -> None:
         "usage_entries",
         {
             "reservation_id": reservation_id,
-            "provider": "fake_local",
-            "task_type": "synthetic",
+            "provider": provider,
+            "task_type": task_type,
             "requests": 1,
             "units": actual,
             "workflow_executions": 1,
             "cost_usd": actual,
-            "cost_status": "confirmed",
-            "rate_version": "phase-4-fake-v1",
+            "cost_status": cost_status,
+            "rate_version": rate_version,
         },
     )
 

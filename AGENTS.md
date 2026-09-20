@@ -3,12 +3,16 @@
 Read `docs/02-architecture.md`, `docs/14-security.md`, `docs/16-testing.md`,
 `docs/requirements.md`, accepted ADRs, and the explicitly authorized phase brief.
 The canonical specification preserves its Phase 1 design status; the current
-implementation authority is `docs/phases/phase-6a-brief.md` and the user's instructions.
+implementation authority is `docs/phases/phase-6b-brief.md` and the user's instructions.
 
-Implement only the authorized Phase 6A. Phase 5 is closed at
-`9d9010f62e890275760eaa7a312ed119f7c28ec0`. Stop at the independent-review gate.
-Phase 6B is not authorized. No real providers, AI, sends, production provisioning
-or deployment. Use fake runtime adapters and exact synthetic authority only.
+Implement only Phase 6B Gate A. Accepted Phase 6A protected main is
+`41e27ff8cb211b1d3a80d702995cad2a9f28567e`, containing reviewed feature
+`fc6921d148ea4d7d163119e5da3560caf653011c`. Stop at independent review.
+Real OpenAI/Anthropic adapter code is permitted; real provider calls require
+separate founder chat authorization naming providers and a total dollar cap.
+No Phase 7, autonomous or recursive agents, production route activation,
+live business data, sends, production provisioning or deployment. Fake technical
+routes and synthetic engineering evaluations confer no business authority.
 Do not commit, push, open a PR or merge until the founder explicitly authorizes it.
 The repository owner and acceptance reviewer is Nouman; technical review evidence
 belongs in the phase handoff. Do not infer approval from silence.
@@ -29,4 +33,4 @@ Keep secrets out of tracked files, logs, fixtures and prompts. No production dat
 Run `npm run check`, `npm run build` and Phase 2/3 browser tests against running
 services. Do not skip or weaken a failing security test to obtain a pass. Report
 exact results, limitations, changed paths, requirement IDs, migrations, rollback,
-and risks in `docs/phases/phase-6a-handoff.md`. Stop; do not begin Phase 6B.
+and risks in `docs/phases/phase-6b-handoff.md`. Stop; do not begin Phase 7.
