@@ -4,7 +4,10 @@ from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Literal
 
+from pydantic import Field
+
 from company_os.ai.contracts import Frozen, ProviderCall
+from company_os.ai.credentials import credential_reference, valid_credential_binding
 from company_os.runtime_contracts import UtcTime
 
 
@@ -26,6 +29,9 @@ class CapabilityReport(Frozen):
     sdk_version: str
     external_account_id: str | None = None
     credential_ref: str | None = None
+    credential_binding: str | None = Field(
+        default=None, pattern=r"^sha256-v1:[0-9a-f]{64}$", repr=False
+    )
 
 
 def precheck(
@@ -57,3 +63,25 @@ def precheck(
     ):
         return "PROVIDER_PREFLIGHT_REQUIRED"
     return None
+
+
+def live_precheck(call: ProviderCall, report: CapabilityReport, limit: Decimal) -> str | None:
+    """Closed dispatch distinction in addition to account capability evidence."""
+    from importlib.metadata import version
+
+    if (
+        call.task.execution_mode != "live_preflight"
+        or call.task.max_model_calls != 1
+        or call.ordinal != 1
+        or call.scenario != "success"
+        or call.route.selection != "preflight"
+        or call.route.region_policy != "preflight_required"
+        or call.route.fallback_provider is not None
+        or call.route.fallback_model_id is not None
+        or call.task.allowed_providers != (report.provider,)
+        or report.credential_ref != credential_reference(call.task.workspace_id, report.provider)
+        or not valid_credential_binding(report.credential_binding)
+        or report.sdk_version != version(report.provider)
+    ):
+        return "LIVE_PREFLIGHT_BINDING_REQUIRED"
+    return precheck(call, report, limit)

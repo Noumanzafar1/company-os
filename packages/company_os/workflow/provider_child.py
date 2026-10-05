@@ -9,6 +9,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from company_os.ai.contracts import ProviderCall, ProviderReply, ProviderResponse  # noqa: E402
+from company_os.ai.credentials import (  # noqa: E402
+    OfflineCredential,
+    SelectedCredential,
+    verify_credential_binding,
+)
 from company_os.ai.providers import FakeAnthropicProvider, FakeOpenAIProvider  # noqa: E402
 
 
@@ -18,20 +23,41 @@ def main() -> None:
         return
     call = ProviderCall.model_validate_json(raw)
 
-    credential = None
+    credential: OfflineCredential | SelectedCredential | None = None
+    mode = "offline-contract"
     if call.route.primary_provider in {"openai", "anthropic"}:
-        from company_os.ai.credentials import OfflineCredential
+        from decimal import Decimal
 
-        raw_secret = sys.stdin.buffer.readline(2049)
-        if len(raw_secret) > 2048:
+        from company_os.ai.preflight import CapabilityReport, live_precheck
+
+        raw_secret = sys.stdin.buffer.readline(8193)
+        if len(raw_secret) > 8192:
             return
         value = json.loads(raw_secret)
         if (
-            value.get("mode") != "offline-contract"
+            value.get("mode") not in {"offline-contract", "live-preflight", "preflight-contract"}
             or value.get("provider") != call.route.primary_provider
         ):
             return
-        credential = OfflineCredential(value["provider"], value["key"])
+        mode = value["mode"]
+        if mode == "offline-contract":
+            credential = OfflineCredential(value["provider"], value["key"])
+        else:
+            credential = SelectedCredential(value["provider"], value["key"])
+            report = CapabilityReport.model_validate(value["report"])
+            if live_precheck(call, report, Decimal(value["limit"])):
+                return
+            verify_credential_binding(
+                call.task.workspace_id,
+                report.provider,
+                report.credential_ref,
+                report.credential_binding,
+                credential,
+            )
+            if mode == "preflight-contract" and not credential.value.startswith("synthetic-"):
+                return
+            if mode == "live-preflight" and credential.value.startswith("synthetic-"):
+                return
         del raw_secret, value
 
     def control() -> None:
@@ -46,6 +72,13 @@ def main() -> None:
         response = FakeOpenAIProvider().generate_typed(call)
     elif provider == "fake_anthropic":
         response = FakeAnthropicProvider().generate_typed(call)
+    elif credential is not None and mode == "live-preflight":
+        from company_os.ai.sdk_providers import AnthropicProvider, OpenAIProvider
+
+        adapter = OpenAIProvider if provider == "openai" else AnthropicProvider
+        response = adapter(
+            credential.value, verified_model=call.route.primary_model_id
+        ).generate_typed(call)
     elif credential is not None:
         from company_os.ai.offline_probe import probe
 

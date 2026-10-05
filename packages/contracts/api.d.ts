@@ -1573,6 +1573,12 @@ export interface components {
              */
             schema_version: string;
             /**
+             * Selection
+             * @default ordinary
+             * @enum {string}
+             */
+            selection: "ordinary" | "preflight";
+            /**
              * Task Type
              * @default gateway_contract
              * @constant
@@ -1635,6 +1641,12 @@ export interface components {
             evaluation_policy_id: string;
             /** Evidence Refs */
             evidence_refs: components["schemas"]["ResourceRef"][];
+            /**
+             * Execution Mode
+             * @default ordinary
+             * @enum {string}
+             */
+            execution_mode: "ordinary" | "live_preflight";
             /**
              * Id
              * Format: uuid

@@ -8,13 +8,19 @@ import threading
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
+from decimal import Decimal
 from pathlib import Path
 from typing import IO, Any
 
 from pydantic import ValidationError
 
 from company_os.ai.contracts import ProviderCall, ProviderReply
-from company_os.ai.credentials import OfflineCredential
+from company_os.ai.credentials import (
+    OfflineCredential,
+    SelectedCredential,
+    verify_credential_binding,
+)
+from company_os.ai.preflight import CapabilityReport, live_precheck
 from company_os.long_contracts import MAX_MESSAGE, ExecutionEnvelope, ExecutionResult
 from company_os.workflow.process_tree import ProcessTree
 
@@ -52,7 +58,31 @@ def execute(
     observe: Callable[[str, int], None] = lambda *_: None,
     *,
     offline_credential: OfflineCredential | None = None,
+    selected_credential: SelectedCredential | None = None,
+    capability_report: CapabilityReport | None = None,
+    live_limit: Decimal = Decimal(0),
+    contract_only: bool = False,
 ) -> Outcome:
+    if selected_credential:
+        if (
+            offline_credential
+            or not isinstance(envelope, ProviderCall)
+            or selected_credential.provider != envelope.route.primary_provider
+            or capability_report is None
+            or live_precheck(envelope, capability_report, live_limit)
+        ):
+            raise ValueError("LIVE_PREFLIGHT_BINDING_REQUIRED")
+        verify_credential_binding(
+            envelope.task.workspace_id,
+            capability_report.provider,
+            capability_report.credential_ref,
+            capability_report.credential_binding,
+            selected_credential,
+        )
+        if contract_only and not selected_credential.value.startswith("synthetic-"):
+            raise ValueError("SYNTHETIC_CREDENTIAL_REQUIRED")
+        if not contract_only and selected_credential.value.startswith("synthetic-"):
+            raise ValueError("SYNTHETIC_CREDENTIAL_NETWORK_DENIED")
     if offline_credential and (
         not isinstance(envelope, ProviderCall)
         or envelope.route.primary_provider != offline_credential.provider
@@ -62,6 +92,7 @@ def execute(
         isinstance(envelope, ProviderCall)
         and envelope.route.primary_provider in {"openai", "anthropic"}
         and offline_credential is None
+        and selected_credential is None
     ):
         raise ValueError("LIVE_AUTHORIZATION_REQUIRED")
     started = time.monotonic()
@@ -99,6 +130,8 @@ def execute(
         # No execution envelope is released before containment succeeds. Parent
         # death before attach closes stdin, so the child exits without starting.
         tree.attach(child)
+        if invalidation():
+            raise ValueError("DISPATCH_REVOKED")
         assert child.stdin is not None and child.stdout is not None
         raw = envelope.model_dump_json().encode() + b"\n"
         if len(raw) > max_message:
@@ -121,18 +154,30 @@ def execute(
         reader.start()
         observe("child_started", child.pid)
         child.stdin.write(raw)
-        if offline_credential:
+        if offline_credential or selected_credential:
+            credential = offline_credential or selected_credential
+            assert credential is not None
             # Separate bounded one-time channel after tree.attach; never part of envelope.
             secret = (
                 json.dumps(
                     {
-                        "provider": offline_credential.provider,
-                        "key": offline_credential.value,
-                        "mode": "offline-contract",
+                        "provider": credential.provider,
+                        "key": credential.value,
+                        "mode": "offline-contract"
+                        if offline_credential
+                        else "preflight-contract"
+                        if contract_only
+                        else "live-preflight",
+                        "report": capability_report.model_dump(mode="json")
+                        if capability_report
+                        else None,
+                        "limit": str(live_limit),
                     }
                 ).encode()
                 + b"\n"
             )
+            if len(secret) > 8192:
+                raise ValueError("CREDENTIAL_CHANNEL_TOO_LARGE")
             child.stdin.write(secret)
             del secret
         child.stdin.flush()

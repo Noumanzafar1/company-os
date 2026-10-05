@@ -107,6 +107,7 @@ class ContextPack(Frozen):
 
 
 class AITask(Frozen):
+    execution_mode: Literal["ordinary", "live_preflight"] = "ordinary"
     id: UUID
     task_type: TaskType = "gateway_contract"
     task_version: Literal[1] = 1
@@ -129,6 +130,7 @@ class AITask(Frozen):
 
 
 class AIRoute(Frozen):
+    selection: Literal["ordinary", "preflight"] = "ordinary"
     route_id: UUID
     version: int = Field(ge=1)
     task_type: TaskType = "gateway_contract"

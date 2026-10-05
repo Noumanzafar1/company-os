@@ -11,6 +11,8 @@ from company_os.persistence.database import rows
 
 MUTABLE = {"agent_runs", "model_runs", "ai_route_states", "ai_fixture_sources"}
 TABLES = MUTABLE | {
+    "ai_preflight_gates",
+    "ai_preflight_routes",
     "ai_evaluation_batches",
     "ai_registry",
     "ai_routes",

@@ -105,13 +105,20 @@ def permitted_input(call: ProviderCall) -> str:
 class OpenAIProvider:
     model = "gpt-4.1-mini-2025-04-14"
 
-    def __init__(self, credential: str, transport: httpx.BaseTransport | None = None) -> None:
+    def __init__(
+        self,
+        credential: str,
+        transport: httpx.BaseTransport | None = None,
+        *,
+        verified_model: str | None = None,
+    ) -> None:
         self.credential = credential
         self.transport = transport
+        self.verified_model = verified_model
 
     def capabilities(self, model_id: str) -> dict[str, bool]:
         return {
-            "structured_output": model_id == self.model,
+            "structured_output": model_id == (self.verified_model or self.model),
             "account_verified": False,
             "tools": False,
         }

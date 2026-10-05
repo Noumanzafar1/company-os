@@ -25,5 +25,6 @@
   "database/migrations/versions/0023_ai_context_guard.py": "c78f2650e8009e72477244249190807f1244ca796b8e97892724a76a5a5b3ccb",
   "database/migrations/versions/0024_ai_guard_correction.py": "c48bd2bded944588cd8fe6618584d3c6cad9e178f109241d9c06208574739359",
   "database/migrations/versions/0025_ai_evaluation_freshness.py": "67b06c35c3d156db75020a2f44c3c5b422fd1241bb87810f92c3c44b343622d1",
-  "database/migrations/versions/0026_phase6b_review_fixes.py": "8f1b7e8d569828dcd0333455a5441f9e83242be784208c1b58336995b98103ee"
+  "database/migrations/versions/0026_phase6b_review_fixes.py": "8f1b7e8d569828dcd0333455a5441f9e83242be784208c1b58336995b98103ee",
+  "database/migrations/versions/0027_phase6b_live_preflight.py": "4aa3b1b23d1d55f5fec4ea65d901cb32526aabe45e9e6c5ea0a891ee948da630"
 }

@@ -29,9 +29,15 @@ def test_migration_history_linear_and_only_authorized_tables(admin):
             conn.execute(text("SELECT tablename FROM pg_tables WHERE schemaname='app'")).scalars()
         )
         assert (
-            names == FOUNDATION_TABLES | CORE_TABLES | RUNTIME_TABLES | AUTHORITY_TABLES | AI_TABLES
+            names
+            == FOUNDATION_TABLES
+            | CORE_TABLES
+            | RUNTIME_TABLES
+            | AUTHORITY_TABLES
+            | AI_TABLES
+            | {"ai_preflight_gates", "ai_preflight_routes"}
         )
         assert (
             conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-            == "0026_phase6b_review_fixes"
+            == "0027_phase6b_live_preflight"
         )

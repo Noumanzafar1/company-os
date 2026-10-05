@@ -47,6 +47,18 @@ def submit(
     *,
     evaluation_route: UUID | None = None,
 ) -> dict[str, Any]:
+    return _submit(conn, request, key, correlation, evaluation_route=evaluation_route)
+
+
+def _submit(
+    conn: Connection,
+    request: AIRequest,
+    key: str,
+    correlation: UUID,
+    *,
+    evaluation_route: UUID | None = None,
+    preflight: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     authority.gate(conn)
     existing = rows(
         conn,
@@ -57,9 +69,18 @@ def submit(
         if existing[0]["scenario"] != request.scenario:
             raise BusinessError("IDEMPOTENCY_CONFLICT")
         return existing[0]
-    route_row = get(conn, "ai_routes", evaluation_route) if evaluation_route else active_route(conn)
+    route_row = (
+        get(conn, "ai_routes", preflight["route_id"])
+        if preflight
+        else get(conn, "ai_routes", evaluation_route)
+        if evaluation_route
+        else active_route(conn)
+    )
     route = AIRoute.model_validate(route_row["body"])
-    if route.primary_provider not in {"fake_openai", "fake_anthropic"}:
+    if not preflight and (
+        route.primary_provider not in {"fake_openai", "fake_anthropic"}
+        or route.selection != "ordinary"
+    ):
         raise BusinessError("LIVE_AUTHORIZATION_REQUIRED", 423)
     sources = rows(
         conn,
@@ -139,6 +160,7 @@ def submit(
         },
     )
     task = AITask(
+        execution_mode="live_preflight" if preflight else "ordinary",
         id=run_id,
         workspace_id=scope["id"],
         subject_refs=(document_ref,),
@@ -148,7 +170,7 @@ def submit(
         policy_version_id=policies[0]["id"],
         evaluation_policy_id=policies[0]["id"],
         max_cost_usd=Decimal(0) if request.scenario == "budget_exhausted" else route.max_cost_usd,
-        max_model_calls=1 if request.scenario == "max_calls" else 2,
+        max_model_calls=1 if preflight or request.scenario == "max_calls" else 2,
         max_input_tokens=route.max_input_tokens,
         max_output_tokens=route.max_output_tokens,
         timeout_seconds=route.timeout_seconds,
@@ -177,6 +199,7 @@ def submit(
             "route_id": route_row["id"],
             "context_id": context_id,
             "evaluation": evaluation_route is not None,
+            "preflight_id": preflight["id"] if preflight else None,
             "task": task.model_dump(mode="json"),
             "scenario": request.scenario,
             "state": "queued",
@@ -184,6 +207,10 @@ def submit(
         },
     )
     runtime.audit(conn, "ai.task_created", run_id, correlation)
+    if preflight:
+        from company_os.application.ai_preflight import check
+
+        check(conn, result, route)
     return result
 
 
@@ -202,10 +229,16 @@ def context_current(conn: Connection, run: dict[str, Any]) -> bool:
             conn,
             "SELECT id FROM app.authority_freezes WHERE action IS NULL OR action='ai.route.promote'",
         )
-        and rows(
-            conn,
-            "SELECT id FROM app.ai_route_states WHERE route_id=:id AND (state='active' OR (:evaluation AND state IN ('draft','evaluated','superseded')))",
-            {"id": run["route_id"], "evaluation": run["evaluation"]},
+        and (
+            bool(run.get("preflight_id"))
+            and conn.execute(
+                text("SELECT app.preflight_current(:id)"), {"id": run["preflight_id"]}
+            ).scalar_one()
+            or rows(
+                conn,
+                "SELECT id FROM app.ai_route_states WHERE route_id=:id AND (state='active' OR (:evaluation AND state IN ('draft','evaluated','superseded')))",
+                {"id": run["route_id"], "evaluation": run["evaluation"]},
+            )
         )
         and conn.execute(
             text("SELECT app.authority_member(:p,false)"), {"p": row["requester_id"]}
@@ -239,12 +272,13 @@ def reserve_call(
     runtime.fenced(conn, job)
     current = get(conn, "agent_runs", run["id"], lock=True)
     task = AITask.model_validate(current["task"])
+    live = current.get("preflight_id") is not None
     if not context_current(conn, current):
         raise BusinessError("STALE_CONTEXT", 423)
     if (
         route.primary_provider not in task.allowed_providers
         or task.sensitivity not in route.allowed_sensitivity
-        or route.region_policy != "offline"
+        or (not live and route.region_policy != "offline")
     ):
         raise BusinessError("PROVIDER_NOT_ALLOWED", 423)
     connections = rows(
@@ -252,8 +286,15 @@ def reserve_call(
         "SELECT * FROM app.ai_provider_connections WHERE provider=:p AND status='enabled'",
         {"p": route.primary_provider},
     )
-    if not connections or route.primary_provider not in {"fake_openai", "fake_anthropic"}:
+    if not live and (
+        not connections or route.primary_provider not in {"fake_openai", "fake_anthropic"}
+    ):
         raise BusinessError("PROVIDER_PREFLIGHT_REQUIRED", 423)
+    preflight_state = None
+    if live:
+        from company_os.application.ai_preflight import check
+
+        preflight_state = check(conn, current, route)
     calls = rows(
         conn,
         "SELECT * FROM app.model_runs WHERE agent_run_id=:id ORDER BY ordinal",
@@ -281,6 +322,19 @@ def reserve_call(
     amount = cost(
         Usage(input_tokens=task.max_input_tokens, output_tokens=task.max_output_tokens), price
     )
+    if live:
+        # Reserve the most expensive supported input class, even if a provider
+        # unexpectedly reports cache creation rather than ordinary input usage.
+        pessimistic_price = {
+            **price,
+            "input": str(
+                max(Decimal(str(price[k])) for k in ("input", "cached", "cache_creation"))
+            ),
+        }
+        amount = cost(
+            Usage(input_tokens=task.max_input_tokens, output_tokens=task.max_output_tokens),
+            pessimistic_price,
+        )
     spent = sum(
         (c["confirmed_usd"] if c["confirmed_usd"] is not None else c["estimated_usd"])
         for c in calls
@@ -298,11 +352,15 @@ def reserve_call(
         }
     )
     conn.execute(text("SELECT pg_advisory_xact_lock(410053)"))
-    budgets = rows(
-        conn,
-        "SELECT * FROM app.budgets WHERE category IN ('ai_technical_day','ai_technical_month') AND period_start<=clock_timestamp() AND period_end>clock_timestamp() ORDER BY id FOR UPDATE",
+    budgets = (
+        [preflight_state["budget"]]
+        if preflight_state
+        else rows(
+            conn,
+            "SELECT * FROM app.budgets WHERE category IN ('ai_technical_day','ai_technical_month') AND period_start<=clock_timestamp() AND period_end>clock_timestamp() ORDER BY id FOR UPDATE",
+        )
     )
-    if {b["category"] for b in budgets} != {"ai_technical_day", "ai_technical_month"}:
+    if not live and {b["category"] for b in budgets} != {"ai_technical_day", "ai_technical_month"}:
         raise BusinessError("BUDGET_UNCONFIGURED", 423)
     if any(
         b["status"] != "active" or b["spent_usd"] + b["reserved_usd"] + amount > b["limit_usd"]

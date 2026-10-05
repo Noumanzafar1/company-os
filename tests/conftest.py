@@ -19,6 +19,36 @@ from sqlalchemy import create_engine
 from apps.api.main import create_app
 
 
+@pytest.fixture(autouse=True)
+def deny_external_test_network(monkeypatch):
+    """All Python tests are offline except disposable loopback infrastructure."""
+    import socket
+
+    connect = socket.socket.connect
+    connect_ex = socket.socket.connect_ex
+    lookup = socket.getaddrinfo
+
+    def check(address):
+        if isinstance(address, tuple) and address[0] not in {"127.0.0.1", "::1", "localhost"}:
+            raise AssertionError("EXTERNAL_TEST_NETWORK_FORBIDDEN")
+
+    def guarded(sock, address):
+        check(address)
+        return connect(sock, address)
+
+    def guarded_ex(sock, address):
+        check(address)
+        return connect_ex(sock, address)
+
+    def guarded_lookup(host, *args, **kwargs):
+        check((host, 0))
+        return lookup(host, *args, **kwargs)
+
+    monkeypatch.setattr(socket.socket, "connect", guarded)
+    monkeypatch.setattr(socket.socket, "connect_ex", guarded_ex)
+    monkeypatch.setattr(socket, "getaddrinfo", guarded_lookup)
+
+
 @pytest.fixture(scope="session")
 def db_env() -> Iterator[dict[str, str]]:
     base = os.environ["MIGRATION_DATABASE_URL"]
@@ -52,7 +82,11 @@ def db_env() -> Iterator[dict[str, str]]:
             check=True,
         )
         subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True)
-        for baseline in ("0025_ai_evaluation_freshness", "0020_long_spec_lock"):
+        for baseline in (
+            "0026_phase6b_review_fixes",
+            "0025_ai_evaluation_freshness",
+            "0020_long_spec_lock",
+        ):
             subprocess.run(
                 [sys.executable, "-m", "alembic", "downgrade", baseline], env=env, check=True
             )

@@ -6,12 +6,14 @@ import os
 import httpx2 as httpx
 
 from company_os.ai.contracts import ProviderCall, ProviderResponse
-from company_os.ai.credentials import OfflineCredential
+from company_os.ai.credentials import OfflineCredential, SelectedCredential
 from company_os.ai.providers import FakeOpenAIProvider
 from company_os.ai.sdk_providers import AnthropicProvider, OpenAIProvider
 
 
-def probe(call: ProviderCall, credential: OfflineCredential) -> ProviderResponse:
+def probe(
+    call: ProviderCall, credential: OfflineCredential | SelectedCredential
+) -> ProviderResponse:
     # Assert the actual child environment, not merely the launcher's dictionary.
     # POSIX Python may add LC_CTYPE while coercing its startup locale.
     allowed = {"SYSTEMROOT", "WINDIR"}
@@ -66,4 +68,10 @@ def probe(call: ProviderCall, credential: OfflineCredential) -> ProviderResponse
         )
 
     adapter = OpenAIProvider if credential.provider == "openai" else AnthropicProvider
-    return adapter(credential.value, httpx.MockTransport(respond)).generate_typed(call)
+    return adapter(
+        credential.value,
+        httpx.MockTransport(respond),
+        verified_model=call.route.primary_model_id
+        if call.task.execution_mode == "live_preflight"
+        else None,
+    ).generate_typed(call)

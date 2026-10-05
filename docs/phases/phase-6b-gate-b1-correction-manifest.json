@@ -1,0 +1,472 @@
+{
+  "schema_version": 1,
+  "phase": "6B Gate B1 independent review corrections",
+  "status": "NOT_READY_NPM_AUDIT_FAILED",
+  "created_at_utc": "2026-10-05T04:51:49.308441+00:00",
+  "head_sha": "007977c8655b2d7bfca662f77e17befed68d6f12",
+  "branch": "phase-6b-gate-b-live-provider-preflight",
+  "base_archive": {
+    "filename": "company-os-phase-6b-gate-b1-review.zip",
+    "sha256": "6ffd877c5c015f1f9be7836c77f588d80c62b121a568e14866119898cdfa4d29",
+    "unchanged": true
+  },
+  "fixes": {
+    "migration_privilege_preservation": "IMPLEMENTED_AND_TESTED",
+    "credential_capability_binding": "IMPLEMENTED_AND_TESTED"
+  },
+  "regression": {
+    "canonical_check": "PASS",
+    "python_full": {
+      "passed": 494,
+      "skipped": 0,
+      "warnings": 1,
+      "seconds": 610.65
+    },
+    "focused_b1": {
+      "passed": 70,
+      "skipped": 0,
+      "warnings": 1,
+      "reported_seconds": 49625.46
+    },
+    "migration_privilege_equivalence": "PASS_ALL_COMPANY_AUTH_APP_TABLE_GRANTS_AND_GRANT_OPTIONS",
+    "credential_substitution": "PASS_BOTH_PROVIDERS_BEFORE_SUPERVISOR",
+    "rls_api_worker": "PASS",
+    "migrations": "PASS_EMPTY_TO_HEAD_FORWARD_ROUNDTRIP_REUPGRADE_REPEAT_AND_POPULATED_REFUSAL",
+    "build": "PASS_21_PAGES",
+    "browser": {
+      "passed": 8,
+      "skipped": 0,
+      "reported_duration": "1.1m"
+    },
+    "npm_audit": {
+      "status": "FAIL",
+      "exit_code": 1,
+      "vulnerabilities": {
+        "high": 5,
+        "critical": 1,
+        "total": 6
+      },
+      "advisories": [
+        "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+        "https://github.com/advisories/GHSA-vcvr-r3jv-pc5j"
+      ],
+      "affected_packages": [
+        "braces",
+        "micromatch",
+        "fast-glob",
+        "@next/eslint-plugin-next",
+        "eslint-config-next",
+        "next"
+      ],
+      "dependency_changes": false,
+      "bypass": false
+    },
+    "python_audit": {
+      "checked_at": "2026-10-05T04:41:26.214715+00:00",
+      "registry": "OSV/PyPI",
+      "checked_packages": 57,
+      "findings": []
+    },
+    "pip_check": "PASS",
+    "network_ban": "PASS",
+    "secret_boundary": "PASS",
+    "mypy": "PASS_69_FILES",
+    "os": "Windows",
+    "browser_engine": "Chrome",
+    "integrity": "PASS_HISTORICAL_MIGRATIONS_LOCKS_CI_CORE_HANDOFF_AND_ALL_PRIOR_ARCHIVES",
+    "console": {
+      "passed": 2,
+      "skipped": 0
+    },
+    "contracts": "PASS",
+    "ruff_lint": "PASS",
+    "ruff_format": "PASS_206_FILES",
+    "eslint": "PASS",
+    "typescript": "PASS",
+    "boundary_checks": "PASS",
+    "diff_check": "PASS"
+  },
+  "original_0026_privileges": [
+    [
+      "agent_runs",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_evaluation_batches",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_evaluations",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_fixture_sources",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_fixture_sources",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "ai_provider_connections",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_provider_connections",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "ai_registry",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_route_states",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_route_states",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "ai_routes",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "approval_manifests",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "approval_requests",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "approval_requests",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "approval_targets",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "audit_entries",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "auth_sessions",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "auth_sessions",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "auth_sessions",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "authority_freezes",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "authority_test_targets",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "authority_test_targets",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "budget_reservations",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "company_runtime_caps",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "context_packs",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "fake_endpoints",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "memberships",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "memberships",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "policies",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "policies",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "policy_versions",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "principals",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "principals",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "role_permissions",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "roles",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "service_identities",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "service_identities",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "usage_entries",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "users",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "workspaces",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "workspaces",
+      "UPDATE",
+      "NO"
+    ]
+  ],
+  "measured_0027_additions": [
+    [
+      "ai_preflight_gates",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "ai_preflight_gates",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_preflight_routes",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "ai_preflight_routes",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "ai_registry",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "ai_route_states",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "ai_routes",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "authority_test_targets",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "budgets",
+      "INSERT",
+      "NO"
+    ],
+    [
+      "budgets",
+      "SELECT",
+      "NO"
+    ],
+    [
+      "budgets",
+      "UPDATE",
+      "NO"
+    ],
+    [
+      "model_runs",
+      "SELECT",
+      "NO"
+    ]
+  ],
+  "original_downgrade_loss": [
+    [
+      "authority_test_targets",
+      "SELECT",
+      "NO"
+    ]
+  ],
+  "historical_migration_raw_sha256": {
+    "database/migrations/versions/0001_foundation.py": "e1f47410c1e13ccbdf085ccff8690103a21354b1b8215eae33245f2d2a785407",
+    "database/migrations/versions/0001_foundation.sql": "e13ad2c3a296ad8743ae611d7dcc1330af021a9b956f6ad722db2eeb9c119e8b",
+    "database/migrations/versions/0002_identity_guards.py": "652fd00caa60956d877941008a4c315661b2dd568369a1e28c93726ad34227b0",
+    "database/migrations/versions/0003_core_business_state.py": "e9c38d91d578629ca078097f7b0eeac7dae79612fcc806f63e876672e99f5feb",
+    "database/migrations/versions/0004_core_integrity.py": "0e27150ca844416c471d864679bda1d7a8bdbf0783afd13f81800a3b3e34707a",
+    "database/migrations/versions/0005_phase3_review_fixes.py": "3023775dd206921d905bfe460a06e3d57ffeb581f6917aecc33ad223509ac720",
+    "database/migrations/versions/0006_durable_runtime.py": "e2997e9aff372ef52874f9af8e5c33ad097fd66e8f34cdb714247df88b7d9289",
+    "database/migrations/versions/0007_runtime_integrity.py": "c87f2e1395519b8be6823382852142af12f2bdc2f24b56b65e3e8c5da2adcd91",
+    "database/migrations/versions/0008_runtime_actor_guard.py": "0ac34227f3fece4c1b5157a2d520fcbd77d1279bdcccf3f0c791c0faf5b13892",
+    "database/migrations/versions/0009_runtime_callbacks.py": "9d12128363d6a0fd194ecb5326b151606be58a070baa2025355b69a8effc00a8",
+    "database/migrations/versions/0010_runtime_budget_caps.py": "b9c61a71a2ff4d68f189d4696f89f97d91d030eee36d157f8aa4a82c737c7dc7",
+    "database/migrations/versions/0011_runtime_event_payloads.py": "496d65e639f523c6cb3ffab38dc97d4dd57a2b6d8770d4a306540aad7124cc4d",
+    "database/migrations/versions/0012_phase4_review_fixes.py": "07f6b88428bb6e109a7687ad0865649ec1d6dfca2d1185026226bd1c1aa9bde7",
+    "database/migrations/versions/0013_policy_authority.py": "316de10a386e6f01beabd64fa32a2d5c19f0cec16500da7559ddd4283bd789bc",
+    "database/migrations/versions/0014_authority_validation_role.py": "3921ae36055acec4844cf3b930b64e7b33417276b952f1c3d125c839ef49210f",
+    "database/migrations/versions/0015_authority_events.py": "33a817ec095b2139f34e6bb520cdeef173578ff93a2a3dfe4fafb47a323bc5ef",
+    "database/migrations/versions/0016_authority_exact_binding.py": "6ee592c54e1c4440a35e1ff32b28419833983df0265403be1507836d3c2dc46c",
+    "database/migrations/versions/0017_authority_commit_boundary.py": "67257b789d2a333bb315dc97fa788636cffefacd4e9dca19cc6d525b2086b2a5",
+    "database/migrations/versions/0018_phase5_review_fixes.py": "8d1edaabe64b8423df73540bd03700215d4c8443dc21ae35171346c55b024bac",
+    "database/migrations/versions/0019_long_execution.py": "0288a1f2abc59d4e63f7942a6d69a8f99f3da29396f87b75d5dd41e1c902eff7",
+    "database/migrations/versions/0020_long_spec_lock.py": "3d139da0f57dd4427ad47f2f1ac4953bc84ef99ee5b8b0bb3607cd1f59a8edcb",
+    "database/migrations/versions/0021_ai_gateway.py": "e467b573d39cf864a5857620720ffc4a8c965f2f5cef7e8ba29726a0607d23c3",
+    "database/migrations/versions/0022_ai_route_authority.py": "6b7fd573f6bad4595dbc0647ec71f0f9921ad7ed54c8e87d36b9761b629d6705",
+    "database/migrations/versions/0023_ai_context_guard.py": "c78f2650e8009e72477244249190807f1244ca796b8e97892724a76a5a5b3ccb",
+    "database/migrations/versions/0024_ai_guard_correction.py": "c48bd2bded944588cd8fe6618584d3c6cad9e178f109241d9c06208574739359",
+    "database/migrations/versions/0025_ai_evaluation_freshness.py": "67b06c35c3d156db75020a2f44c3c5b422fd1241bb87810f92c3c44b343622d1",
+    "database/migrations/versions/0026_phase6b_review_fixes.py": "8f1b7e8d569828dcd0333455a5441f9e83242be784208c1b58336995b98103ee"
+  },
+  "live_status": {
+    "openai_calls": 0,
+    "anthropic_calls": 0,
+    "authenticated_administrative_requests": 0,
+    "authorized_b1_usd": "0.00",
+    "observed_b1_usd": "0.00",
+    "production_ai_routes": 0
+  },
+  "scope": {
+    "real_credential_resolution": false,
+    "commit_push_pr_merge": false,
+    "gate_b2": false,
+    "phase7": false,
+    "dependency_changes": false,
+    "audit_bypass": false
+  },
+  "changed_files": [
+    "apps/api/ai.py",
+    "database/migrations/manifest.json",
+    "database/migrations/versions/0027_phase6b_live_preflight.py",
+    "docs/adr/025-live-provider-preflight.md",
+    "docs/phases/phase-6b-gate-b-handoff.md",
+    "docs/phases/phase-6b-gate-b1-correction-handoff.md",
+    "docs/phases/phase-6b-gate-b1-correction-manifest.json",
+    "packages/company_os/ai/credentials.py",
+    "packages/company_os/ai/preflight.py",
+    "packages/company_os/workflow/ai_runtime.py",
+    "packages/company_os/workflow/isolation.py",
+    "packages/company_os/workflow/provider_child.py",
+    "tests/integration/test_ai_preflight.py",
+    "tests/integration/test_ai_preflight_migrations.py",
+    "tests/unit/test_ai_preflight_contracts.py"
+  ],
+  "source_sha256": {
+    "apps/api/ai.py": "2b19f98fdad1285debc37e678c690e5c952357c2260bf871d41668b5cf8571c1",
+    "database/migrations/manifest.json": "62a6aee9048b3f7b55bdf43d7b7e002ff6c9a48dc1334ab766b21c6c4518fc09",
+    "database/migrations/versions/0027_phase6b_live_preflight.py": "8823e77b327904f611d1a5aa2942c182f0559f6eb7e45cada552e98c853ffadf",
+    "docs/adr/025-live-provider-preflight.md": "c5f316073628b343e95e34bdcfd0637b3c82d0f4ff66c8e1d012e1809e3f7d76",
+    "docs/phases/phase-6b-gate-b-handoff.md": "932ca115e055d62d0a0dc4290f79efab4e3c3fc9c73eeef981cccd9f037946cd",
+    "docs/phases/phase-6b-gate-b1-correction-handoff.md": "6ebaad2e303e426b9b79e994d7ae914bb9153b8e2eb0faf7490ff42599b3dda0",
+    "packages/company_os/ai/credentials.py": "78067b6889126d3b483f87afbb249bb9a46bf5a76e4628d697ac3374022e2655",
+    "packages/company_os/ai/preflight.py": "ff9350d0ebc524c8c9f23073b0360ec7bfa0d2cafb73dd1eeed08b899dda86ce",
+    "packages/company_os/workflow/ai_runtime.py": "be81dc847e7b288f07e30f370c48e07224fcfaf2e48cbd172e4dc0a5befc7b58",
+    "packages/company_os/workflow/isolation.py": "25302491ded598cbe103feb1188e435c5c936083cce47b1df4d45d400ae1aefb",
+    "packages/company_os/workflow/provider_child.py": "01e977dbbc0b9ac1f1c2e110cab7876984dddc246020b9d67e439de99946fa22",
+    "tests/integration/test_ai_preflight.py": "98136480e8635001995311e900e835adcdca97d29cda22a7df4a4efccb63ff4d",
+    "tests/integration/test_ai_preflight_migrations.py": "584854f721192932fcf4979bd3e6b6fd4ef037503a024dfe23459f3e7a0716d9",
+    "tests/unit/test_ai_preflight_contracts.py": "43988365ae8d3aa62a52312efcb26442a8adcb19bbc6ecc4eee5c049c36057a6"
+  },
+  "base_file_sha256": {
+    "apps/api/ai.py": "b6b58f378e1451e1e6031e52ecda8ba868338bac90be12be8cf363d6a01cfbb6",
+    "database/migrations/manifest.json": "5d1cd4893f165f155e0109cf97c23ae648e495d87eea27d500e636b57079160d",
+    "database/migrations/versions/0027_phase6b_live_preflight.py": "f2bf1dfbe94b8127d5671fcd82a8ae29203bf0a30d85f70696ac8ff8486c3556",
+    "docs/adr/025-live-provider-preflight.md": "a9346c2cbfe5915441e5a5f8acfcb328dad90220a1e1d06460472453ab919cee",
+    "docs/phases/phase-6b-gate-b-handoff.md": "5fb252f2833fc5f9f88b482424cc646bd82411dbcdd9deb74344f2043f0dadcf",
+    "docs/phases/phase-6b-gate-b1-correction-handoff.md": null,
+    "docs/phases/phase-6b-gate-b1-correction-manifest.json": null,
+    "packages/company_os/ai/credentials.py": "6cb2e994a2145d34113b0ab06d0a2734c3441119411c57e7f7dbcc8365082be9",
+    "packages/company_os/ai/preflight.py": "6e1f2d9c8c7b60e96d247acbfdff771f6a06a72007239919cefba38b21d41581",
+    "packages/company_os/workflow/ai_runtime.py": "ee827e4301a943349140aa8262f7dfade0a18bc19c568081f75f514f41c62e59",
+    "packages/company_os/workflow/isolation.py": "3bfb94c6ff9452e49940f08b1391b295bc9d2ad3b8a62273fe47e7da8d45f655",
+    "packages/company_os/workflow/provider_child.py": "209ee50b1bfc9f1bada0f80b22d1f78ea972d4ea0e4b37da63b9e18a80a5eae2",
+    "tests/integration/test_ai_preflight.py": "5f1f275caa1d5f3be05ca983b746a561885a6d38d5c88982d3993702ed62c4ec",
+    "tests/integration/test_ai_preflight_migrations.py": null,
+    "tests/unit/test_ai_preflight_contracts.py": "f94e48774b284f31ebf7cd38985503d4ffa4d4b45b4f68439e19ec4eeab2fcab"
+  },
+  "archive": {
+    "filename": "company-os-phase-6b-gate-b1-correction-delta.zip",
+    "entry_count": 16,
+    "inventory": "CORRECTION_FILE_LIST.txt",
+    "sidecar": "company-os-phase-6b-gate-b1-correction-delta.zip.sha256"
+  },
+  "limitations": [
+    "npm audit fails: 5 high, 1 critical; dependency correction outside the two requested fixes",
+    "No real provider/account/price verification",
+    "B2 requires finally reviewed fresh database or independently proven schema equivalence",
+    "Local Windows/Chrome verification, no new protected CI run"
+  ]
+}

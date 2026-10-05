@@ -8,6 +8,7 @@ run(python,['scripts/contracts.py',...(generate?[]:['--check'])]);
 const output=generate?'packages/contracts/api.d.ts':'.local/api.check.d.ts';
 run(process.execPath,['node_modules/openapi-typescript/bin/cli.js','packages/contracts/openapi.json','-o',output]);
 if(!generate) {
+  run(process.execPath,['--test','tests/security/audit_npm.test.mjs']);
   if(readFileSync(output,'utf8').replaceAll('\r\n','\n')!==readFileSync('packages/contracts/api.d.ts','utf8').replaceAll('\r\n','\n'))throw new Error('Generated TypeScript contract drift');
   run(python,['-m','ruff','check','.']);
   run(python,['-m','ruff','format','--check','.']);
