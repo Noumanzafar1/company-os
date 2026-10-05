@@ -679,6 +679,15 @@
             "title": "Schema Version",
             "type": "string"
           },
+          "selection": {
+            "default": "ordinary",
+            "enum": [
+              "ordinary",
+              "preflight"
+            ],
+            "title": "Selection",
+            "type": "string"
+          },
           "task_type": {
             "const": "gateway_contract",
             "default": "gateway_contract",
@@ -789,6 +798,15 @@
             },
             "title": "Evidence Refs",
             "type": "array"
+          },
+          "execution_mode": {
+            "default": "ordinary",
+            "enum": [
+              "ordinary",
+              "live_preflight"
+            ],
+            "title": "Execution Mode",
+            "type": "string"
           },
           "id": {
             "format": "uuid",

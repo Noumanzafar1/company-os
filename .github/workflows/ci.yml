@@ -39,13 +39,13 @@ jobs:
         run: node scripts/ci-services.mjs prepare
       - name: Foundation acceptance checks
         run: npm run check
-      - name: Dependency security scan
-        run: npm audit --audit-level=moderate
       - name: Production console build
         run: npm run build
       - run: npx playwright install --with-deps chromium
       - name: Browser demonstration
         run: node scripts/ci-services.mjs e2e
+      - name: Dependency security scan (full audit and EXC-003 policy)
+        run: node scripts/audit_npm.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

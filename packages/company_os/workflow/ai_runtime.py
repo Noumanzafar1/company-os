@@ -9,9 +9,11 @@ from sqlalchemy import Engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
 from company_os.ai.contracts import AIResult, AIRoute, AITask, ContextPack, ProviderCall, Validation
+from company_os.ai.credentials import resolve_selected, verify_credential_binding
+from company_os.ai.preflight import CapabilityReport
 from company_os.ai.validation import cost, validate_output
 from company_os.application import ai_gateway as gateway
-from company_os.application import runtime
+from company_os.application import ai_preflight, runtime
 from company_os.persistence.ai import get, insert, update
 from company_os.persistence.business import BusinessError
 from company_os.persistence.database import transaction
@@ -103,7 +105,41 @@ def run_ai(
             )
 
         try:
-            outcome = execute(envelope, control)
+            if run.get("preflight_id"):
+                # Reservation/ModelRun committed above. Recheck before the parent
+                # resolves exactly one reference; never resolve inside a child envelope.
+                with transaction(engine, *scope) as conn:
+                    runtime.fenced(conn, job)
+                    if not gateway.context_current(conn, run):
+                        raise BusinessError("STALE_CONTEXT", 423)
+                    state = ai_preflight.check(conn, run, route)
+                report = CapabilityReport.model_validate(state["link"]["report"])
+                credential = resolve_selected(
+                    task.workspace_id, report.provider, report.credential_ref or ""
+                )
+                verify_credential_binding(
+                    task.workspace_id,
+                    report.provider,
+                    report.credential_ref,
+                    report.credential_binding,
+                    credential,
+                )
+                outcome = execute(
+                    envelope,
+                    control,
+                    selected_credential=credential,
+                    capability_report=report,
+                    live_limit=state["budget"]["limit_usd"],
+                )
+                del credential
+            else:
+                outcome = execute(envelope, control)
+        except (ValueError, BusinessError):
+            # No raw resolver/SDK error reaches logs. A durable reservation is
+            # conservatively held; recovery never replays this one-call preflight.
+            from company_os.workflow.isolation import Outcome
+
+            outcome = Outcome("PREFLIGHT_DISPATCH_DENIED", None, False, 0, 0, 0, 0, 0)
         finally:
             stopped.set()
             watcher.join(timeout=3)
@@ -180,6 +216,7 @@ def run_ai(
                     return True
                 if (
                     response.status == "failed"
+                    and not run.get("preflight_id")
                     and response.error in {"rate_limit", "provider_overloaded"}
                     and call["ordinal"] < task.max_model_calls
                     and run["scenario"] != "fallback_denied"
@@ -206,7 +243,12 @@ def run_ai(
                         False,
                     )
                 )
-                if repairable and call["ordinal"] < task.max_model_calls and not uncertain:
+                if (
+                    repairable
+                    and not run.get("preflight_id")
+                    and call["ordinal"] < task.max_model_calls
+                    and not uncertain
+                ):
                     runtime.audit(conn, "ai.repair_required", call["id"], run["correlation_id"])
                     continue
                 result_status: Any = (

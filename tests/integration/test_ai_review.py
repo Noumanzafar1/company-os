@@ -321,7 +321,7 @@ def test_populated_freshness_downgrade_preserves_history(runtime, engine, db_env
         assert get(conn, "ai_evaluations", value["id"])["body"] == value["body"]
         assert (
             rows(conn, "SELECT version_num FROM public.alembic_version")[0]["version_num"]
-            == "0026_phase6b_review_fixes"
+            == "0027_phase6b_live_preflight"
         )
 
 

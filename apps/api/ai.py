@@ -96,7 +96,7 @@ def register(api: FastAPI, authenticated: Callable[..., SessionIdentity]) -> Non
             result = {
                 "providers": rows(
                     conn,
-                    "SELECT provider,status,report FROM app.ai_provider_connections ORDER BY provider",
+                    "SELECT provider,status,report - 'credential_binding' AS report FROM app.ai_provider_connections ORDER BY provider",
                 ),
                 "tasks": rows(
                     conn,
